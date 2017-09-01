@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EBF5EA"
+    >
+
+    <ImageView
+        android:scaleType="centerCrop"
+        android:background="#0c96ec"
+        android:id="@+id/imgCover"
+        android:layout_width="match_parent"
+        android:layout_height="150dp" />
+
+    <ImageView
+        android:id="@+id/imgAvatar"
+        android:background="#ff0"
+        android:layout_marginTop="90dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="120dp"
+        android:layout_height="120dp" />
+
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/imgAvatar"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="#f00"
+        android:text="User's Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnLogOut"
+        android:layout_marginTop="50dp"
+        android:layout_below="@+id/tvUserName"
+        android:layout_centerHorizontal="true"
+        android:text="Đăng Xuất"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+
+
+</RelativeLayout>
