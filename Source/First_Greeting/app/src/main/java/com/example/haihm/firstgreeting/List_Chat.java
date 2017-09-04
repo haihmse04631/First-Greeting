@@ -5,12 +5,34 @@ package com.example.haihm.firstgreeting;
  */
 
 public class List_Chat {
-    private String name;
-    private int avatar;
+     String name;
+     String linkAvatar;
+     String id;
 
-    public List_Chat(String name, int avatar) {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public List_Chat(String linkAvatar) {
+        this.linkAvatar = linkAvatar;
+    }
+
+    public List_Chat(String name, String linkAvatar, String id) {
         this.name = name;
-        this.avatar = avatar;
+        this.linkAvatar = linkAvatar;
+        this.id = id;
+    }
+
+    public List_Chat() {
+    }
+
+    public List_Chat(String name, String linkAvatar) {
+        this.name = name;
+        this.linkAvatar = linkAvatar;
     }
 
     public String getName() {
@@ -21,11 +43,11 @@ public class List_Chat {
         this.name = name;
     }
 
-    public int getAvatar() {
-        return avatar;
+    public String getLinkAvatar() {
+        return linkAvatar;
     }
 
-    public void setAvatar(int avatar) {
-        this.avatar = avatar;
+    public void setLinkAvatar(String linkAvatar) {
+        this.linkAvatar = linkAvatar;
     }
 }

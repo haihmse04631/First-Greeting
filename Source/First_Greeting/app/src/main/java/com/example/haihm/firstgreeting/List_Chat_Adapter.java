@@ -1,11 +1,14 @@
 package com.example.haihm.firstgreeting;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -15,29 +18,29 @@ import java.util.List;
 
 public class List_Chat_Adapter extends BaseAdapter {
 
-    private Chat context;
-    private int layout;
-    private List<List_Chat> list_chatList;
+    Context myContext;
+    int myLayout;
+    List<List_Chat> arrayListChat;
 
-    public List_Chat_Adapter(Chat context, int layout, List<List_Chat> list_chatList) {
-        this.context = context;
-        this.layout = layout;
-        this.list_chatList = list_chatList;
+    public List_Chat_Adapter(Context myContext, int myLayout, List<List_Chat> arrayListChat) {
+        this.myContext = myContext;
+        this.myLayout = myLayout;
+        this.arrayListChat = arrayListChat;
     }
 
     @Override
     public int getCount() {
-        return list_chatList.size();
+        return arrayListChat.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return arrayListChat.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     private class ViewHolder{
@@ -48,27 +51,26 @@ public class List_Chat_Adapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ViewHolder holder;
+        ViewHolder holder = new ViewHolder();
+        //LayoutInflater inflater = (LayoutInflater) myContext.get;
+        LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View rowView = convertView;
+        if(rowView == null){
 
-        if(convertView == null){
-            LayoutInflater inflater = (LayoutInflater) context.getLayoutInflater(context.getArguments());
+            rowView = inflater.inflate(myLayout, null);
+            holder.imgAvatar = (ImageView) rowView.findViewById(R.id.imageAvatar);
+            holder.tvName = (TextView) rowView.findViewById(R.id.tvName);
+            rowView.setTag(holder);
 
-            convertView = inflater.inflate(layout, null);
-            holder = new ViewHolder();
-            //ánh xạ convertView
-
-            holder.tvName = (TextView) convertView.findViewById(R.id.tvName);
-            holder.imgAvatar = (ImageView) convertView.findViewById(R.id.imageAvatar);
-            convertView.setTag(holder);
+            //convertView.setTag(holder);
         }else{
-            holder = (ViewHolder) convertView.getTag();
+            holder = (ViewHolder) rowView.getTag();
+            //holder = (ViewHolder) convertView.getTag();
         }
 
-        List_Chat listChat = list_chatList.get(position);
+        holder.tvName.setText(arrayListChat.get(position).getName());
+        Picasso.with(myContext).load(arrayListChat.get(position).getLinkAvatar()).into(holder.imgAvatar);
 
-        holder.tvName.setText(listChat.getName());
-        holder.imgAvatar.setImageResource(listChat.getAvatar());
-
-        return convertView;
+        return rowView;
     }
 }

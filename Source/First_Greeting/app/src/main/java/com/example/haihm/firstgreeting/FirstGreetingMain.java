@@ -125,6 +125,7 @@ public class FirstGreetingMain extends AppCompatActivity {
                     return newsFeedTab;
                 case 2:
                     Chat chatTab = new Chat();
+                    chatTab.setArguments(bund);
                     return chatTab;
                 case 3:
                     Profile profileTab = new Profile();

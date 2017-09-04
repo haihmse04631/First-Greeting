@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
     public void transfer() {
         Intent intent = new Intent(MainActivity.this, FirstGreetingMain.class);
         Bundle bund = new Bundle();
+        bund.putString("fbId",fbId);
         bund.putString("fbName", fbName);
         bund.putString("fbImage", fbImage);
         bund.putString("fbCover", fbCover);
