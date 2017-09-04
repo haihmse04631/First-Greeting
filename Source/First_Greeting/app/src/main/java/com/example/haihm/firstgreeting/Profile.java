@@ -2,7 +2,6 @@ package com.example.haihm.firstgreeting;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,6 @@ import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -29,7 +24,6 @@ public class Profile extends Fragment {
     Button btnLogOut;
     TextView tvUserName;
     ImageView imgCover, imgAvatar;
-    DatabaseReference mData;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,33 +36,11 @@ public class Profile extends Fragment {
         imgAvatar = (ImageView) rootView.findViewById(R.id.imgAvatar);
         imgCover = (ImageView) rootView.findViewById(R.id.imgCover);
 
-
-        mData = FirebaseDatabase.getInstance().getReference();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null){
-            tvUserName.setText(getArguments().getString("fbName"));
-            String fbImage = getArguments().getString("fbImage");
-            Picasso.with(getApplicationContext()).load(fbImage).into(imgAvatar);
-            String fbCover = getArguments().getString("fbCover");
-            Picasso.with(getApplicationContext()).load(fbCover).into(imgCover);
-
-            List_Chat listChat = new List_Chat(getArguments().getString("fbName"), getArguments().getString("fbImage"), getArguments().getString("fbId"));
-            mData.child("User").push().setValue(listChat, new DatabaseReference.CompletionListener() {
-                @Override
-                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                    if(databaseError == null){
-                        Log.d("mData: ", "Luu thong tin thanh cong!");
-                        Log.d("mData: ", getArguments().getString("fbId"));
-                    }else{
-                        Log.d("mData: ", "Luu thong tin khong thanh cong!");
-                    }
-                }
-            });
-
-        }else{
-            goLoginScreen();
-        }
-
+        tvUserName.setText(getArguments().getString("fbName"));
+        String fbImage = getArguments().getString("fbImage");
+        Picasso.with(getApplicationContext()).load(fbImage).into(imgAvatar);
+        String fbCover = getArguments().getString("fbCover");
+        Picasso.with(getApplicationContext()).load(fbCover).into(imgCover);
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
