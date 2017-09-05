@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 
 public class FirstGreetingMain extends AppCompatActivity {
 
@@ -31,7 +30,6 @@ public class FirstGreetingMain extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private ImageButton btnBackToMain;
     Intent intent;
     Bundle bund;
 
@@ -43,16 +41,6 @@ public class FirstGreetingMain extends AppCompatActivity {
 
         intent = getIntent();
         bund = intent.getBundleExtra("MyPackage");
-
-        btnBackToMain = (ImageButton) findViewById(R.id.btnBackToMain);
-
-        btnBackToMain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FirstGreetingMain.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -81,6 +69,10 @@ public class FirstGreetingMain extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        // do nothing.
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,7 +108,7 @@ public class FirstGreetingMain extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch(position){
+            switch (position) {
                 case 0:
                     VideoCall videoCallTab = new VideoCall();
                     return videoCallTab;
