@@ -4,6 +4,8 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
     defaultConfig {
+
+
         applicationId "com.example.haihm.firstgreeting"
         minSdkVersion 19
         targetSdkVersion 26

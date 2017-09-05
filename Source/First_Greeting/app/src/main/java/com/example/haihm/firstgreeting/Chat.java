@@ -3,6 +3,7 @@ package com.example.haihm.firstgreeting;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,8 +36,8 @@ public class Chat extends Fragment {
         arrayListChat = new ArrayList<>();
 
         //arrayListChat.add(new List_Chat("Hoang Minh Hai", R.drawable.apple));
-       // loadData();
-       // adapter = new List_Chat_Adapter(this, R.layout.row_list_chat, arrayListChat);
+        loadData();
+        adapter = new List_Chat_Adapter(this.getContext(), R.layout.row_list_chat, arrayListChat);
 
         lvListChat.setAdapter(adapter);
 
@@ -48,7 +49,7 @@ public class Chat extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 List_Chat listChat = dataSnapshot.getValue(List_Chat.class);
-                arrayListChat.add(new List_Chat(listChat.name, listChat.linkAvatar));
+                arrayListChat.add(listChat);
                 adapter.notifyDataSetChanged();
             }
 

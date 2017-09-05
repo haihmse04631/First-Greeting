@@ -3,7 +3,6 @@ package com.example.haihm.firstgreeting;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -149,15 +148,8 @@ public class MainActivity extends AppCompatActivity {
         mData.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.child("User").hasChild(fbId)) {
-                    Log.d("mess", "existed");
-                    mData.child("User").child(fbId).removeValue();
-                    mData.child("User").child(fbId).push().setValue(listChat, new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-
-                        }
-                    });
+                if (!snapshot.child("User").hasChild(fbId)) {
+                    mData.child("User").child(fbId).setValue(listChat);
                 }
             }
 
@@ -165,20 +157,10 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
 
-        mData.child("User").child(fbId).push().setValue(listChat, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if (databaseError == null) {
-                    Log.d("mData: ", "Luu thong tin thanh cong!");
-                    Log.d("mData: ", fbId);
-                } else {
-                    Log.d("mData: ", "Luu thong tin khong thanh cong!");
-                }
-            }
+
         });
+        mData.child("User").child(fbId).setValue(listChat);
 
     }
-
 }
