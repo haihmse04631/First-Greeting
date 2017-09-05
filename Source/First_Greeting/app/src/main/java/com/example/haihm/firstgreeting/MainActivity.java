@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancel() {
-
+                        LoginManager.getInstance().logOut();
                     }
 
                     @Override
@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void transfer() {
-        System.out.println("Chuan bi transfer");
         Intent intent = new Intent(MainActivity.this, FirstGreetingMain.class);
         Bundle bund = new Bundle();
         bund.putString("fbId", fbId);
@@ -98,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
 
     // Get facebook data
     public void loadData() {
-        System.out.println("Bat dau load");
         Bundle params = new Bundle();
         params.putString("fields", "id,name,email,picture.type(large),cover");
         GraphRequestAsyncTask graphRequestAsyncTask = new GraphRequest(AccessToken.getCurrentAccessToken(), "me", params, HttpMethod.GET,
@@ -143,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pushFirebase() {
-        final List_Chat listChat = new List_Chat(fbName, fbImage);
+        final User listChat = new User(fbName, fbImage);
         mData = FirebaseDatabase.getInstance().getReference();
         mData.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

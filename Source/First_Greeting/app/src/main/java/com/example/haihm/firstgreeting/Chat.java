@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -23,23 +24,37 @@ import java.util.ArrayList;
 
 public class Chat extends Fragment {
     private ListView lvListChat;
-    private ArrayList<List_Chat> arrayListChat;
+    private ArrayList<User> arrayListChat;
     private List_Chat_Adapter adapter;
     DatabaseReference mData;
+    Bundle bundle;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.chat_tab, container, false);
         lvListChat = (ListView) rootView.findViewById(R.id.listViewListChat);
         mData = FirebaseDatabase.getInstance().getReference();
         arrayListChat = new ArrayList<>();
 
-        //arrayListChat.add(new List_Chat("Hoang Minh Hai", R.drawable.apple));
+        //arrayListChat.add(new User("Hoang Minh Hai", R.drawable.apple));
         loadData();
         adapter = new List_Chat_Adapter(this.getContext(), R.layout.row_list_chat, arrayListChat);
-
         lvListChat.setAdapter(adapter);
+
+        lvListChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                User user = (User) adapterView.getItemAtPosition(i);
+                Log.e("data", user.getName());
+//                bundle.putString("fbId",arrayListChat.get(i).getId());
+//                bundle.putString("fbName", arrayListChat.get(i).getName());
+//                bundle.putString("fbImage", arrayListChat.get(i).getLinkAvatar());
+//                Intent intent = new Intent(getActivity(), MessageForm.class);
+//                intent.putExtra("myPackage", bundle);
+//                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
@@ -48,8 +63,8 @@ public class Chat extends Fragment {
         mData.child("User").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                List_Chat listChat = dataSnapshot.getValue(List_Chat.class);
-                arrayListChat.add(listChat);
+                User user = dataSnapshot.getValue(User.class);
+                arrayListChat.add(user);
                 adapter.notifyDataSetChanged();
             }
 

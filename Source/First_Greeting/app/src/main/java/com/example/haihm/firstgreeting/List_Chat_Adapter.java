@@ -20,9 +20,9 @@ public class List_Chat_Adapter extends BaseAdapter {
 
     Context myContext;
     int myLayout;
-    List<List_Chat> arrayListChat;
+    List<User> arrayListChat;
 
-    public List_Chat_Adapter(Context myContext, int myLayout, List<List_Chat> arrayListChat) {
+    public List_Chat_Adapter(Context myContext, int myLayout, List<User> arrayListChat) {
         this.myContext = myContext;
         this.myLayout = myLayout;
         this.arrayListChat = arrayListChat;
