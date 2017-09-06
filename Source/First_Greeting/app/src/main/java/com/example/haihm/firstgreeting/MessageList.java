@@ -1,14 +1,13 @@
 package com.example.haihm.firstgreeting;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by HongSonPham on 9/6/17.
  */
 
-public class Message extends HashMap<String, ArrayList<SingleMessage>> {
-    public Message() {
+public class MessageList extends ArrayList<SingleMessage> {
+    public MessageList() {
         super();
     }
 }

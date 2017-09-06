@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 /**
@@ -52,8 +54,16 @@ public class ListSendMessageAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) SendMessContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = view;
 
+        if(rowView == null){
 
-        return null;
+        }else{
+
+        }
+        holder.txtMessageSend.setText(arraySendMessage.get(i).getMessageSend());
+        Picasso.with(SendMessContext).load(arraySendMessage.get(i).getLinkAvatar()).into(holder.imgAvatarSend);
+
+
+        return rowView;
     }
 
     @Override
