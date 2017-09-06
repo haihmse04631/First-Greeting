@@ -46,6 +46,7 @@ public class Chat extends Fragment {
         adapter = new ListUserAdapter(this.getContext(), R.layout.row_list_chat, arrayListChat);
         userList = new UserList();
         lvListChat.setAdapter(adapter);
+        System.out.println("ngon");
 
         lvListChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -66,17 +67,46 @@ public class Chat extends Fragment {
         mData.child("User").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String id = (String) dataSnapshot.getKey();
+                Log.e("data", id);
+                if (id.equals(fbId)) {
+                    return;
+                }
+                User user = dataSnapshot.getValue(User.class);
+                Log.e("data", user.getName());
+                userList.add(user);
+                adapter.notifyDataSetChanged();
+            }
 
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mData.child("Message").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String id = (String) dataSnapshot.getKey();
                 if (id.equals(fbId)) {
                     return;
                 }
-                String linkAvatar = (String) dataSnapshot.child("linkAvatar").getValue();
-                String name = (String) dataSnapshot.child("name").getValue();
-                String role = (String) dataSnapshot.child("role").getValue();
                 Message message = new Message();
-
                 Iterator iterator1 = dataSnapshot.child("message").getChildren().iterator();
                 while (iterator1.hasNext()) {
                     DataSnapshot item1 = (DataSnapshot) iterator1.next();
@@ -89,10 +119,6 @@ public class Chat extends Fragment {
                     }
                     message.put(item1.getKey(), list);
                 }
-
-                User user = new User(name, linkAvatar, id, message, role);
-                userList.add(user);
-                adapter.notifyDataSetChanged();
             }
 
             @Override

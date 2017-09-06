@@ -43,7 +43,7 @@ public class ListUserAdapter extends BaseAdapter {
         return position;
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         ImageView imgAvatar;
         TextView tvName;
     }
@@ -55,7 +55,7 @@ public class ListUserAdapter extends BaseAdapter {
         //LayoutInflater inflater = (LayoutInflater) myContext.get;
         LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = convertView;
-        if(rowView == null){
+        if (rowView == null) {
 
             rowView = inflater.inflate(myLayout, null);
             holder.imgAvatar = (ImageView) rowView.findViewById(R.id.imageAvatar);
@@ -63,7 +63,7 @@ public class ListUserAdapter extends BaseAdapter {
             rowView.setTag(holder);
 
             //convertView.setTag(holder);
-        }else{
+        } else {
             holder = (ViewHolder) rowView.getTag();
             //holder = (ViewHolder) convertView.getTag();
         }

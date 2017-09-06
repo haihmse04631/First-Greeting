@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                                 JSONObject jsonObject = new JSONObject(userDetail);
                                 fbId = jsonObject.getString("id");
                                 fbName = jsonObject.getString("name");
-                                fbImage = "https://graph.facebook.com/" + fbId + "/picture?role=large";
+                                fbImage = "https://graph.facebook.com/" + fbId + "/picture?width=960&height=960";
 
                                 if (jsonObject.has("cover")) {
                                     String getInitialCover = jsonObject.getString("cover");
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         friends.put("2222", messageList);
         /*------------------------------*/
 
-        final User user = new User(fbName, fbImage, fbId, friends, "Member");
+        final User user = new User(fbName, fbImage, fbId, "Member");
         mData = FirebaseDatabase.getInstance().getReference();
 
         mData.child("User").child(fbId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
                     mData.child("User").child(fbId).setValue(user);
+                    mData.child("Message").child(fbId).setValue(friends);
                 }
             }
 

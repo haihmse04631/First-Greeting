@@ -8,17 +8,15 @@ public class User {
     String name;
     String linkAvatar;
     String id;
-    Message message;
     String role;
 
     public User() {
     }
 
-    public User(String name, String linkAvatar, String id, Message message, String role) {
+    public User(String name, String linkAvatar, String id, String role) {
         this.name = name;
         this.linkAvatar = linkAvatar;
         this.id = id;
-        this.message = message;
         this.role = role;
     }
 
@@ -44,14 +42,6 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public Message getMessage() {
-        return message;
-    }
-
-    public void setMessage(Message message) {
-        this.message = message;
     }
 
     public String getRole() {

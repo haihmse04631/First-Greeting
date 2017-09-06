@@ -17,7 +17,7 @@ public class MessageForm extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
-        txtCheck = (TextView) findViewById(R.id.txtCheck);
+//        txtCheck = (TextView) findViewById(R.id.txtCheck);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("myPackage");
 
