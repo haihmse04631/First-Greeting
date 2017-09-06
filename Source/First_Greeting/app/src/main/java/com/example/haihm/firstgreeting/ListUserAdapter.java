@@ -16,13 +16,13 @@ import java.util.List;
  * Created by haihm on 8/11/2017.
  */
 
-public class List_Chat_Adapter extends BaseAdapter {
+public class ListUserAdapter extends BaseAdapter {
 
     Context myContext;
     int myLayout;
     List<User> arrayListChat;
 
-    public List_Chat_Adapter(Context myContext, int myLayout, List<User> arrayListChat) {
+    public ListUserAdapter(Context myContext, int myLayout, List<User> arrayListChat) {
         this.myContext = myContext;
         this.myLayout = myLayout;
         this.arrayListChat = arrayListChat;

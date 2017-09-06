@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class Chat extends Fragment {
     private ListView lvListChat;
     private ArrayList<User> arrayListChat;
-    private List_Chat_Adapter adapter;
+    private ListUserAdapter adapter;
     DatabaseReference mData;
     Bundle bundle;
 
@@ -39,7 +39,7 @@ public class Chat extends Fragment {
 
         //arrayListChat.add(new User("Hoang Minh Hai", R.drawable.apple));
         loadData();
-        adapter = new List_Chat_Adapter(this.getContext(), R.layout.row_list_chat, arrayListChat);
+        adapter = new ListUserAdapter(this.getContext(), R.layout.row_list_chat, arrayListChat);
         lvListChat.setAdapter(adapter);
 
         lvListChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {

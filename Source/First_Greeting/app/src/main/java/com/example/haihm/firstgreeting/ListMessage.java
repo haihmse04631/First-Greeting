@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
-public class List_Message extends AppCompatActivity {
+public class ListMessage extends AppCompatActivity {
 
     private ImageButton btnBackToNewsFeed;
 
@@ -21,7 +21,7 @@ public class List_Message extends AppCompatActivity {
         btnBackToNewsFeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(List_Message.this, FirstGreetingMain.class);
+                Intent intent = new Intent(ListMessage.this, FirstGreetingMain.class);
                 startActivity(intent);
             }
         });
