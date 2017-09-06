@@ -25,6 +25,9 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
@@ -40,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         callbackManager = CallbackManager.Factory.create();
-        btnLoginFacebook = (LoginButton) findViewById(R.id.login_button);
+        btnLoginFacebook = findViewById(R.id.login_button);
 
         checkFacebookLogin();
     }
@@ -93,12 +96,13 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("MyPackage", bund);
         startActivity(intent);
         pushFirebase();
+        processLogin();
     }
 
     // Get facebook data
     public void loadData() {
         Bundle params = new Bundle();
-        params.putString("fields", "id,name,email,picture.type(large),cover");
+        params.putString("fields", "id,name,email,picture.role(large),cover");
         GraphRequestAsyncTask graphRequestAsyncTask = new GraphRequest(AccessToken.getCurrentAccessToken(), "me", params, HttpMethod.GET,
                 new GraphRequest.Callback() {
                     @Override
@@ -107,10 +111,9 @@ public class MainActivity extends AppCompatActivity {
                             String userDetail = response.getRawResponse();
                             try {
                                 JSONObject jsonObject = new JSONObject(userDetail);
-                                System.out.println("jsonObject::" + jsonObject);
                                 fbId = jsonObject.getString("id");
                                 fbName = jsonObject.getString("name");
-                                fbImage = "https://graph.facebook.com/" + fbId + "/picture?type=large";
+                                fbImage = "https://graph.facebook.com/" + fbId + "/picture?role=large";
 
                                 if (jsonObject.has("cover")) {
                                     String getInitialCover = jsonObject.getString("cover");
@@ -141,13 +144,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pushFirebase() {
-        final User listChat = new User(fbName, fbImage);
+        final Message friends = new Message();
+        /* Temporary Data */
+        ArrayList messageList = new ArrayList();
+        messageList.add(new SingleMessage(new Date(), "Hello guy!"));
+        messageList.add(new SingleMessage(new Date(), "Hello dude!"));
+        friends.put("1234", messageList);
+        friends.put("2222", messageList);
+        /*------------------------------*/
+
+        final User user = new User(fbName, fbImage, fbId, friends, "Member");
         mData = FirebaseDatabase.getInstance().getReference();
-        mData.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        mData.child("User").child(fbId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (!snapshot.child("User").hasChild(fbId)) {
-                    mData.child("User").child(fbId).setValue(listChat);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    mData.child("User").child(fbId).setValue(user);
                 }
             }
 
@@ -155,10 +168,6 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-
-
         });
-        mData.child("User").child(fbId).setValue(listChat);
-
     }
 }

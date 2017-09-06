@@ -27,27 +27,5 @@ public class MessageForm extends AppCompatActivity {
 
     public void pushMessageToFirebase() {
 
-
-
-
-//        final User listChat = new User(fbName, fbImage);
-//        mData = FirebaseDatabase.getInstance().getReference();
-//        mData.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot snapshot) {
-//                if (!snapshot.child("User").hasChild(fbId)) {
-//                    mData.child("User").child(fbId).setValue(listChat);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//
-//
-//        });
-//        mData.child("User").child(fbId).setValue(listChat);
-
     }
 }
