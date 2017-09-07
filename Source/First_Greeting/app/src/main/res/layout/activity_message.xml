@@ -15,17 +15,15 @@
             android:id="@+id/listViewMessage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true" />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
 
     </RelativeLayout>
 
     <LinearLayout
-        android:weightSum="10"
         android:orientation="horizontal"
-        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="50dp">
         <EditText
             android:layout_weight="8.5"
             android:layout_width="0dp"

@@ -59,8 +59,21 @@ public class Chat extends Fragment {
 
         //Load data from Firebase
         loadData();
+        sortList();
 
         return rootView;
+    }
+
+    private void sortList() {
+        for (int i = 0; i < userList.size()-1; i++) {
+            for (int j = 0; j < userList.size()-1; j++) {
+                if (userList.get(i).getLastMessage().toString().compareTo(userList.get(j).getLastMessage().toString()) > 0) {
+                    User user = userList.get(i);
+                    userList.set(i, userList.get(j));
+                    userList.set(j, user);
+                }
+            }
+        }
     }
 
     private void loadData() {
@@ -74,6 +87,7 @@ public class Chat extends Fragment {
                 }
                 User user = dataSnapshot.getValue(User.class);
                 Log.e("data", user.getName());
+                Log.e("data", user.getLastMessage().toString());
                 userList.add(user);
                 adapter.notifyDataSetChanged();
             }
