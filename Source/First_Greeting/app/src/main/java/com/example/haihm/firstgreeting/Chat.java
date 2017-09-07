@@ -1,6 +1,7 @@
 package com.example.haihm.firstgreeting;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -25,7 +26,6 @@ import java.util.Iterator;
 
 public class Chat extends Fragment {
     private ListView lvListChat;
-    private ArrayList<User> arrayListChat;
     private ListUserAdapter adapter;
     private UserList userList;
     private String fbId;
@@ -36,24 +36,24 @@ public class Chat extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.chat_tab, container, false);
-        fbId = getArguments().getString("fbId");
         lvListChat = (ListView) rootView.findViewById(R.id.listViewListChat);
         mData = FirebaseDatabase.getInstance().getReference();
-        arrayListChat = new ArrayList<>();
 
-        //arrayListChat.add(new User("Hoang Minh Hai", R.drawable.apple));
-        loadData();
-        adapter = new ListUserAdapter(this.getContext(), R.layout.row_list_chat, arrayListChat);
+        fbId = getArguments().getString("fbId");
         userList = new UserList();
+        adapter = new ListUserAdapter(this.getContext(), R.layout.row_list_chat, userList);
         lvListChat.setAdapter(adapter);
-        System.out.println("ngon");
 
         lvListChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 User user = (User) adapterView.getItemAtPosition(i);
-                System.out.println(user.getName());
-                Log.e("data", user.getName());
+                Intent intent = new Intent(getActivity(), MessageForm.class);
+                bundle = new Bundle();
+                bundle.putString("fbSendId", fbId);
+                bundle.putString("fbReceiveId", user.getId());
+                intent.putExtra("MyPackage", bundle);
+                startActivity(intent);
             }
         });
 
