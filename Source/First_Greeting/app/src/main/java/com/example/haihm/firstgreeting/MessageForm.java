@@ -22,7 +22,6 @@ public class MessageForm extends AppCompatActivity {
     DatabaseReference mData;
     Intent intent;
     Bundle bund;
-
     TextView txtTitle;
 
     String sendId;
