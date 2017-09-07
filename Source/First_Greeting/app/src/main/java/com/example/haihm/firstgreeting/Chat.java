@@ -17,9 +17,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 /**
  * Created by haihm on 8/8/2017.
  */
@@ -40,6 +37,7 @@ public class Chat extends Fragment {
         mData = FirebaseDatabase.getInstance().getReference();
 
         fbId = getArguments().getString("fbId");
+
         userList = new UserList();
         adapter = new ListUserAdapter(this.getContext(), R.layout.row_list_chat, userList);
         lvListChat.setAdapter(adapter);
@@ -113,48 +111,7 @@ public class Chat extends Fragment {
             }
         });
 
-        mData.child("Message").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String id = (String) dataSnapshot.getKey();
-                if (id.equals(fbId)) {
-                    return;
-                }
-                Message message = new Message();
-                Iterator iterator1 = dataSnapshot.child("message").getChildren().iterator();
-                while (iterator1.hasNext()) {
-                    DataSnapshot item1 = (DataSnapshot) iterator1.next();
-                    ArrayList<SingleMessage> list = new ArrayList<SingleMessage>();
-                    Iterator iterator2 = dataSnapshot.child("message").child(item1.getKey()).getChildren().iterator();
-                    while (iterator2.hasNext()) {
-                        DataSnapshot item2 = (DataSnapshot) iterator2.next();
-                        SingleMessage aMessage = item2.getValue(SingleMessage.class);
-                        list.add(aMessage);
-                    }
-                    message.put(item1.getKey(), list);
-                }
-            }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
     }
 }
