@@ -2,6 +2,7 @@ package com.example.haihm.firstgreeting;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
@@ -12,15 +13,17 @@ public class MessageForm extends AppCompatActivity {
     DatabaseReference mData;
     Intent intent;
     Bundle bund;
-    TextView txtCheck;
-    String title = "Name of your friend";
+    TextView txtTitle;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(title);
         setContentView(R.layout.activity_message);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.title_layout);
+        txtTitle = (TextView) findViewById(R.id.txtMyTitle);
+        txtTitle.setText("Name of you friend");
 
         intent = getIntent();
         bund = intent.getBundleExtra("MyPackage");

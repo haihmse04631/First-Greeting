@@ -33,6 +33,7 @@
 
         <activity android:name=".MessageForm"
             android:label="Message"
+
             ></activity>
     </application>
 
