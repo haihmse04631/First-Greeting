@@ -13,10 +13,13 @@ public class MessageForm extends AppCompatActivity {
     Intent intent;
     Bundle bund;
     TextView txtCheck;
+    String title = "Name of your friend";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(title);
         setContentView(R.layout.activity_message);
 
         intent = getIntent();
