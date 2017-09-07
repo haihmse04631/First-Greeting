@@ -9,13 +9,17 @@ import java.util.Date;
 public class SingleMessage {
     private Date date;
     private String content;
+    private String avatarLink;
+    private String type;
 
     public SingleMessage() {
     }
 
-    public SingleMessage(Date date, String content) {
+    public SingleMessage(Date date, String content, String avatarLink) {
         this.date = date;
         this.content = content;
+        this.avatarLink = avatarLink;
+        type = "";
     }
 
     public Date getDate() {
@@ -32,6 +36,22 @@ public class SingleMessage {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getAvatarLink() {
+        return avatarLink;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setAvatarLink(String avatarLink) {
+        this.avatarLink = avatarLink;
     }
 
     @Override

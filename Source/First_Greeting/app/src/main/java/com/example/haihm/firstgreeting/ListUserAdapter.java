@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
 /**
  * Created by haihm on 8/11/2017.
  */
@@ -20,22 +18,22 @@ public class ListUserAdapter extends BaseAdapter {
 
     Context myContext;
     int myLayout;
-    List<User> arrayListChat;
+    UserList userList;
 
-    public ListUserAdapter(Context myContext, int myLayout, List<User> arrayListChat) {
+    public ListUserAdapter(Context myContext, int myLayout, UserList userList) {
         this.myContext = myContext;
         this.myLayout = myLayout;
-        this.arrayListChat = arrayListChat;
+        this.userList = userList;
     }
 
     @Override
     public int getCount() {
-        return arrayListChat.size();
+        return userList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return arrayListChat.get(position);
+        return userList.get(position);
     }
 
     @Override
@@ -68,8 +66,8 @@ public class ListUserAdapter extends BaseAdapter {
             //holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.tvName.setText(arrayListChat.get(position).getName());
-        Picasso.with(myContext).load(arrayListChat.get(position).getLinkAvatar()).into(holder.imgAvatar);
+        holder.tvName.setText(userList.get(position).getName());
+        Picasso.with(myContext).load(userList.get(position).getLinkAvatar()).into(holder.imgAvatar);
 
         return rowView;
     }

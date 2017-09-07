@@ -147,8 +147,8 @@ public class MainActivity extends AppCompatActivity {
         final Message friends = new Message();
         /* Temporary Data */
         ArrayList messageList = new ArrayList();
-        messageList.add(new SingleMessage(new Date(), "Hello guy!"));
-        messageList.add(new SingleMessage(new Date(), "Hello dude!"));
+        messageList.add(new SingleMessage(new Date(), "Hello guy!", fbImage));
+        messageList.add(new SingleMessage(new Date(), "Hello dude!", fbImage));
         friends.put("1234", messageList);
         friends.put("2222", messageList);
         /*------------------------------*/
