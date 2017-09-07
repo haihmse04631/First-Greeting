@@ -25,12 +25,15 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="50dp">
+
         <EditText
-            android:layout_weight="8.5"
+            android:id="@+id/txtInput"
             android:layout_width="0dp"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_weight="8.5" />
 
         <ImageButton
+            android:id="@+id/btnSend"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1.5"

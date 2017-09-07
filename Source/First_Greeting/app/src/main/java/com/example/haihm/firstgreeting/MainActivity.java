@@ -25,9 +25,6 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Date;
-
 public class MainActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
@@ -146,11 +143,11 @@ public class MainActivity extends AppCompatActivity {
     public void pushFirebase() {
         final Message friends = new Message();
         /* Temporary Data */
-        ArrayList messageList = new ArrayList();
-        messageList.add(new SingleMessage(new Date(), "Hello guy!", fbImage));
-        messageList.add(new SingleMessage(new Date(), "Hello dude!", fbImage));
-        friends.put("1234", messageList);
-        friends.put("2222", messageList);
+//        ArrayList messageList = new ArrayList();
+//        messageList.add(new SingleMessage(new Date(), "Hello guy!", fbImage));
+//        messageList.add(new SingleMessage(new Date(), "Hello dude!", fbImage));
+//        friends.put("1234", messageList);
+//        friends.put("2222", messageList);
         /*------------------------------*/
 
         final User user = new User(fbName, fbImage, fbId, "Member");

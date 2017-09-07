@@ -45,13 +45,12 @@ public class ListMessageAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public synchronized View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolderSend holderSend = new ViewHolderSend();
         ViewHolderReceive holderReceive = new ViewHolderReceive();
 
         LayoutInflater inflater = (LayoutInflater) MessContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = view;
-
 
         if (arrayMessage.get(i).getType().equals("send")) {
             if (rowView == null) {
@@ -59,11 +58,8 @@ public class ListMessageAdapter extends BaseAdapter {
                 holderSend.imgAvatarSend = (ImageView) rowView.findViewById(R.id.avatarSend);
                 holderSend.txtMessageSend = (TextView) rowView.findViewById(R.id.txtMessageSend);
                 rowView.setTag(holderSend);
-
-                //convertView.setTag(holder);
             } else {
                 holderSend = (ViewHolderSend) rowView.getTag();
-                //holder = (ViewHolder) convertView.getTag();
             }
             holderSend.txtMessageSend.setText(arrayMessage.get(i).getContent());
             Picasso.with(MessContext).load(arrayMessage.get(i).getAvatarLink()).into(holderSend.imgAvatarSend);
@@ -74,11 +70,8 @@ public class ListMessageAdapter extends BaseAdapter {
                 holderReceive.imgAvatarReceive = (ImageView) rowView.findViewById(R.id.avatarReceive);
                 holderReceive.txtMessageReceive = (TextView) rowView.findViewById(R.id.txtMessageReceive);
                 rowView.setTag(holderReceive);
-
-                //convertView.setTag(holder);
-            } else {
+            } else  {
                 holderReceive = (ViewHolderReceive) rowView.getTag();
-                //holder = (ViewHolder) convertView.getTag();
             }
             holderReceive.txtMessageReceive.setText(arrayMessage.get(i).getContent());
             Picasso.with(MessContext).load(arrayMessage.get(i).getAvatarLink()).into(holderReceive.imgAvatarReceive);

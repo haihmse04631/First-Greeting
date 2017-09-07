@@ -26,6 +26,7 @@ public class Chat extends Fragment {
     private ListUserAdapter adapter;
     private UserList userList;
     private String fbId;
+    private String fbImage;
     DatabaseReference mData;
     Bundle bundle;
 
@@ -37,6 +38,7 @@ public class Chat extends Fragment {
         mData = FirebaseDatabase.getInstance().getReference();
 
         fbId = getArguments().getString("fbId");
+        fbImage = getArguments().getString("fbImage");
 
         userList = new UserList();
         adapter = new ListUserAdapter(this.getContext(), R.layout.row_list_chat, userList);
@@ -49,7 +51,9 @@ public class Chat extends Fragment {
                 Intent intent = new Intent(getActivity(), MessageForm.class);
                 bundle = new Bundle();
                 bundle.putString("fbSendId", fbId);
+                bundle.putString("fbSendAvatarLink", fbImage);
                 bundle.putString("fbReceiveId", user.getId());
+                bundle.putString("fbReceiveAvatarLink", user.getLinkAvatar());
                 intent.putExtra("MyPackage", bundle);
                 startActivity(intent);
             }
@@ -64,7 +68,7 @@ public class Chat extends Fragment {
 
     private void sortList() {
         for (int i = 0; i < userList.size()-1; i++) {
-            for (int j = 0; j < userList.size()-1; j++) {
+            for (int j = i+1; j < userList.size(); j++) {
                 if (userList.get(i).getLastMessage().toString().compareTo(userList.get(j).getLastMessage().toString()) > 0) {
                     User user = userList.get(i);
                     userList.set(i, userList.get(j));
@@ -84,8 +88,6 @@ public class Chat extends Fragment {
                     return;
                 }
                 User user = dataSnapshot.getValue(User.class);
-                Log.e("data", user.getName());
-                Log.e("data", user.getLastMessage().toString());
                 userList.add(user);
                 adapter.notifyDataSetChanged();
             }
