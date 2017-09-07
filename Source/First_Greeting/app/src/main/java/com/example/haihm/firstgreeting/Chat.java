@@ -113,8 +113,6 @@ public class Chat extends Fragment {
             }
         });
 
-
-
     }
 }
 

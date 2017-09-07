@@ -25,7 +25,6 @@
             android:name=".FirstGreetingMain"
             android:label="@string/title_activity_first_greeting_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ListMessage" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -33,6 +32,7 @@
 
         <activity android:name=".MessageForm"
             android:label="Message"
+
             ></activity>
     </application>
 

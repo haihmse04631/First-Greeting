@@ -2,11 +2,13 @@ package com.example.haihm.firstgreeting;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -14,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MessageForm extends AppCompatActivity {
@@ -22,6 +25,8 @@ public class MessageForm extends AppCompatActivity {
 
     Intent intent;
     Bundle bund;
+    TextView txtTitle;
+
     String sendId;
     String sendAvartarLink;
     String receiveId;
@@ -29,11 +34,13 @@ public class MessageForm extends AppCompatActivity {
 
     private ListView lvListMessage;
     private ListMessageAdapter adapter;
-    private MessageList messList;
+
+  //  private MessageList messList;
 
     ImageButton btnSend;
     EditText txtInput;
     String title = "Name of your friend";
+    private ArrayList<SingleMessage> messList;
 
     int numberOfSend;
     int lock;
@@ -41,8 +48,11 @@ public class MessageForm extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(title);
         setContentView(R.layout.activity_message);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.title_layout);
+        txtTitle = (TextView) findViewById(R.id.txtMyTitle);
+        txtTitle.setText("Name of your friend");
 
         mData = FirebaseDatabase.getInstance().getReference();
         btnSend = (ImageButton) findViewById(R.id.btnSend);
@@ -56,7 +66,7 @@ public class MessageForm extends AppCompatActivity {
         receiveAvartarLink = bund.getString("fbReceiveAvatarLink");
         lvListMessage = (ListView) findViewById(R.id.listViewMessage);
 
-        messList = new MessageList();
+        messList = new ArrayList<>();
         adapter = new ListMessageAdapter(MessageForm.this, R.layout.row_send_message, R.layout.row_receive_message, messList);
         lvListMessage.setAdapter(adapter);
 
@@ -91,7 +101,7 @@ public class MessageForm extends AppCompatActivity {
                 numberOfSend++;
                 SingleMessage aMessage = dataSnapshot.getValue(SingleMessage.class);
                 aMessage.setType("send");
-                messList.addMess(aMessage);
+                messList.add(aMessage);
                 sortList();
                 adapter.notifyDataSetChanged();
             }
@@ -122,7 +132,7 @@ public class MessageForm extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 SingleMessage aMessage = dataSnapshot.getValue(SingleMessage.class);
                 aMessage.setType("receive");
-                messList.addMess(aMessage);
+                messList.add(aMessage);
                 sortList();
                 adapter.notifyDataSetChanged();
             }
