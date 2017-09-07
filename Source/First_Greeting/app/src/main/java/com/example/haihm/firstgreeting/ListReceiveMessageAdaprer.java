@@ -17,6 +17,7 @@ import java.util.List;
  */
 
 public class ListReceiveMessageAdaprer extends BaseAdapter {
+
     Context ReceiveMessContext;
     int ReceiveMessLayout;
     List<ReceiveMessage> arrayReceiveMessage;
@@ -42,7 +43,7 @@ public class ListReceiveMessageAdaprer extends BaseAdapter {
         return i;
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         TextView txtMessageReceive;
         ImageView imgAvatarReceive;
     }
@@ -54,9 +55,9 @@ public class ListReceiveMessageAdaprer extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) ReceiveMessContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = view;
 
-        if(rowView == null){
+        if (rowView == null) {
 
-        }else{
+        } else {
 
         }
         holder.txtMessageReceive.setText(arrayReceiveMessage.get(i).getMessageReceive());
