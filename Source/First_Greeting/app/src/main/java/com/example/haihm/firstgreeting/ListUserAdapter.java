@@ -69,7 +69,7 @@ public class ListUserAdapter extends BaseAdapter {
         }
 
         holder.tvName.setText(userList.get(position).getName());
-        holder.tvLastMessage.setText(userList.get(position).getLastMessage().getContent());
+        holder.tvLastMessage.setText(userList.get(position).getLastMessage().get(userList.get(position).getId()).getContent());
         Picasso.with(myContext).load(userList.get(position).getLinkAvatar()).into(holder.imgAvatar);
 
         return rowView;

@@ -1,6 +1,6 @@
 package com.example.haihm.firstgreeting;
 
-import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by haihm on 8/10/2017.
@@ -11,7 +11,7 @@ public class User {
     String linkAvatar;
     String id;
     String role;
-    SingleMessage lastMessage;
+    HashMap<String, SingleMessage> lastMessage;
 
     public User() {
     }
@@ -21,7 +21,7 @@ public class User {
         this.linkAvatar = linkAvatar;
         this.id = id;
         this.role = role;
-        lastMessage = new SingleMessage(new Date(), "", "");
+        lastMessage = new HashMap<>();
     }
 
     public String getName() {
@@ -52,16 +52,16 @@ public class User {
         return role;
     }
 
-    public SingleMessage getLastMessage() {
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public HashMap<String, SingleMessage> getLastMessage() {
         return lastMessage;
     }
 
-    public void setLastMessage(SingleMessage lastMessage) {
+    public void setLastMessage(HashMap<String, SingleMessage> lastMessage) {
         this.lastMessage = lastMessage;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     @Override

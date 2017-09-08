@@ -16,9 +16,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by haihm on 8/8/2017.
@@ -70,39 +73,65 @@ public class Chat extends Fragment {
     }
 
     private void sortList() {
-        Collections.sort(userList, new Comparator<User>(){
-            public int compare(User p1, User p2){
-                return p1.getLastMessage().getDate().compareTo(p2.getLastMessage().getDate());
+        Collections.sort(userList, new Comparator<User>() {
+            public int compare(User p1, User p2) {
+                return p1.getLastMessage().get(p1.getId()).getDate().compareTo(p2.getLastMessage().get(p2.getId()).getDate());
             }
         });
+//        for (User user : userList) {
+//            Log.e("data", user.getName());
+//            Log.e("data", user.getLastMessage().get(user.getId()).getDate().toString());
+//        }
     }
 
     private void loadData() {
         mData.child("User").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String id = (String) dataSnapshot.getKey();
-                Log.e("data", id);
-                if (id.equals(fbId)) {
+                final String friendId = (String) dataSnapshot.getKey();
+                if (friendId.equals(fbId)) {
                     return;
                 }
-                User user = dataSnapshot.getValue(User.class);
-                userList.add(user);
-                sortList();
-                adapter.notifyDataSetChanged();
+                final User user = dataSnapshot.getValue(User.class);
+                final HashMap<String, SingleMessage> lastMessages = new HashMap<String, SingleMessage>();
+                final SingleMessage[] lastMess1 = {new SingleMessage()};
+                final SingleMessage[] lastMess2 = {new SingleMessage()};
+                mData.child("Message").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        long indexOfLastMess = dataSnapshot.child(fbId).child(friendId).getChildrenCount();
+                        Log.e("Data:", Long.toString(indexOfLastMess));
+                        if (indexOfLastMess == 0) {
+                            lastMess1[0] = new SingleMessage(new Date(), " ", "");
+                        } else {
+                            lastMess1[0] = dataSnapshot.child(fbId).child(friendId).child(Long.toString(indexOfLastMess - 1)).getValue(SingleMessage.class);
+                        }
+
+                        indexOfLastMess = dataSnapshot.child(friendId).child(fbId).getChildrenCount();
+                        if (indexOfLastMess == 0) {
+                            lastMess2[0] = new SingleMessage(lastMess1[0].getDate(), " ", "");
+                        } else {
+                            lastMess2[0] = dataSnapshot.child(friendId).child(fbId).child(Long.toString(indexOfLastMess - 1)).getValue(SingleMessage.class);
+                        }
+                        SingleMessage lastMess = lastMess1[0].getDate().compareTo(lastMess2[0].getDate()) >= 0 ? lastMess1[0] : lastMess2[0];
+                        lastMessages.put(friendId, lastMess);
+                        user.setLastMessage(lastMessages);
+                        Log.e("data", user.getLastMessage().get(friendId).getDate().toString());
+                        userList.add(user);
+                        sortList();
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                String id = (String) dataSnapshot.getKey();
-                SingleMessage changedMess = dataSnapshot.child("lastMessage").getValue(SingleMessage.class);
-                for (int i = 0; i < userList.size(); i++) {
-                    if (userList.get(i).getId().equals(id)) {
-                        userList.get(i).setLastMessage(changedMess);
-                        sortList();
-                        adapter.notifyDataSetChanged();
-                    }
-                }
+
             }
 
             @Override
@@ -124,26 +153,82 @@ public class Chat extends Fragment {
         mData.child("Message").child(fbId).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                final String receiveId = dataSnapshot.getKey();
+                String friendId = dataSnapshot.getKey();
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    SingleMessage sendMess = child.getValue(SingleMessage.class);
-                    SingleMessage receiveMess = new SingleMessage();
-                    mData.child("User").child(fbId).child("lastMessage").setValue(sendMess);
+                    SingleMessage aMessage = child.getValue(SingleMessage.class);
+                    for (int i = 0; i < userList.size(); i++) {
+                        if (userList.get(i).getId().equals(friendId)) {
+                            userList.get(i).getLastMessage().put(friendId, aMessage);
+                            sortList();
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
                 }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                String receiveId = dataSnapshot.getKey();
+                String friendId = dataSnapshot.getKey();
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     SingleMessage aMessage = child.getValue(SingleMessage.class);
-                    mData.child("User").child(fbId).child("lastMessage").setValue(aMessage);
-                    mData.child("User").child(receiveId).child("lastMessage").setValue(aMessage);
                     for (int i = 0; i < userList.size(); i++) {
-                        if (userList.get(i).getId().equals(receiveId)) {
-                            userList.get(i).setLastMessage(aMessage);
+                        if (userList.get(i).getId().equals(friendId)) {
+                            userList.get(i).getLastMessage().put(friendId, aMessage);
                             sortList();
                             adapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mData.child("Message").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String friendId = dataSnapshot.getKey();
+                String id = dataSnapshot.child(friendId).getKey();
+                if (id.equals(fbId)) {
+                    for (DataSnapshot child : dataSnapshot.child(fbId).getChildren()) {
+                        SingleMessage aMessage = child.getValue(SingleMessage.class);
+                        for (int i = 0; i < userList.size(); i++) {
+                            if (userList.get(i).getId().equals(friendId)) {
+                                userList.get(i).getLastMessage().put(friendId, aMessage);
+                                sortList();
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                String friendId = dataSnapshot.getKey();
+                String id = dataSnapshot.child(friendId).getKey();
+                if (id.equals(fbId)) {
+                    for (DataSnapshot child : dataSnapshot.child(fbId).getChildren()) {
+                        SingleMessage aMessage = child.getValue(SingleMessage.class);
+                        for (int i = 0; i < userList.size(); i++) {
+                            if (userList.get(i).getId().equals(friendId)) {
+                                userList.get(i).getLastMessage().put(friendId, aMessage);
+                                sortList();
+                                adapter.notifyDataSetChanged();
+                            }
                         }
                     }
                 }
