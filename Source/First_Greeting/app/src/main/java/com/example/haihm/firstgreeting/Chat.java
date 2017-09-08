@@ -78,10 +78,6 @@ public class Chat extends Fragment {
                 return p1.getLastMessage().get(p1.getId()).getDate().compareTo(p2.getLastMessage().get(p2.getId()).getDate());
             }
         });
-//        for (User user : userList) {
-//            Log.e("data", user.getName());
-//            Log.e("data", user.getLastMessage().get(user.getId()).getDate().toString());
-//        }
     }
 
     private void loadData() {
@@ -100,7 +96,6 @@ public class Chat extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         long indexOfLastMess = dataSnapshot.child(fbId).child(friendId).getChildrenCount();
-                        Log.e("Data:", Long.toString(indexOfLastMess));
                         if (indexOfLastMess == 0) {
                             lastMess1[0] = new SingleMessage(new Date(), " ", "");
                         } else {
@@ -116,7 +111,6 @@ public class Chat extends Fragment {
                         SingleMessage lastMess = lastMess1[0].getDate().compareTo(lastMess2[0].getDate()) >= 0 ? lastMess1[0] : lastMess2[0];
                         lastMessages.put(friendId, lastMess);
                         user.setLastMessage(lastMessages);
-                        Log.e("data", user.getLastMessage().get(friendId).getDate().toString());
                         userList.add(user);
                         sortList();
                         adapter.notifyDataSetChanged();
@@ -200,35 +194,17 @@ public class Chat extends Fragment {
         mData.child("Message").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String friendId = dataSnapshot.getKey();
-                String id = dataSnapshot.child(friendId).getKey();
-                if (id.equals(fbId)) {
-                    for (DataSnapshot child : dataSnapshot.child(fbId).getChildren()) {
-                        SingleMessage aMessage = child.getValue(SingleMessage.class);
-                        for (int i = 0; i < userList.size(); i++) {
-                            if (userList.get(i).getId().equals(friendId)) {
-                                userList.get(i).getLastMessage().put(friendId, aMessage);
-                                sortList();
-                                adapter.notifyDataSetChanged();
-                            }
-                        }
-                    }
-                }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                String friendId = dataSnapshot.getKey();
-                String id = dataSnapshot.child(friendId).getKey();
-                if (id.equals(fbId)) {
-                    for (DataSnapshot child : dataSnapshot.child(fbId).getChildren()) {
-                        SingleMessage aMessage = child.getValue(SingleMessage.class);
-                        for (int i = 0; i < userList.size(); i++) {
-                            if (userList.get(i).getId().equals(friendId)) {
-                                userList.get(i).getLastMessage().put(friendId, aMessage);
-                                sortList();
-                                adapter.notifyDataSetChanged();
-                            }
+                for (DataSnapshot child : dataSnapshot.child(fbId).getChildren()) {
+                    SingleMessage aMessage = child.getValue(SingleMessage.class);
+                    for (int i = 0; i < userList.size(); i++) {
+                        if (userList.get(i).getId().equals(friendId)) {
+                            userList.get(i).getLastMessage().put(friendId, aMessage);
+                            sortList();
+                            adapter.notifyDataSetChanged();
                         }
                     }
                 }
