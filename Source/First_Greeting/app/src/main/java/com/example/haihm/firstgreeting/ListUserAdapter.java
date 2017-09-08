@@ -44,6 +44,7 @@ public class ListUserAdapter extends BaseAdapter {
     private class ViewHolder {
         ImageView imgAvatar;
         TextView tvName;
+        TextView tvLastMessage;
     }
 
     @Override
@@ -58,6 +59,7 @@ public class ListUserAdapter extends BaseAdapter {
             rowView = inflater.inflate(myLayout, null);
             holder.imgAvatar = (ImageView) rowView.findViewById(R.id.imageAvatar);
             holder.tvName = (TextView) rowView.findViewById(R.id.tvName);
+            holder.tvLastMessage = (TextView) rowView.findViewById(R.id.tvLastMessage);
             rowView.setTag(holder);
 
             //convertView.setTag(holder);
@@ -67,6 +69,7 @@ public class ListUserAdapter extends BaseAdapter {
         }
 
         holder.tvName.setText(userList.get(position).getName());
+        holder.tvLastMessage.setText(userList.get(position).getLastMessage().getContent());
         Picasso.with(myContext).load(userList.get(position).getLinkAvatar()).into(holder.imgAvatar);
 
         return rowView;

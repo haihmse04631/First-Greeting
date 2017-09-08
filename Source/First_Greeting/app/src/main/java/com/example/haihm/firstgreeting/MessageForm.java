@@ -17,6 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 public class MessageForm extends AppCompatActivity {
@@ -51,8 +53,6 @@ public class MessageForm extends AppCompatActivity {
         setContentView(R.layout.activity_message);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.title_layout);
-        txtTitle = (TextView) findViewById(R.id.txtMyTitle);
-        txtTitle.setText("Name of your friend");
 
         mData = FirebaseDatabase.getInstance().getReference();
         btnSend = (ImageButton) findViewById(R.id.btnSend);
@@ -64,8 +64,12 @@ public class MessageForm extends AppCompatActivity {
         sendAvartarLink = bund.getString("fbSendAvatarLink");
         receiveId = bund.getString("fbReceiveId");
         receiveAvartarLink = bund.getString("fbReceiveAvatarLink");
-        lvListMessage = (ListView) findViewById(R.id.listViewMessage);
+        title = bund.getString("fbReceiveName");
 
+        txtTitle = (TextView) findViewById(R.id.txtMyTitle);
+        txtTitle.setText(title);
+
+        lvListMessage = (ListView) findViewById(R.id.listViewMessage);
         messList = new ArrayList<>();
         adapter = new ListMessageAdapter(MessageForm.this, R.layout.row_send_message, R.layout.row_receive_message, messList);
         lvListMessage.setAdapter(adapter);
@@ -73,25 +77,21 @@ public class MessageForm extends AppCompatActivity {
         numberOfSend = 0;
         lock = 0;
         loadMessage(sendId, receiveId);
-        Thread t = Thread.currentThread();
-        try {
-            t.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        Thread t = Thread.currentThread();
+//        try {
+//            t.sleep(500);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         pushMessageToFirebase(sendId, receiveId);
     }
 
     private void sortList() {
-        for (int i = 0; i < messList.size() - 1; i++) {
-            for (int j = i + 1; j < messList.size(); j++) {
-                if (messList.get(i).getDate().toString().compareTo(messList.get(j).getDate().toString()) > 0) {
-                    SingleMessage aMess = messList.get(i);
-                    messList.set(i, messList.get(j));
-                    messList.set(j, aMess);
-                }
+        Collections.sort(messList, new Comparator<SingleMessage>(){
+            public int compare(SingleMessage p1, SingleMessage p2){
+                return p1.getDate().compareTo(p2.getDate());
             }
-        }
+        });
     }
 
     public void loadMessage(String sendId, String receiveId) {
@@ -164,6 +164,9 @@ public class MessageForm extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String content = txtInput.getText().toString();
+                if (content.isEmpty()) {
+                    return;
+                }
                 txtInput.setText("");
                 SingleMessage aMess = new SingleMessage(new Date(), content, sendAvartarLink);
                 mData.child("Message").child(sendId).child(receiveId).child(Integer.toString(numberOfSend)).setValue(aMess);

@@ -17,6 +17,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Collections;
+import java.util.Comparator;
+
 /**
  * Created by haihm on 8/8/2017.
  */
@@ -54,6 +57,7 @@ public class Chat extends Fragment {
                 bundle.putString("fbSendAvatarLink", fbImage);
                 bundle.putString("fbReceiveId", user.getId());
                 bundle.putString("fbReceiveAvatarLink", user.getLinkAvatar());
+                bundle.putString("fbReceiveName", user.getName());
                 intent.putExtra("MyPackage", bundle);
                 startActivity(intent);
             }
@@ -61,21 +65,16 @@ public class Chat extends Fragment {
 
         //Load data from Firebase
         loadData();
-        sortList();
 
         return rootView;
     }
 
     private void sortList() {
-        for (int i = 0; i < userList.size()-1; i++) {
-            for (int j = i+1; j < userList.size(); j++) {
-                if (userList.get(i).getLastMessage().toString().compareTo(userList.get(j).getLastMessage().toString()) > 0) {
-                    User user = userList.get(i);
-                    userList.set(i, userList.get(j));
-                    userList.set(j, user);
-                }
+        Collections.sort(userList, new Comparator<User>(){
+            public int compare(User p1, User p2){
+                return p1.getLastMessage().getDate().compareTo(p2.getLastMessage().getDate());
             }
-        }
+        });
     }
 
     private void loadData() {
@@ -89,12 +88,21 @@ public class Chat extends Fragment {
                 }
                 User user = dataSnapshot.getValue(User.class);
                 userList.add(user);
+                sortList();
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                String id = (String) dataSnapshot.getKey();
+                SingleMessage changedMess = dataSnapshot.child("lastMessage").getValue(SingleMessage.class);
+                for (int i = 0; i < userList.size(); i++) {
+                    if (userList.get(i).getId().equals(id)) {
+                        userList.get(i).setLastMessage(changedMess);
+                        sortList();
+                        adapter.notifyDataSetChanged();
+                    }
+                }
             }
 
             @Override
@@ -113,6 +121,49 @@ public class Chat extends Fragment {
             }
         });
 
+        mData.child("Message").child(fbId).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                final String receiveId = dataSnapshot.getKey();
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    SingleMessage sendMess = child.getValue(SingleMessage.class);
+                    SingleMessage receiveMess = new SingleMessage();
+                    mData.child("User").child(fbId).child("lastMessage").setValue(sendMess);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                String receiveId = dataSnapshot.getKey();
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    SingleMessage aMessage = child.getValue(SingleMessage.class);
+                    mData.child("User").child(fbId).child("lastMessage").setValue(aMessage);
+                    mData.child("User").child(receiveId).child("lastMessage").setValue(aMessage);
+                    for (int i = 0; i < userList.size(); i++) {
+                        if (userList.get(i).getId().equals(receiveId)) {
+                            userList.get(i).setLastMessage(aMessage);
+                            sortList();
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
 

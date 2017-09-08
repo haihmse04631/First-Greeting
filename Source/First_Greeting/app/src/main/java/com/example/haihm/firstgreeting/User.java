@@ -11,7 +11,7 @@ public class User {
     String linkAvatar;
     String id;
     String role;
-    Date lastMessage;
+    SingleMessage lastMessage;
 
     public User() {
     }
@@ -21,7 +21,7 @@ public class User {
         this.linkAvatar = linkAvatar;
         this.id = id;
         this.role = role;
-        lastMessage = new Date();
+        lastMessage = new SingleMessage(new Date(), "", "");
     }
 
     public String getName() {
@@ -52,11 +52,11 @@ public class User {
         return role;
     }
 
-    public Date getLastMessage() {
+    public SingleMessage getLastMessage() {
         return lastMessage;
     }
 
-    public void setLastMessage(Date lastMessage) {
+    public void setLastMessage(SingleMessage lastMessage) {
         this.lastMessage = lastMessage;
     }
 

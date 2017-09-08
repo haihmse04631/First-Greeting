@@ -53,46 +53,39 @@ public class ListMessageAdapter extends BaseAdapter {
         View rowView = view;
 
         if (arrayMessage.get(i).getType().equals("send")) {
-            if (rowView == null) {
-                rowView = inflater.inflate(SendLayout, null);
-                holderSend.imgAvatarSend = (ImageView) rowView.findViewById(R.id.avatarSend);
-                holderSend.txtMessageSend = (TextView) rowView.findViewById(R.id.txtMessageSend);
-                rowView.setTag(holderSend);
-            } else {
-                holderSend = (ViewHolderSend) rowView.getTag();
-            }
+            rowView = inflater.inflate(SendLayout, null);
+            holderSend.imgAvatarSend = (ImageView) rowView.findViewById(R.id.avatarSend);
+            holderSend.txtMessageSend = (TextView) rowView.findViewById(R.id.txtMessageSend);
+            rowView.setTag(holderSend);
+            holderSend = (ViewHolderSend) rowView.getTag();
             holderSend.txtMessageSend.setText(arrayMessage.get(i).getContent());
             Picasso.with(MessContext).load(arrayMessage.get(i).getAvatarLink()).into(holderSend.imgAvatarSend);
 
         } else if (arrayMessage.get(i).getType().equals("receive")) {
-            if (rowView == null) {
-                rowView = inflater.inflate(ReceiveLayout, null);
-                holderReceive.imgAvatarReceive = (ImageView) rowView.findViewById(R.id.avatarReceive);
-                holderReceive.txtMessageReceive = (TextView) rowView.findViewById(R.id.txtMessageReceive);
-                rowView.setTag(holderReceive);
-            } else  {
-                holderReceive = (ViewHolderReceive) rowView.getTag();
-            }
+            rowView = inflater.inflate(ReceiveLayout, null);
+            holderReceive.imgAvatarReceive = (ImageView) rowView.findViewById(R.id.avatarReceive);
+            holderReceive.txtMessageReceive = (TextView) rowView.findViewById(R.id.txtMessageReceive);
+            rowView.setTag(holderReceive);
+            holderReceive = (ViewHolderReceive) rowView.getTag();
             holderReceive.txtMessageReceive.setText(arrayMessage.get(i).getContent());
             Picasso.with(MessContext).load(arrayMessage.get(i).getAvatarLink()).into(holderReceive.imgAvatarReceive);
         }
 
-
         return rowView;
-    }
+}
 
     @Override
     public CharSequence[] getAutofillOptions() {
         return new CharSequence[0];
     }
 
-    private class ViewHolderReceive {
-        TextView txtMessageReceive;
-        ImageView imgAvatarReceive;
-    }
+private class ViewHolderReceive {
+    TextView txtMessageReceive;
+    ImageView imgAvatarReceive;
+}
 
-    private class ViewHolderSend {
-        TextView txtMessageSend;
-        ImageView imgAvatarSend;
-    }
+private class ViewHolderSend {
+    TextView txtMessageSend;
+    ImageView imgAvatarSend;
+}
 }
