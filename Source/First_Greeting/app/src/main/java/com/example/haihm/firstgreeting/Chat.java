@@ -75,7 +75,7 @@ public class Chat extends Fragment {
     private void sortList() {
         Collections.sort(userList, new Comparator<User>() {
             public int compare(User p1, User p2) {
-                return p1.getLastMessage().get(p1.getId()).getDate().compareTo(p2.getLastMessage().get(p2.getId()).getDate());
+                return p2.getLastMessage().get(p2.getId()).getDate().compareTo(p1.getLastMessage().get(p1.getId()).getDate());
             }
         });
     }
@@ -198,6 +198,9 @@ public class Chat extends Fragment {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                String friendId = dataSnapshot.getKey();
+                String id = dataSnapshot.child(friendId).getKey();
+                Log.e("Data: ", "a");
                 for (DataSnapshot child : dataSnapshot.child(fbId).getChildren()) {
                     SingleMessage aMessage = child.getValue(SingleMessage.class);
                     for (int i = 0; i < userList.size(); i++) {

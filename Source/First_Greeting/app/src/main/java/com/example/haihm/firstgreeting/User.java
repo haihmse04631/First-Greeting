@@ -21,7 +21,16 @@ public class User {
         this.linkAvatar = linkAvatar;
         this.id = id;
         this.role = role;
-        lastMessage = new HashMap<>();
+        lastMessage = new HashMap<String, SingleMessage>(){
+            @Override
+            public String toString() {
+                String s = "";
+                for (String key : lastMessage.keySet()) {
+                    s += lastMessage.get(key) + "\n";
+                }
+                return s;
+            }
+        };
     }
 
     public String getName() {
@@ -66,6 +75,6 @@ public class User {
 
     @Override
     public String toString() {
-        return name;
+        return name + "\n" + lastMessage;
     }
 }

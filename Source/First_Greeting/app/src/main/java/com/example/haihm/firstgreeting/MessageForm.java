@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -164,7 +163,6 @@ public class MessageForm extends AppCompatActivity {
                 }
                 txtInput.setText("");
                 SingleMessage aMess = new SingleMessage(new Date(), content, sendAvartarLink);
-                Log.e("Data: ", aMess.getDate().toString());
                 mData.child("Message").child(sendId).child(receiveId).child(Integer.toString(numberOfSend)).setValue(aMess);
             }
         });
