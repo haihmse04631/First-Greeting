@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -21,7 +22,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
-public class MessageForm extends AppCompatActivity {
+public class MessageForm extends AppCompatActivity implements View.OnClickListener {
 
     DatabaseReference mData;
 
@@ -37,7 +38,7 @@ public class MessageForm extends AppCompatActivity {
     private ListView lvListMessage;
     private ListMessageAdapter adapter;
 
-  //  private MessageList messList;
+    //  private MessageList messList;
 
     ImageButton btnSend;
     EditText txtInput;
@@ -81,8 +82,8 @@ public class MessageForm extends AppCompatActivity {
     }
 
     private void sortList() {
-        Collections.sort(messList, new Comparator<SingleMessage>(){
-            public int compare(SingleMessage p1, SingleMessage p2){
+        Collections.sort(messList, new Comparator<SingleMessage>() {
+            public int compare(SingleMessage p1, SingleMessage p2) {
                 return p1.getDate().compareTo(p2.getDate());
             }
         });
@@ -166,5 +167,38 @@ public class MessageForm extends AppCompatActivity {
                 mData.child("Message").child(sendId).child(receiveId).child(Integer.toString(numberOfSend)).setValue(aMess);
             }
         });
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == btnSend) {
+            Log.e("Data:", "abc");
+            mData.child("Message").child(receiveId).child(sendId).addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    mData.child("Message").child(receiveId).child(sendId).child(dataSnapshot.getKey()).child("status").setValue("true");
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 }

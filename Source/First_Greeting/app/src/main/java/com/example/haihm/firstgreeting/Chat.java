@@ -4,7 +4,6 @@ package com.example.haihm.firstgreeting;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -200,7 +199,6 @@ public class Chat extends Fragment {
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 String friendId = dataSnapshot.getKey();
                 String id = dataSnapshot.child(friendId).getKey();
-                Log.e("Data: ", "a");
                 for (DataSnapshot child : dataSnapshot.child(fbId).getChildren()) {
                     SingleMessage aMessage = child.getValue(SingleMessage.class);
                     for (int i = 0; i < userList.size(); i++) {

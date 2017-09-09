@@ -11,6 +11,7 @@ public class SingleMessage {
     private String content;
     private String avatarLink;
     private String type;
+    private Boolean status;
 
     public SingleMessage() {
     }
@@ -20,6 +21,7 @@ public class SingleMessage {
         this.content = content;
         this.avatarLink = avatarLink;
         type = "";
+        status = false;
     }
 
     public Date getDate() {
@@ -52,6 +54,14 @@ public class SingleMessage {
 
     public void setAvatarLink(String avatarLink) {
         this.avatarLink = avatarLink;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     @Override
