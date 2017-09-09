@@ -1,6 +1,7 @@
 package com.example.haihm.firstgreeting;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +71,13 @@ public class ListUserAdapter extends BaseAdapter {
 
         holder.tvName.setText(userList.get(position).getName());
         holder.tvLastMessage.setText(userList.get(position).getLastMessage().get(userList.get(position).getId()).getContent());
+        String status = userList.get(position).getLastMessage().get(userList.get(position).getId()).getStatus();
+//        holder.tvLastMessage.setText(status);
+        if (status.equals("false")) {
+            holder.tvLastMessage.setTypeface(null, Typeface.BOLD_ITALIC);
+        } else {
+            holder.tvLastMessage.setTypeface(null, Typeface.NORMAL);
+        }
         Picasso.with(myContext).load(userList.get(position).getLinkAvatar()).into(holder.imgAvatar);
 
         return rowView;

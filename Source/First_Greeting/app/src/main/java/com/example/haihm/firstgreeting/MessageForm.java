@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -16,13 +16,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
-public class MessageForm extends AppCompatActivity implements View.OnClickListener {
+public class MessageForm extends AppCompatActivity {
 
     DatabaseReference mData;
 
@@ -79,6 +80,8 @@ public class MessageForm extends AppCompatActivity implements View.OnClickListen
         lock = 0;
         loadMessage(sendId, receiveId);
         pushMessageToFirebase(sendId, receiveId);
+        checkStatus();
+        setStatus();
     }
 
     private void sortList() {
@@ -158,7 +161,7 @@ public class MessageForm extends AppCompatActivity implements View.OnClickListen
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String content = txtInput.getText().toString();
+                String content = txtInput.getText().toString().trim();
                 if (content.isEmpty()) {
                     return;
                 }
@@ -169,36 +172,44 @@ public class MessageForm extends AppCompatActivity implements View.OnClickListen
         });
     }
 
-    @Override
-    public void onClick(View view) {
-        if (view == btnSend) {
-            Log.e("Data:", "abc");
-            mData.child("Message").child(receiveId).child(sendId).addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    mData.child("Message").child(receiveId).child(sendId).child(dataSnapshot.getKey()).child("status").setValue("true");
+    public void setStatus() {
+        mData.child("Message").child(receiveId).child(sendId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot mess : dataSnapshot.getChildren()) {
+                    mData.child("Message").child(receiveId).child(sendId).child(mess.getKey()).child("status").setValue("true");
                 }
+            }
 
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
+            }
+        });
     }
+
+
+    public void checkStatus() {
+        lvListMessage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                setStatus();
+            }
+        });
+        txtInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setStatus();
+            }
+        });
+        txtTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setStatus();
+            }
+        });
+
+    }
+
 }

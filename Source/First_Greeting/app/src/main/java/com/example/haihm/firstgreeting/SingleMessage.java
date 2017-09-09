@@ -11,7 +11,7 @@ public class SingleMessage {
     private String content;
     private String avatarLink;
     private String type;
-    private Boolean status;
+    private String status;
 
     public SingleMessage() {
     }
@@ -21,7 +21,7 @@ public class SingleMessage {
         this.content = content;
         this.avatarLink = avatarLink;
         type = "";
-        status = false;
+        status = "false";
     }
 
     public Date getDate() {
@@ -56,11 +56,11 @@ public class SingleMessage {
         this.avatarLink = avatarLink;
     }
 
-    public Boolean getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

@@ -198,9 +198,11 @@ public class Chat extends Fragment {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 String friendId = dataSnapshot.getKey();
-                String id = dataSnapshot.child(friendId).getKey();
                 for (DataSnapshot child : dataSnapshot.child(fbId).getChildren()) {
                     SingleMessage aMessage = child.getValue(SingleMessage.class);
+                    if (aMessage.getStatus().equals("false")) {
+
+                    }
                     for (int i = 0; i < userList.size(); i++) {
                         if (userList.get(i).getId().equals(friendId)) {
                             userList.get(i).getLastMessage().put(friendId, aMessage);

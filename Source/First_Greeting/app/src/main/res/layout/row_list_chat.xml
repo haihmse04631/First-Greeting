@@ -27,16 +27,17 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="25dp">
+
             <TextView
-                android:layout_centerInParent="true"
-                android:text="Hoang minh Hai"
-                android:textSize="15sp"
-                android:textColor="#000000"
                 android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                />
+                android:layout_centerInParent="true"
+                android:text="Hoang minh Hai"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="15sp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -46,6 +47,7 @@
                 android:layout_centerInParent="true"
                 android:text="Handsome^^"
                 android:textColor="#000000"
+                android:textSize="14sp"
                 android:id="@+id/tvLastMessage"
                 android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
