@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
 import java.util.List;
 
 /**
@@ -60,7 +61,8 @@ public class ListMessageAdapter extends BaseAdapter {
             rowView.setTag(holderSend);
             holderSend = (ViewHolderSend) rowView.getTag();
             holderSend.txtMessageSend.setText(arrayMessage.get(i).getContent());
-            holderSend.txtTime.setText(arrayMessage.get(i).getDate().getHours() + ":" + arrayMessage.get(i).getDate().getMinutes());
+            String stringDate = DateFormat.getTimeInstance().format(arrayMessage.get(i).getDate());
+            holderSend.txtTime.setText(stringDate);
             Picasso.with(MessContext).load(arrayMessage.get(i).getAvatarLink()).into(holderSend.imgAvatarSend);
 
         } else if (arrayMessage.get(i).getType().equals("receive")) {
@@ -71,7 +73,8 @@ public class ListMessageAdapter extends BaseAdapter {
             rowView.setTag(holderReceive);
             holderReceive = (ViewHolderReceive) rowView.getTag();
             holderReceive.txtMessageReceive.setText(arrayMessage.get(i).getContent());
-            holderReceive.txtTime.setText(arrayMessage.get(i).getDate().getHours() + ":" + arrayMessage.get(i).getDate().getMinutes());
+            String stringDate = DateFormat.getTimeInstance().format(arrayMessage.get(i).getDate());
+            holderReceive.txtTime.setText(stringDate);
             Picasso.with(MessContext).load(arrayMessage.get(i).getAvatarLink()).into(holderReceive.imgAvatarReceive);
         }
 

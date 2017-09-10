@@ -52,21 +52,16 @@ public class ListUserAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder holder = new ViewHolder();
-        //LayoutInflater inflater = (LayoutInflater) myContext.get;
         LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = convertView;
         if (rowView == null) {
-
             rowView = inflater.inflate(myLayout, null);
             holder.imgAvatar = (ImageView) rowView.findViewById(R.id.imageAvatar);
             holder.tvName = (TextView) rowView.findViewById(R.id.tvName);
             holder.tvLastMessage = (TextView) rowView.findViewById(R.id.tvLastMessage);
             rowView.setTag(holder);
-
-            //convertView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
-            //holder = (ViewHolder) convertView.getTag();
         }
 
         holder.tvName.setText(userList.get(position).getName());

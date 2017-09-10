@@ -1,40 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_marginTop="5dp"
-    android:weightSum="10"
-     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:weightSum="10">
 
-        <TextView
-            android:layout_marginLeft="10dp"
-            android:text="Hoang Minh Hai"
-            android:layout_marginRight="10dp"
-            android:id="@+id/txtMessageSend"
-            android:layout_toLeftOf="@+id/avatarSend"
-            android:background="#b8f1b6"
-            android:padding="8dp"
-            android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp" />
+    <TextView
+        android:id="@+id/txtMessageSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/avatarSend"
+        android:background="#b8f1b6"
+        android:gravity="left"
+        android:padding="8dp"
+        android:text="Hoang Minh Hai" />
 
-        <ImageView
-            android:id="@+id/avatarSend"
-            android:background="#ff0"
-            android:layout_marginRight="10dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+    <ImageView
+        android:id="@+id/avatarSend"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:background="#ff0" />
 
-        <TextView
-            android:id="@+id/txtTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/txtMessageSend"
-            android:layout_weight="1.78"
-            android:layout_marginLeft="10dp"
-            android:padding="8dp"
-            android:gravity="center"
-            android:text="time" />
+    <TextView
+        android:id="@+id/txtTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="-70dp"
+        android:layout_toLeftOf="@+id/txtMessageSend"
+        android:layout_weight="1.78"
+        android:gravity="right"
+        android:padding="8dp"
+        android:text="time"
+        android:visibility="invisible" />
 
 </RelativeLayout>

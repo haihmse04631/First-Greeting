@@ -87,7 +87,7 @@ public class MessageForm extends AppCompatActivity {
         setStatus();
     }
 
-    private void backToChat(){
+    private void backToChat() {
         btnBackToChat = (ImageButton) findViewById(R.id.backToChat);
         btnBackToChat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,6 +208,15 @@ public class MessageForm extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 setStatus();
+
+                TextView time = view.findViewById(R.id.txtTime);
+                if (time.getVisibility() != View.VISIBLE) {
+                    time.setVisibility(View.VISIBLE);
+                } else {
+                    time.setVisibility(View.GONE);
+                }
+//                String date = new Date().getDay() + "";
+//                time.setText(date);
             }
         });
         txtInput.setOnClickListener(new View.OnClickListener() {
