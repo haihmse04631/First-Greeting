@@ -71,9 +71,8 @@ public class ListUserAdapter extends BaseAdapter {
 
         holder.tvName.setText(userList.get(position).getName());
         holder.tvLastMessage.setText(userList.get(position).getLastMessage().get(userList.get(position).getId()).getContent());
-        String status = userList.get(position).getLastMessage().get(userList.get(position).getId()).getStatus();
-//        holder.tvLastMessage.setText(status);
-        if (status.equals("false")) {
+        SingleMessage lasMess = userList.get(position).getLastMessage().get(userList.get(position).getId());
+        if (lasMess.getStatus().equals("false") && lasMess.getType().equals("receive")) {
             holder.tvLastMessage.setTypeface(null, Typeface.BOLD_ITALIC);
         } else {
             holder.tvLastMessage.setTypeface(null, Typeface.NORMAL);

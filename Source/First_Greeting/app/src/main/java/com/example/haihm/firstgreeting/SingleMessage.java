@@ -20,7 +20,7 @@ public class SingleMessage {
         this.date = date;
         this.content = content;
         this.avatarLink = avatarLink;
-        type = "";
+        type = "send";
         status = "false";
     }
 
