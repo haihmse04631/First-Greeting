@@ -42,6 +42,7 @@ public class MessageForm extends AppCompatActivity {
     //  private MessageList messList;
 
     ImageButton btnSend;
+    ImageButton btnBackToChat;
     EditText txtInput;
     String title = "Name of your friend";
     private ArrayList<SingleMessage> messList;
@@ -76,12 +77,24 @@ public class MessageForm extends AppCompatActivity {
         adapter = new ListMessageAdapter(MessageForm.this, R.layout.row_send_message, R.layout.row_receive_message, messList);
         lvListMessage.setAdapter(adapter);
 
+        backToChat();
+
         numberOfSend = 0;
         lock = 0;
         loadMessage(sendId, receiveId);
         pushMessageToFirebase(sendId, receiveId);
         checkStatus();
         setStatus();
+    }
+
+    private void backToChat(){
+        btnBackToChat = (ImageButton) findViewById(R.id.backToChat);
+        btnBackToChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     private void sortList() {

@@ -29,10 +29,11 @@
             android:layout_height="25dp">
 
             <TextView
+                android:layout_marginLeft="10dp"
                 android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
+                android:layout_alignParentLeft="true"
                 android:layout_centerInParent="true"
                 android:text="Hoang minh Hai"
                 android:textStyle="bold"
@@ -44,9 +45,13 @@
             android:layout_width="match_parent"
             android:layout_height="25dp">
             <TextView
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
                 android:layout_centerInParent="true"
                 android:text="Handsome^^"
-                android:textColor="#000000"
+                android:textColor="#f10707"
                 android:textSize="14sp"
                 android:id="@+id/tvLastMessage"
                 android:layout_centerHorizontal="true"
