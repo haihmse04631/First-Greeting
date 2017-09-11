@@ -5,6 +5,19 @@
     android:background="#EBF5EA"
     >
 
+    <EditText
+        android:hint="Bạn đang nghĩ gì?"
+        android:id="@+id/edtStatus"
+        android:layout_width="match_parent"
+        android:layout_height="70dp" />
+    <Button
+        android:id="@+id/btnPostStatus"
+        android:layout_marginRight="10dp"
+        android:text="Đăng"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="35dp" />
+
     <ListView
         android:id="@+id/lvNewsFeed"
         android:layout_width="match_parent"
