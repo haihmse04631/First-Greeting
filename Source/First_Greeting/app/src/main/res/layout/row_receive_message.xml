@@ -21,9 +21,12 @@
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/avatarReceive"
         android:layout_weight="1.78"
-        android:background="#b8f1b6"
+        android:background="@drawable/custom_shape"
         android:gravity="left"
-        android:padding="8dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:text="Hoang Minh Hai" />
 
     <TextView

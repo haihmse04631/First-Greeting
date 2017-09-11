@@ -2,6 +2,7 @@ package com.example.haihm.firstgreeting;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -201,7 +202,6 @@ public class MessageForm extends AppCompatActivity {
         });
     }
 
-
     public void checkStatus() {
         lvListMessage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -209,12 +209,21 @@ public class MessageForm extends AppCompatActivity {
                                     long id) {
                 setStatus();
 
-                TextView time = view.findViewById(R.id.txtTime);
-                if (time.getVisibility() != View.VISIBLE) {
-                    time.setVisibility(View.VISIBLE);
-                } else {
-                    time.setVisibility(View.GONE);
-                }
+                final TextView time = view.findViewById(R.id.txtTime);
+//                if (time.getVisibility() != View.VISIBLE) {
+//                    time.setVisibility(View.VISIBLE);
+//                } else {
+//                    time.setVisibility(View.GONE);
+//                }
+                time.setVisibility(View.VISIBLE);
+                new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            time.setVisibility(View.GONE);
+                        }
+                },3000);
+
+               // time.setVisibility(View.GONE);
 //                String date = new Date().getDay() + "";
 //                time.setText(date);
             }
