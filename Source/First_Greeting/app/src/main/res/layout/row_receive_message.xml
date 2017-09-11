@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="5dp"
-    android:weightSum="10">
+    android:layout_height="48dp"
+    android:layout_marginTop="5dp">
 
     <ImageView
+        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
         android:id="@+id/avatarReceive"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -13,12 +14,11 @@
         android:background="#ff0" />
 
     <TextView
+        android:layout_centerInParent="true"
         android:id="@+id/txtMessageReceive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="70dp"
         android:layout_toRightOf="@+id/avatarReceive"
         android:layout_weight="1.78"
         android:background="#b8f1b6"
@@ -27,13 +27,12 @@
         android:text="Hoang Minh Hai" />
 
     <TextView
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="5dp"
         android:id="@+id/txtTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="-70dp"
         android:layout_toRightOf="@+id/txtMessageReceive"
-        android:layout_weight="1.78"
         android:gravity="center"
         android:padding="8dp"
         android:text="time"
