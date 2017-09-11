@@ -52,28 +52,22 @@ public class ListUserAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder holder = new ViewHolder();
-        //LayoutInflater inflater = (LayoutInflater) myContext.get;
         LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = convertView;
         if (rowView == null) {
-
             rowView = inflater.inflate(myLayout, null);
             holder.imgAvatar = (ImageView) rowView.findViewById(R.id.imageAvatar);
             holder.tvName = (TextView) rowView.findViewById(R.id.tvName);
             holder.tvLastMessage = (TextView) rowView.findViewById(R.id.tvLastMessage);
             rowView.setTag(holder);
-
-            //convertView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
-            //holder = (ViewHolder) convertView.getTag();
         }
 
         holder.tvName.setText(userList.get(position).getName());
         holder.tvLastMessage.setText(userList.get(position).getLastMessage().get(userList.get(position).getId()).getContent());
-        String status = userList.get(position).getLastMessage().get(userList.get(position).getId()).getStatus();
-//        holder.tvLastMessage.setText(status);
-        if (status.equals("false")) {
+        SingleMessage lasMess = userList.get(position).getLastMessage().get(userList.get(position).getId());
+        if (lasMess.getStatus().equals("false") && lasMess.getType().equals("receive")) {
             holder.tvLastMessage.setTypeface(null, Typeface.BOLD_ITALIC);
         } else {
             holder.tvLastMessage.setTypeface(null, Typeface.NORMAL);

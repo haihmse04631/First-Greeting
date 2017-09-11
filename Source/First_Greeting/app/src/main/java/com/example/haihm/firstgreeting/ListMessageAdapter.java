@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
 import java.util.List;
 
 /**
@@ -56,18 +57,24 @@ public class ListMessageAdapter extends BaseAdapter {
             rowView = inflater.inflate(SendLayout, null);
             holderSend.imgAvatarSend = (ImageView) rowView.findViewById(R.id.avatarSend);
             holderSend.txtMessageSend = (TextView) rowView.findViewById(R.id.txtMessageSend);
+            holderSend.txtTime = (TextView) rowView.findViewById(R.id.txtTime);
             rowView.setTag(holderSend);
             holderSend = (ViewHolderSend) rowView.getTag();
             holderSend.txtMessageSend.setText(arrayMessage.get(i).getContent());
+            String stringDate = DateFormat.getTimeInstance().format(arrayMessage.get(i).getDate());
+            holderSend.txtTime.setText(stringDate);
             Picasso.with(MessContext).load(arrayMessage.get(i).getAvatarLink()).into(holderSend.imgAvatarSend);
 
         } else if (arrayMessage.get(i).getType().equals("receive")) {
             rowView = inflater.inflate(ReceiveLayout, null);
             holderReceive.imgAvatarReceive = (ImageView) rowView.findViewById(R.id.avatarReceive);
             holderReceive.txtMessageReceive = (TextView) rowView.findViewById(R.id.txtMessageReceive);
+            holderReceive.txtTime = (TextView) rowView.findViewById(R.id.txtTime);
             rowView.setTag(holderReceive);
             holderReceive = (ViewHolderReceive) rowView.getTag();
             holderReceive.txtMessageReceive.setText(arrayMessage.get(i).getContent());
+            String stringDate = DateFormat.getTimeInstance().format(arrayMessage.get(i).getDate());
+            holderReceive.txtTime.setText(stringDate);
             Picasso.with(MessContext).load(arrayMessage.get(i).getAvatarLink()).into(holderReceive.imgAvatarReceive);
         }
 
@@ -82,10 +89,12 @@ public class ListMessageAdapter extends BaseAdapter {
 private class ViewHolderReceive {
     TextView txtMessageReceive;
     ImageView imgAvatarReceive;
+    TextView txtTime;
 }
 
 private class ViewHolderSend {
     TextView txtMessageSend;
     ImageView imgAvatarSend;
+    TextView txtTime;
 }
 }
