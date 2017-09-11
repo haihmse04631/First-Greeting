@@ -32,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:padding="5dp"
             android:paddingLeft="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"
@@ -39,6 +40,49 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:weightSum="10">
+
+        <RelativeLayout
+            android:layout_weight="5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <Button
+                android:textAllCaps="false"
+                android:id="@+id/btnLike"
+                android:layout_centerInParent="true"
+                android:textSize="10sp"
+                android:text="Like"
+                android:layout_width="70dp"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight="5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <Button
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textAllCaps="false"
+                android:id="@+id/btnComment"
+                android:layout_centerInParent="true"
+                android:textSize="10sp"
+                android:text="Comment"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lvListComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></ListView>
 
 
 </LinearLayout>
