@@ -19,6 +19,11 @@ allprojects {
         maven {
             url "https://maven.google.com" // Google's Maven repository
         }
+        maven {
+            url 'https://maven.google.com'
+            }
+
+        maven { url 'https://tokbox.bintray.com/maven' }
     }
 }
 

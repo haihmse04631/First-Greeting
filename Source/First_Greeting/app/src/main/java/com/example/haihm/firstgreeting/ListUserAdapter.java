@@ -87,7 +87,7 @@ public class ListUserAdapter extends BaseAdapter {
         } else {
             holder.tvLastMessage.setTypeface(null, Typeface.NORMAL);
         }
-        if (lasMess.getStatus().equals("true") && lasMess.getType().equals("receive")) {
+        if (lasMess.getStatus().equals("true")) {
             holder.tvCountMess.setVisibility(View.INVISIBLE);
             holder.tvCountMess.setText("");
         }

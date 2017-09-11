@@ -63,7 +63,9 @@ public class ListMessageAdapter extends BaseAdapter {
             holderSend.txtMessageSend.setText(arrayMessage.get(i).getContent());
             String stringDate = DateFormat.getTimeInstance().format(arrayMessage.get(i).getDate());
             holderSend.txtTime.setText(stringDate);
-            Picasso.with(MessContext).load(arrayMessage.get(i).getAvatarLink()).into(holderSend.imgAvatarSend);
+            if (((i > 0) && !arrayMessage.get(i - 1).getType().equals("send")) || (i == 0)) {
+                Picasso.with(MessContext).load(arrayMessage.get(i).getAvatarLink()).into(holderSend.imgAvatarSend);
+            }
 
         } else if (arrayMessage.get(i).getType().equals("receive")) {
             rowView = inflater.inflate(ReceiveLayout, null);
@@ -75,26 +77,28 @@ public class ListMessageAdapter extends BaseAdapter {
             holderReceive.txtMessageReceive.setText(arrayMessage.get(i).getContent());
             String stringDate = DateFormat.getTimeInstance().format(arrayMessage.get(i).getDate());
             holderReceive.txtTime.setText(stringDate);
-            Picasso.with(MessContext).load(arrayMessage.get(i).getAvatarLink()).into(holderReceive.imgAvatarReceive);
+            if (((i > 0) && arrayMessage.get(i - 1).getType().equals("send")) || (i == 0)) {
+                Picasso.with(MessContext).load(arrayMessage.get(i).getAvatarLink()).into(holderReceive.imgAvatarReceive);
+            }
         }
 
         return rowView;
-}
+    }
 
     @Override
     public CharSequence[] getAutofillOptions() {
         return new CharSequence[0];
     }
 
-private class ViewHolderReceive {
-    TextView txtMessageReceive;
-    ImageView imgAvatarReceive;
-    TextView txtTime;
-}
+    private class ViewHolderReceive {
+        TextView txtMessageReceive;
+        ImageView imgAvatarReceive;
+        TextView txtTime;
+    }
 
-private class ViewHolderSend {
-    TextView txtMessageSend;
-    ImageView imgAvatarSend;
-    TextView txtTime;
-}
+    private class ViewHolderSend {
+        TextView txtMessageSend;
+        ImageView imgAvatarSend;
+        TextView txtTime;
+    }
 }
