@@ -98,6 +98,7 @@ public class FirstGreetingMain extends AppCompatActivity {
             switch (position) {
                 case 0:
                     VideoCall videoCallTab = new VideoCall();
+                    videoCallTab.setArguments(bund);
                     return videoCallTab;
                 case 1:
                     NewsFeed newsFeedTab = new NewsFeed();

@@ -96,7 +96,9 @@ public class Chat extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         long indexOfLastMess = dataSnapshot.child(fbId).child(friendId).getChildrenCount();
                         if (indexOfLastMess == 0) {
-                            lastMess1[0] = new SingleMessage(new Date(), " ", "");
+                            Date date = new Date();
+                            date.setTime(0);
+                            lastMess1[0] = new SingleMessage(date, " ", "");
                         } else {
                             lastMess1[0] = dataSnapshot.child(fbId).child(friendId).child(Long.toString(indexOfLastMess - 1)).getValue(SingleMessage.class);
                         }
@@ -147,6 +149,9 @@ public class Chat extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String friendId = dataSnapshot.getKey();
+                if (friendId.equals(fbId)) {
+                    return;
+                }
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     SingleMessage aMessage = child.getValue(SingleMessage.class);
                     for (int i = 0; i < userList.size(); i++) {
@@ -162,6 +167,9 @@ public class Chat extends Fragment {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 String friendId = dataSnapshot.getKey();
+                if (friendId.equals(fbId)) {
+                    return;
+                }
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     SingleMessage aMessage = child.getValue(SingleMessage.class);
                     for (int i = 0; i < userList.size(); i++) {
@@ -198,6 +206,9 @@ public class Chat extends Fragment {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 String friendId = dataSnapshot.getKey();
+                if (friendId.equals(fbId)) {
+                    return;
+                }
                 for (DataSnapshot child : dataSnapshot.child(fbId).getChildren()) {
                     SingleMessage aMessage = child.getValue(SingleMessage.class);
                     aMessage.setType("receive");

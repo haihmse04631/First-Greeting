@@ -30,10 +30,10 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".MessageForm"
-            android:label="Message"
-
-            ></activity>
+        <activity
+            android:name=".MessageForm"
+            android:label="Message" />
+        <activity android:name=".RoomVideoCall"></activity>
     </application>
 
 </manifest>

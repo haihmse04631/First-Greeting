@@ -84,15 +84,17 @@ public class MessageForm extends AppCompatActivity {
         lock = 0;
         loadMessage(sendId, receiveId);
         pushMessageToFirebase(sendId, receiveId);
-        checkStatus();
+        showTime();
         setStatus();
     }
 
     private void backToChat() {
         btnBackToChat = (ImageButton) findViewById(R.id.backToChat);
+        final int[] count = {0};
         btnBackToChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setStatus();
                 finish();
             }
         });
@@ -186,7 +188,7 @@ public class MessageForm extends AppCompatActivity {
         });
     }
 
-    public void setStatus() {
+    public synchronized void setStatus() {
         mData.child("Message").child(receiveId).child(sendId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -202,42 +204,25 @@ public class MessageForm extends AppCompatActivity {
         });
     }
 
-    public void checkStatus() {
+    public void showTime() {
         lvListMessage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                setStatus();
-
                 final TextView time = view.findViewById(R.id.txtTime);
-//                if (time.getVisibility() != View.VISIBLE) {
-//                    time.setVisibility(View.VISIBLE);
-//                } else {
-//                    time.setVisibility(View.GONE);
-//                }
+                if (time.getVisibility() != View.VISIBLE) {
+                    time.setVisibility(View.VISIBLE);
+                } else {
+                    time.setVisibility(View.GONE);
+                }
                 time.setVisibility(View.VISIBLE);
                 new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             time.setVisibility(View.GONE);
                         }
-                },3000);
+                },2500);
 
-               // time.setVisibility(View.GONE);
-//                String date = new Date().getDay() + "";
-//                time.setText(date);
-            }
-        });
-        txtInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setStatus();
-            }
-        });
-        txtTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setStatus();
             }
         });
 

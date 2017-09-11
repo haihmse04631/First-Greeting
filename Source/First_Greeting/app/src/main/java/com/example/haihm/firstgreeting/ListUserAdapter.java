@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+
 /**
  * Created by haihm on 8/11/2017.
  */
@@ -20,13 +22,16 @@ public class ListUserAdapter extends BaseAdapter {
     Context myContext;
     int myLayout;
     UserList userList;
-    int count;
+    HashMap<String, Integer> count;
 
     public ListUserAdapter(Context myContext, int myLayout, UserList userList) {
         this.myContext = myContext;
         this.myLayout = myLayout;
         this.userList = userList;
-        this.count = 0;
+        this.count = new HashMap<>();
+        for (User user : userList) {
+            count.put(user.getId(), 0);
+        }
     }
 
     @Override
@@ -52,7 +57,7 @@ public class ListUserAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public synchronized View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder holder = new ViewHolder();
         LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -68,29 +73,23 @@ public class ListUserAdapter extends BaseAdapter {
             holder = (ViewHolder) rowView.getTag();
         }
 
+        String fbId = userList.get(position).getId();
+        SingleMessage lasMess = userList.get(position).getLastMessage().get(fbId);
         holder.tvName.setText(userList.get(position).getName());
-        holder.tvLastMessage.setText(userList.get(position).getLastMessage().get(userList.get(position).getId()).getContent());
-        SingleMessage lasMess = userList.get(position).getLastMessage().get(userList.get(position).getId());
+        holder.tvLastMessage.setText(lasMess.getContent());
 
 
-        if (lasMess.getStatus().equals("false") && lasMess.getType().equals("receive")) {
-            if (holder.tvLastMessage.getTypeface() == Typeface.defaultFromStyle(Typeface.BOLD_ITALIC)) {
-                count ++;
-                holder.tvCountMess.setVisibility(View.VISIBLE);
-                holder.tvCountMess.setText(Integer.toString(count));
-            } else {
-                count = 1;
-                holder.tvCountMess.setVisibility(View.VISIBLE);
-                holder.tvCountMess.setText(Integer.toString(count));
-            }
-            holder.tvLastMessage.setTypeface(null, Typeface.BOLD_ITALIC);
-        } else {
-            holder.tvLastMessage.setTypeface(null, Typeface.NORMAL);
-        }
         if (lasMess.getStatus().equals("true")) {
             holder.tvCountMess.setVisibility(View.INVISIBLE);
-            holder.tvCountMess.setText("");
+            holder.tvLastMessage.setTypeface(null, Typeface.NORMAL);
+            count.put(fbId, 0);
+        } else if (lasMess.getType().equals("receive")) {
+            count.put(fbId, count.get(fbId) + 1);
+            holder.tvLastMessage.setTypeface(null, Typeface.BOLD_ITALIC);
+            holder.tvCountMess.setText(Integer.toString(count.get(fbId)));
+            holder.tvCountMess.setVisibility(View.VISIBLE);
         }
+
         Picasso.with(myContext).load(userList.get(position).getLinkAvatar()).into(holder.imgAvatar);
 
         return rowView;

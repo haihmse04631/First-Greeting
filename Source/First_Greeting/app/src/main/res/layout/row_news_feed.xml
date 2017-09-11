@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:background="#EBF5EA"
+    android:layout_marginTop="5dp"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:id="@+id/imgAvatarNewsFeed"
+            android:layout_marginLeft="10dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+
+        <TextView
+            android:text="user name"
+            android:layout_marginLeft="10dp"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@+id/imgAvatarNewsFeed"
+            android:id="@+id/tvUserNewsFeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:padding="5dp"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:weightSum="10">
+
+        <RelativeLayout
+            android:layout_weight="5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <Button
+                android:textAllCaps="false"
+                android:id="@+id/btnLike"
+                android:layout_centerInParent="true"
+                android:textSize="10sp"
+                android:text="Like"
+                android:layout_width="70dp"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight="5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <Button
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textAllCaps="false"
+                android:id="@+id/btnComment"
+                android:layout_centerInParent="true"
+                android:textSize="10sp"
+                android:text="Comment"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lvListComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></ListView>
+
+
+</LinearLayout>
