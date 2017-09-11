@@ -14,6 +14,7 @@ import android.widget.Button;
 
 public class VideoCall extends Fragment {
     Button btnAttendance;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -30,6 +31,9 @@ public class VideoCall extends Fragment {
         });
 
         return rootView;
+
     }
+
+
 }
 

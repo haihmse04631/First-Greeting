@@ -5,36 +5,36 @@
     android:layout_marginTop="5dp">
 
     <TextView
-        android:layout_centerInParent="true"
         android:id="@+id/txtMessageSend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:layout_marginBottom="5dp"
         android:layout_marginRight="10dp"
+        android:layout_marginLeft="70dp"
         android:layout_toLeftOf="@+id/avatarSend"
         android:background="@drawable/custom_shape"
         android:gravity="left"
         android:paddingBottom="8dp"
-        android:paddingTop="8dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
+        android:paddingTop="8dp"
         android:text="Hoang Minh Hai" />
 
     <ImageView
-        android:layout_centerInParent="true"
         android:id="@+id/avatarSend"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
-        android:background="#ff0" />
+        android:layout_centerInParent="true"
+        android:layout_marginRight="10dp" />
 
     <TextView
-        android:layout_marginRight="5dp"
-        android:layout_centerInParent="true"
         android:id="@+id/txtTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="-70dp"
         android:layout_toLeftOf="@+id/txtMessageSend"
         android:layout_weight="1.78"
         android:gravity="center"
