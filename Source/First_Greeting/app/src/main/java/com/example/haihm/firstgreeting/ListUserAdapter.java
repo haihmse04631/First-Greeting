@@ -20,11 +20,13 @@ public class ListUserAdapter extends BaseAdapter {
     Context myContext;
     int myLayout;
     UserList userList;
+    int count;
 
     public ListUserAdapter(Context myContext, int myLayout, UserList userList) {
         this.myContext = myContext;
         this.myLayout = myLayout;
         this.userList = userList;
+        this.count = 0;
     }
 
     @Override
@@ -46,6 +48,7 @@ public class ListUserAdapter extends BaseAdapter {
         ImageView imgAvatar;
         TextView tvName;
         TextView tvLastMessage;
+        TextView tvCountMess;
     }
 
     @Override
@@ -59,6 +62,7 @@ public class ListUserAdapter extends BaseAdapter {
             holder.imgAvatar = (ImageView) rowView.findViewById(R.id.imageAvatar);
             holder.tvName = (TextView) rowView.findViewById(R.id.tvName);
             holder.tvLastMessage = (TextView) rowView.findViewById(R.id.tvLastMessage);
+            holder.tvCountMess = (TextView) rowView.findViewById(R.id.txtCountMess);
             rowView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
@@ -67,10 +71,21 @@ public class ListUserAdapter extends BaseAdapter {
         holder.tvName.setText(userList.get(position).getName());
         holder.tvLastMessage.setText(userList.get(position).getLastMessage().get(userList.get(position).getId()).getContent());
         SingleMessage lasMess = userList.get(position).getLastMessage().get(userList.get(position).getId());
+
         if (lasMess.getStatus().equals("false") && lasMess.getType().equals("receive")) {
+            if (holder.tvLastMessage.getTypeface() == Typeface.defaultFromStyle(Typeface.BOLD_ITALIC)) {
+                count ++;
+                holder.tvCountMess.setText(Integer.toString(count));
+            } else {
+                count = 1;
+                holder.tvCountMess.setText(Integer.toString(count));
+            }
             holder.tvLastMessage.setTypeface(null, Typeface.BOLD_ITALIC);
         } else {
             holder.tvLastMessage.setTypeface(null, Typeface.NORMAL);
+        }
+        if (lasMess.getStatus().equals("true") && lasMess.getType().equals("receive")) {
+            holder.tvCountMess.setText("");
         }
         Picasso.with(myContext).load(userList.get(position).getLinkAvatar()).into(holder.imgAvatar);
 
