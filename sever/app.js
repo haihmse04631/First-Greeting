@@ -27,6 +27,7 @@ function scramble(array) {
     return array;
 }
 
+a = scramble(a); b = scramble(b);
 
 
 io.on('connection', function (socket) {
