@@ -45,10 +45,12 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     private static final int RC_VIDEO_APP_PERM = 124;
     private Session mSession;
     private Publisher mPublisher;
-    private Subscriber mSubscriber;
+    private Subscriber mSubscriber1;
+    private Subscriber mSubscriber2;
 
     private FrameLayout mPublisherViewContainer;
-    private FrameLayout mSubscriberViewContainer;
+    private FrameLayout mSubscriberViewContainer1;
+    private FrameLayout mSubscriberViewContainer2;
 
     public void fetchSessionConnectionData() {
 
@@ -62,32 +64,10 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
     {
         try {
-            mSocket = IO.socket("http://192.168.0.27:3000");
+            mSocket = IO.socket("http://192.168.0.10:3000");
         } catch (URISyntaxException e) {
         }
     }
-
-//    private Emitter.Listener onNewMessage_DangKyUN = new Emitter.Listener() {
-//
-//        public void call(final Object... args) {
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    JSONObject data = (JSONObject) args[0];
-//                    String noidung;
-//
-//                    try {
-//                        noidung = data.getString("noidung");
-//
-//                        Toast.makeText(getApplicationContext(), noidung, Toast.LENGTH_LONG).show();
-//
-//                    } catch (JSONException e) {
-//                        return;
-//                    }
-//                }
-//            });
-//        }
-//    };
 
     private Emitter.Listener returnSessionId = new Emitter.Listener() {
 
@@ -102,8 +82,6 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                     try {
                         session = data.getString("sessionId");
                         token = data.getString("token");
-
-//                        Log.e()
 
                         Toast.makeText(getApplicationContext(), session, Toast.LENGTH_LONG).show();
                         Toast.makeText(getApplicationContext(), token, Toast.LENGTH_LONG).show();
@@ -132,16 +110,16 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
 //        mSocket.on("server-send", onNewMessage_DangKyUN);
 
-//        mSocket.emit("client-send", "Successful!");
-//        JSONObject user = new JSONObject();
-//        try {
-//            user.put("fbId", bund.getString("fbId"));
-//            user.put("fbType", bund.getString("fbType"));
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        mSocket.emit("get-session-id", user);
-//        mSocket.on("return-session-id", returnSessionId);
+        mSocket.emit("client-send", "Successful!");
+        JSONObject user = new JSONObject();
+        try {
+            user.put("fbId", bund.getString("fbId"));
+            user.put("fbType", bund.getString("fbType"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mSocket.emit("get-session-id", user);
+        mSocket.on("return-session-id", returnSessionId);
 
     }
 
@@ -157,8 +135,9 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         String[] perms = {Manifest.permission.INTERNET, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
         if (EasyPermissions.hasPermissions(this, perms)) {
             // initialize view objects from your layout
-            mPublisherViewContainer = (FrameLayout) findViewById(R.id.frUser1);
-            mSubscriberViewContainer = (FrameLayout) findViewById(R.id.frUser2);
+            mPublisherViewContainer = (FrameLayout) findViewById(R.id.frUser2);
+            mSubscriberViewContainer1 = (FrameLayout) findViewById(R.id.frUser1);
+            mSubscriberViewContainer2 = (FrameLayout) findViewById(R.id.frUser3);
 
             // initialize and connect to the session
             fetchSessionConnectionData();
@@ -192,10 +171,15 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     public void onStreamReceived(Session session, Stream stream) {
         Log.i(LOG_TAG, "Stream Received");
 
-        if (mSubscriber == null) {
-            mSubscriber = new Subscriber.Builder(this, stream).build();
-            mSession.subscribe(mSubscriber);
-            mSubscriberViewContainer.addView(mSubscriber.getView());
+        if (mSubscriber1 == null) {
+            mSubscriber1 = new Subscriber.Builder(this, stream).build();
+            mSession.subscribe(mSubscriber1);
+            mSubscriberViewContainer1.addView(mSubscriber1.getView());
+        }
+        if (mSubscriber2 == null) {
+            mSubscriber2 = new Subscriber.Builder(this, stream).build();
+            mSession.subscribe(mSubscriber2);
+            mSubscriberViewContainer2.addView(mSubscriber2.getView());
         }
     }
 
@@ -204,9 +188,13 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     public void onStreamDropped(Session session, Stream stream) {
         Log.i(LOG_TAG, "Stream Dropped");
 
-        if (mSubscriber != null) {
-            mSubscriber = null;
-            mSubscriberViewContainer.removeAllViews();
+        if (mSubscriber1 != null) {
+            mSubscriber1 = null;
+            mSubscriberViewContainer1.removeAllViews();
+        }
+        if (mSubscriber2 != null) {
+            mSubscriber2 = null;
+            mSubscriberViewContainer2.removeAllViews();
         }
     }
 

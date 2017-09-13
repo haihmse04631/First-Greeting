@@ -77,6 +77,8 @@ public class FirstGreetingMain extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(FirstGreetingMain.this, Setting.class);
+            startActivity(intent);
             return true;
         }
 

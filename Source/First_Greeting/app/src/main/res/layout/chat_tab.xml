@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_height="match_parent"
+<LinearLayout
+    android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:weightSum="10"
     android:background="#cefcca"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListView
+        android:layout_weight="9.5"
         android:background="#cefcca"
         android:id="@+id/listViewListChat"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="0dp"></ListView>
 
-</RelativeLayout>
+    <RelativeLayout
+        android:background="#cefcca"
+        android:layout_weight="0.5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"></RelativeLayout>
+
+</LinearLayout>
