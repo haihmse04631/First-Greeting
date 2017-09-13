@@ -132,16 +132,16 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
 //        mSocket.on("server-send", onNewMessage_DangKyUN);
 
-        mSocket.emit("client-send", "Successful!");
-        JSONObject user = new JSONObject();
-        try {
-            user.put("fbId", bund.getString("fbId"));
-            user.put("fbType", bund.getString("fbType"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        mSocket.emit("get-session-id", user);
-        mSocket.on("return-session-id", returnSessionId);
+//        mSocket.emit("client-send", "Successful!");
+//        JSONObject user = new JSONObject();
+//        try {
+//            user.put("fbId", bund.getString("fbId"));
+//            user.put("fbType", bund.getString("fbType"));
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        mSocket.emit("get-session-id", user);
+//        mSocket.on("return-session-id", returnSessionId);
 
     }
 

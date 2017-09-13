@@ -14,13 +14,14 @@
         android:layout_height="0dp"
         android:layout_weight="2.5">
 
-        <ImageView
+        <TextView
+            android:textColor="#000000"
+            android:fontFamily="cursive"
+            android:textSize="55sp"
             android:layout_centerInParent="true"
+            android:text="First Greeting"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:foregroundGravity="center"
-            app:srcCompat="@drawable/title" />
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 
     <LinearLayout
@@ -56,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="2dp"
+            android:layout_marginBottom="7dp"
             android:fontFamily="cursive"
             android:gravity="center_horizontal"
             android:text="Product by Ice Team"

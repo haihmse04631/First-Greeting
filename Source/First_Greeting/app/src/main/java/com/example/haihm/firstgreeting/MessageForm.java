@@ -221,7 +221,7 @@ public class MessageForm extends AppCompatActivity {
                         public void run() {
                             time.setVisibility(View.GONE);
                         }
-                },2500);
+                },2000);
 
             }
         });
