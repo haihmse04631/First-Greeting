@@ -33,7 +33,8 @@
         <activity
             android:name=".MessageForm"
             android:label="Message" />
-        <activity android:name=".RoomVideoCall"></activity>
+        <activity android:name=".RoomVideoCall" />
+        <activity android:name=".Setting"></activity>
     </application>
 
 </manifest>
