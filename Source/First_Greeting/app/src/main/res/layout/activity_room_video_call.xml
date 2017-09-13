@@ -1,45 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
-    android:weightSum="10"
-    android:background="#EBF5EA"
-    android:layout_height="match_parent"
+<LinearLayout android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:weightSum="10"
+    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
-        android:weightSum="2"
         android:orientation="horizontal"
-        android:layout_weight="5"
+        android:weightSum="10"
+        android:layout_weight="5.5"
         android:layout_width="match_parent"
         android:layout_height="0dp">
-
         <FrameLayout
+            android:background="#f00"
+            android:layout_weight="6"
             android:id="@+id/frUser1"
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent">
 
+
         </FrameLayout>
 
-        <FrameLayout
-            android:id="@+id/frUser2"
-            android:layout_weight="1"
+        <LinearLayout
+            android:weightSum="10"
             android:layout_width="0dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:orientation="vertical">
 
-        </FrameLayout>
+            <RelativeLayout
+                android:layout_weight="8"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"></RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/frUser3"
-        android:layout_weight="5"
+    <LinearLayout
+        android:weightSum="10"
+        android:orientation="horizontal"
+        android:layout_marginTop="-50dp"
+        android:layout_weight="5.5"
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
-    </FrameLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"></LinearLayout>
 
+            <FrameLayout
+                android:id="@+id/frUser2"
+                android:background="#17af21"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"></FrameLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/frUser3"
+            android:background="#2020b6"
+            android:layout_weight="6"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"></FrameLayout>
+    </LinearLayout>
 
 </LinearLayout>

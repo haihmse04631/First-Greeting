@@ -64,7 +64,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
     {
         try {
-            mSocket = IO.socket("http://192.168.0.17:3000");
+            mSocket = IO.socket("http://192.168.0.10:3000");
         } catch (URISyntaxException e) {
         }
     }
@@ -135,8 +135,8 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         String[] perms = {Manifest.permission.INTERNET, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
         if (EasyPermissions.hasPermissions(this, perms)) {
             // initialize view objects from your layout
-            mPublisherViewContainer = (FrameLayout) findViewById(R.id.frUser1);
-            mSubscriberViewContainer1 = (FrameLayout) findViewById(R.id.frUser2);
+            mPublisherViewContainer = (FrameLayout) findViewById(R.id.frUser2);
+            mSubscriberViewContainer1 = (FrameLayout) findViewById(R.id.frUser1);
             mSubscriberViewContainer2 = (FrameLayout) findViewById(R.id.frUser3);
 
             // initialize and connect to the session
