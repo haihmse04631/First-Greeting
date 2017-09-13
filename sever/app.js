@@ -10,14 +10,12 @@ const API_SECRET = 'd79c3cfa1c01f93d4b1c461c8494ff1b9b5e75fe';
 
 // get initial session id 
 var opentok = new OpenTok(API_KEY, API_SECRET);
+
 var sessionId = [];
 var m = 0,
     n = 0;
-var index;
 var member = [];
 var cvt = [];
-var memberWait = [];
-var cvtWait = [];
 
 
 Array.prototype.contains = function(obj) {
@@ -67,35 +65,34 @@ io.on('connection', function(socket) {
             //==== storage data from client
             if (data.role === "Member") {
                 if (!member.contains(data)) {
-                    member.push({ id: data.id, socket: socket });
-                    memberWait[member.length - 1] = true;
-                    console.log(member.length);
+                    member.push({ id: data.id, hasSession: "false", sesionId: "", socket: socket });
                     var check = setInterval(function() {
-                        if (!memberWait[member.length - 1]) {
-                            console.log("Session ID: " + sessionId[0]);
-                            socket.emit('return-session-id', { sessionId: sessionId, token: opentok.generateToken(sessionId[0]) });
+                        if (member[member.length-1].hasSession === "true") {
+                            socket.emit('return-session-id', { sessionId: member[member.length-1].sessionId, token: opentok.generateToken(member[member.length-1].sessionId) });
                         }
                     }, 1000);
                 }
             } else if (!cvt.contains(data)) {
-                cvt.push({ id: data.id, socket: socket });
-                cvtWait[cvt.length - 1] = true;
+                cvt.push({ id: data.id, hasSession: "false", sesionId: "", socket: socket });
                 console.log(cvt.length);
                 var ok = false;
                 var check = setInterval(function() {
         
-                    if (!cvtWait[cvt.length - 1]) {
+                    if (cvt[cvt.length-1].hasSession === "true") {
                         if (ok === true) {
                             return;
                         }
-                        console.log("Session ID sending: " + sessionId[0]);
-                        socket.emit('return-session-id', { sessionId: sessionId[0], token: opentok.generateToken(sessionId[0]) });
+                        console.log("Session ID sending to cvt " + cvt.length + " " + cvt[cvt.length-1].sessionId);
+                        socket.emit('return-session-id', { sessionId: cvt[cvt.length-1].sessionId, token: opentok.generateToken(cvt[cvt.length-1].sessionId) });
                         ok = true;
                     }
                 }, 1000);
             }
-
-            if (cvt.length == 2) start();
+            if (cvt.length % 2 == 0) {
+                if (cvt.length/2 > sessionId.length) {
+                    createNewSession();
+                }
+            }
         }
     });
 
@@ -104,28 +101,32 @@ io.on('connection', function(socket) {
     });
 });
 
-//------- set time to start every calls?? ------ 
-
-
-//------- send sessionId and token for each client --------
-
-for (var i = 0; i < 10; i++) {
+function createNewSession() {
     opentok.createSession(function(error, session) {
-        console.log(API_KEY);
-        console.log(API_SECRET);
-
-
         if (error) {
             console.log("Error creating session:\n", error)
         } else {
             sessionId[sessionId.length] = session.sessionId;
             console.log("created: " + sessionId.length);
+            // start();
         }
 
     });
 }
 
-// Start
+// for (var i = 0; i < 10; i++) {
+//     opentok.createSession(function(error, session) {
+//         if (error) {
+//             console.log("Error creating session:\n", error)
+//         } else {
+//             sessionId[sessionId.length] = session.sessionId;
+//             console.log("created: " + sessionId.length);
+//         }
+
+//     });
+// }
+
+// Start connecting users
 function start() {
     console.log("Starting");
     n = member.length;
@@ -134,18 +135,18 @@ function start() {
     console.log("m:" + m);
     var numberOfSession = Math.max(n, Math.trunc(m / 2))
     console.log("max: " + numberOfSession);
-    for (index = 0; index < 10; index++) {
-        console.log(sessionId[index])
+    for (var index = 0; index < 10; index++) {
         if (index < n) {
-            memberWait[index] = false;
+            member[index].sessionId = sessionId[index];
+            member[index].hasSession = "true";
         }
         if (index * 2 < m) {
-            cvtWait[index * 2] = false;
-            console.log(index * 2 + " = " + cvtWait[index * 2]);
+            cvt[index * 2].sessionId = sessionId[index];
+            cvt[index * 2].hasSession = "true";
         }
         if (index * 2 + 1 < m) {
-            cvtWait[index * 2 + 1] = false;
-            console.log((index * 2 + 1) + " = ");
+            cvt[index * 2 + 1].sessionId = sessionId[index];
+            cvt[index * 2 + 1].hasSession = "true";
         }
     }
 }
