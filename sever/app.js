@@ -17,11 +17,10 @@ var m = 0,
 var member = [];
 var cvt = [];
 
-
-Array.prototype.contains = function(obj) {
+Array.prototype.contains = function(data) {
     var i = this.length;
     while (i--) {
-        if (this[i] === obj) {
+        if (this[i].id === data.id) {
             return true;
         }
     }
@@ -63,36 +62,50 @@ io.on('connection', function(socket) {
     socket.on('get-session-id', function(data) {
         {
             //==== storage data from client
-            if (data.role === "Member") {
+            console.log(data);
+            if (data.role != "Member") {
                 if (!member.contains(data)) {
-                    member.push({ id: data.id, hasSession: "false", sesionId: "", socket: socket });
+                    member.push({ id: data.fbId, hasSession: "false", sesionId: "", socket: socket });
+                    console.log(member.length);
+                    // createNewSession();
+                    var ok = false;
                     var check = setInterval(function() {
-                        if (member[member.length-1].hasSession === "true") {
-                            socket.emit('return-session-id', { sessionId: member[member.length-1].sessionId, token: opentok.generateToken(member[member.length-1].sessionId) });
+                        if (member[member.length - 1].hasSession === "true") {
+                            if (ok === true) {
+                                return;
+                            }
+                            console.log("Session ID sending to member " + member.length + ":\n" + cvt[cvt.length - 1].sessionId);
+                            socket.emit('return-session-id', { sessionId: member[member.length - 1].sessionId, token: opentok.generateToken(member[member.length - 1].sessionId) });
+                            ok = true;
                         }
                     }, 1000);
+                } else {
+                    console.log("This user is existed");
                 }
             } else if (!cvt.contains(data)) {
-                cvt.push({ id: data.id, hasSession: "false", sesionId: "", socket: socket });
+                cvt.push({ id: data.fbId, hasSession: "false", sesionId: "", socket: socket });
                 console.log(cvt.length);
                 var ok = false;
                 var check = setInterval(function() {
-        
-                    if (cvt[cvt.length-1].hasSession === "true") {
+
+                    if (cvt[cvt.length - 1].hasSession === "true") {
                         if (ok === true) {
                             return;
                         }
-                        console.log("Session ID sending to cvt " + cvt.length + " " + cvt[cvt.length-1].sessionId);
-                        socket.emit('return-session-id', { sessionId: cvt[cvt.length-1].sessionId, token: opentok.generateToken(cvt[cvt.length-1].sessionId) });
+                        console.log("Session ID sending to cvt " + cvt.length + ":\n" + cvt[cvt.length - 1].sessionId);
+                        socket.emit('return-session-id', { sessionId: cvt[cvt.length - 1].sessionId, token: opentok.generateToken(cvt[cvt.length - 1].sessionId) });
                         ok = true;
                     }
                 }, 1000);
-            }
-            if (cvt.length % 2 == 0) {
-                if (cvt.length/2 > sessionId.length) {
-                    createNewSession();
+                if (cvt.length % 2 == 0) {
+                    if (cvt.length / 2 > sessionId.length) {
+                        createNewSession();
+                    }
                 }
+            } else {
+                console.log("This user is existed");
             }
+
         }
     });
 
@@ -102,40 +115,30 @@ io.on('connection', function(socket) {
 });
 
 function createNewSession() {
-    opentok.createSession(function(error, session) {
+    opentok.createSession({mediaMode:"routed"}, function(error, session) {
         if (error) {
             console.log("Error creating session:\n", error)
         } else {
             sessionId[sessionId.length] = session.sessionId;
             console.log("created: " + sessionId.length);
-            // start();
+            start();
         }
 
     });
 }
 
-// for (var i = 0; i < 10; i++) {
-//     opentok.createSession(function(error, session) {
-//         if (error) {
-//             console.log("Error creating session:\n", error)
-//         } else {
-//             sessionId[sessionId.length] = session.sessionId;
-//             console.log("created: " + sessionId.length);
-//         }
-
-//     });
-// }
-
 // Start connecting users
 function start() {
     console.log("Starting");
+    scramble(member);
+    scramble(cvt);
     n = member.length;
     m = cvt.length;
     console.log("n: " + n);
     console.log("m:" + m);
     var numberOfSession = Math.max(n, Math.trunc(m / 2))
     console.log("max: " + numberOfSession);
-    for (var index = 0; index < 10; index++) {
+    for (var index = 0; index < sessionId.length; index++) {
         if (index < n) {
             member[index].sessionId = sessionId[index];
             member[index].hasSession = "true";

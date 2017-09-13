@@ -43,7 +43,7 @@ public class VideoCall extends Fragment {
                             bund = new Bundle();
                             bund.putString("fbId", fbId);
                             String fbType = dataSnapshot.getValue().toString();
-                            bund.putString("fbType", fbType);
+                            bund.putString("role", fbType);
                             intent.putExtra("UserInfo", bund);
                             startActivity(intent);
                         }

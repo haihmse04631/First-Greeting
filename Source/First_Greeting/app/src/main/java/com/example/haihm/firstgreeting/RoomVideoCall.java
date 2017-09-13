@@ -1,7 +1,7 @@
 package com.example.haihm.firstgreeting;
 
-import android.content.Intent;
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+import com.opentok.android.BaseVideoRenderer;
 import com.opentok.android.OpentokError;
 import com.opentok.android.Publisher;
 import com.opentok.android.PublisherKit;
@@ -52,13 +53,6 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     private FrameLayout mSubscriberViewContainer1;
     private FrameLayout mSubscriberViewContainer2;
 
-    public void fetchSessionConnectionData() {
-
-        mSession = new Session.Builder(RoomVideoCall.this, API_KEY, SESSION_ID).build();
-        mSession.setSessionListener(RoomVideoCall.this);
-        mSession.connect(TOKEN);
-
-    }
 
     private Socket mSocket;
 
@@ -68,36 +62,6 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         } catch (URISyntaxException e) {
         }
     }
-
-    private Emitter.Listener returnSessionId = new Emitter.Listener() {
-
-        public void call(final Object... args) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    String session;
-                    String token;
-
-                    try {
-                        session = data.getString("sessionId");
-                        token = data.getString("token");
-
-                        Toast.makeText(getApplicationContext(), session, Toast.LENGTH_LONG).show();
-                        Toast.makeText(getApplicationContext(), token, Toast.LENGTH_LONG).show();
-                        API_KEY = "45956802";
-                        SESSION_ID = session;
-                        TOKEN = token;
-
-                        requestPermissions();
-
-                    } catch (JSONException e) {
-                        return;
-                    }
-                }
-            });
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,13 +78,49 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         JSONObject user = new JSONObject();
         try {
             user.put("fbId", bund.getString("fbId"));
-            user.put("fbType", bund.getString("fbType"));
+            user.put("role", bund.getString("role"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
         mSocket.emit("get-session-id", user);
         mSocket.on("return-session-id", returnSessionId);
 
+    }
+
+    private Emitter.Listener returnSessionId = new Emitter.Listener() {
+
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    String session;
+                    String token;
+
+                    try {
+                        session = data.getString("sessionId");
+                        token = data.getString("token");
+
+                        Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), token, Toast.LENGTH_LONG).show();
+                        API_KEY = "45956802";
+                        SESSION_ID = session;
+                        TOKEN = token;
+
+                        requestPermissions();
+
+                    } catch (JSONException e) {
+                        return;
+                    }
+                }
+            });
+        }
+    };
+
+    public void fetchSessionConnectionData() {
+        mSession = new Session.Builder(RoomVideoCall.this, API_KEY, SESSION_ID).build();
+        mSession.setSessionListener(RoomVideoCall.this);
+        mSession.connect(TOKEN);
     }
 
     @Override
@@ -135,8 +135,8 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         String[] perms = {Manifest.permission.INTERNET, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
         if (EasyPermissions.hasPermissions(this, perms)) {
             // initialize view objects from your layout
-            mPublisherViewContainer = (FrameLayout) findViewById(R.id.frUser2);
-            mSubscriberViewContainer1 = (FrameLayout) findViewById(R.id.frUser1);
+            mPublisherViewContainer = (FrameLayout) findViewById(R.id.frUser1);
+            mSubscriberViewContainer1 = (FrameLayout) findViewById(R.id.frUser2);
             mSubscriberViewContainer2 = (FrameLayout) findViewById(R.id.frUser3);
 
             // initialize and connect to the session
@@ -168,17 +168,22 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     }
 
     @Override
-    public void onStreamReceived(Session session, Stream stream) {
+    public synchronized void onStreamReceived(Session session, Stream stream) {
         Log.i(LOG_TAG, "Stream Received");
 
         if (mSubscriber1 == null) {
+            Log.e("data: ", "stream 1: " + stream.getName() + " | " + stream.getStreamId());
+
             mSubscriber1 = new Subscriber.Builder(this, stream).build();
             mSession.subscribe(mSubscriber1);
+            mSubscriber1.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE, BaseVideoRenderer.STYLE_VIDEO_FILL);
             mSubscriberViewContainer1.addView(mSubscriber1.getView());
-        }
-        if (mSubscriber2 == null) {
+        } else if (mSubscriber2 == null) {
+            Log.e("data: ", "stream 2: " + stream.getName() + " | " + stream.getStreamId());
+            
             mSubscriber2 = new Subscriber.Builder(this, stream).build();
             mSession.subscribe(mSubscriber2);
+            mSubscriber2.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE, BaseVideoRenderer.STYLE_VIDEO_FILL);
             mSubscriberViewContainer2.addView(mSubscriber2.getView());
         }
     }
