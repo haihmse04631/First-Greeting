@@ -5,11 +5,12 @@ const io = require('socket.io')(server);
 const socketio = require('./socketio')(io);
 const OpenTok = require('opentok');
 
-const API_KEY = '45956802';
-const API_SECRET = 'd79c3cfa1c01f93d4b1c461c8494ff1b9b5e75fe';
+const API_KEY = '45956472';
+const API_SECRET = '81b2bef88a6c486fbcc6036d40b3319aa4bdbc1c';
 
 // get initial session id 
 var opentok = new OpenTok(API_KEY, API_SECRET);
+// var opentok = new OpenTok.OpenTokSDK(API_KEY, API_SECRET);
 
 var sessionId = [];
 var m = 0,
@@ -56,7 +57,6 @@ server.listen(3000, () => {
 });
 
 io.on('connection', function(socket) {
-
     console.log('A user connected ');
 
     socket.on('get-session-id', function(data) {
@@ -109,23 +109,25 @@ io.on('connection', function(socket) {
         }
     });
 
-    socket.on('start-call', function() {
+    socket.on('start-call', function(data) {
         start();
     });
 });
 
 function createNewSession() {
-    opentok.createSession({mediaMode:"routed"}, function(error, session) {
+
+    opentok.createSession({ mediaMode: "routed" }, function(error, session) {
         if (error) {
             console.log("Error creating session:\n", error)
         } else {
             sessionId[sessionId.length] = session.sessionId;
-            console.log("created: " + sessionId.length);
+            console.log("Session ID: " + sessionId[sessionId.length-1]);
             start();
         }
-
     });
+
 }
+// createNewSession();
 
 // Start connecting users
 function start() {

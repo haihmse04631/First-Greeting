@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.nkzawa.emitter.Emitter;
@@ -21,6 +19,7 @@ import com.opentok.android.PublisherKit;
 import com.opentok.android.Session;
 import com.opentok.android.Stream;
 import com.opentok.android.Subscriber;
+import com.opentok.android.SubscriberKit;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,8 +32,6 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class RoomVideoCall extends AppCompatActivity implements Session.SessionListener,
         PublisherKit.PublisherListener {
 
-    TextView txtInput;
-    Button btnSend;
     Bundle bund;
     Intent intent;
 
@@ -56,13 +53,6 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
     private Socket mSocket;
 
-    {
-        try {
-            mSocket = IO.socket("http://192.168.0.10:3000");
-        } catch (URISyntaxException e) {
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +60,10 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
         intent = getIntent();
         bund = intent.getBundleExtra("UserInfo");
+        try {
+            mSocket = IO.socket("http://192.168.1.9:3000");
+        } catch (URISyntaxException e) {
+        }
         mSocket.connect();
 
 //        mSocket.on("server-send", onNewMessage_DangKyUN);
@@ -103,7 +97,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
                         Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();
 //                        Toast.makeText(getApplicationContext(), token, Toast.LENGTH_LONG).show();
-                        API_KEY = "45956802";
+                        API_KEY = "45956472";
                         SESSION_ID = session;
                         TOKEN = token;
 
@@ -154,7 +148,13 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     public void onConnected(Session session) {
         Log.i(LOG_TAG, "Session Connected");
 
-        mPublisher = new Publisher.Builder(this).build();
+//        mPublisher = new Publisher.Builder(this).build();
+        mPublisher = new Publisher.Builder(this)
+                .audioTrack(true)
+                .frameRate(Publisher.CameraCaptureFrameRate.FPS_30)
+                .resolution(Publisher.CameraCaptureResolution.HIGH)
+                .videoTrack(true)
+                .build();
         mPublisher.setPublisherListener(this);
 
         mPublisherViewContainer.addView(mPublisher.getView());
@@ -168,23 +168,63 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     }
 
     @Override
-    public synchronized void onStreamReceived(Session session, Stream stream) {
-        Log.i(LOG_TAG, "Stream Received");
+    public void onStreamReceived(Session session, Stream stream) {
+        Log.e("Data", "Stream Received");
+        Log.e("Data", session.getCapabilities().toString());
 
         if (mSubscriber1 == null) {
+
             Log.e("data: ", "stream 1: " + stream.getName() + " | " + stream.getStreamId());
+            Toast.makeText(getApplicationContext(), "stream 1: " + stream.getStreamId(), Toast.LENGTH_LONG).show();
 
             mSubscriber1 = new Subscriber.Builder(this, stream).build();
-            mSession.subscribe(mSubscriber1);
             mSubscriber1.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE, BaseVideoRenderer.STYLE_VIDEO_FILL);
-            mSubscriberViewContainer1.addView(mSubscriber1.getView());
+            mSession.subscribe(mSubscriber1);
+            mSubscriber1.setSubscriberListener(new SubscriberKit.SubscriberListener() {
+                @Override
+                public void onConnected(SubscriberKit subscriberKit) {
+
+                    mSubscriber1.getView();
+                    mSubscriberViewContainer1.addView(mSubscriber1.getView());
+                }
+
+                @Override
+                public void onDisconnected(SubscriberKit subscriberKit) {
+
+                }
+
+                @Override
+                public void onError(SubscriberKit subscriberKit, OpentokError opentokError) {
+                    Log.e("Data: ", "Can't subscribe!");
+                }
+            });
+
+
         } else if (mSubscriber2 == null) {
+
             Log.e("data: ", "stream 2: " + stream.getName() + " | " + stream.getStreamId());
-            
+            Toast.makeText(getApplicationContext(), "stream 2: " + stream.getStreamId(), Toast.LENGTH_LONG).show();
+
             mSubscriber2 = new Subscriber.Builder(this, stream).build();
-            mSession.subscribe(mSubscriber2);
             mSubscriber2.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE, BaseVideoRenderer.STYLE_VIDEO_FILL);
-            mSubscriberViewContainer2.addView(mSubscriber2.getView());
+            mSession.subscribe(mSubscriber2);
+            mSubscriber2.setSubscriberListener(new SubscriberKit.SubscriberListener() {
+                @Override
+                public void onConnected(SubscriberKit subscriberKit) {
+                    mSubscriber2.getView();
+                    mSubscriberViewContainer2.addView(mSubscriber2.getView());
+                }
+
+                @Override
+                public void onDisconnected(SubscriberKit subscriberKit) {
+
+                }
+
+                @Override
+                public void onError(SubscriberKit subscriberKit, OpentokError opentokError) {
+                    Log.e("Data: ", "Can't subscribe!");
+                }
+            });
         }
     }
 
@@ -193,11 +233,11 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     public void onStreamDropped(Session session, Stream stream) {
         Log.i(LOG_TAG, "Stream Dropped");
 
-        if (mSubscriber1 != null) {
+        if (mSubscriber1 != null && mSubscriber1.getStream() == stream) {
             mSubscriber1 = null;
             mSubscriberViewContainer1.removeAllViews();
         }
-        if (mSubscriber2 != null) {
+        if (mSubscriber2 != null && mSubscriber2.getStream() == stream) {
             mSubscriber2 = null;
             mSubscriberViewContainer2.removeAllViews();
         }
@@ -225,4 +265,13 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         Log.e(LOG_TAG, "Publisher error: " + opentokError.getMessage());
     }
 
+
+    // Back button
+    @Override
+    public void onBackPressed() {
+        if (mPublisher != null) {
+            mSession.unpublish(mPublisher);
+        }
+        finish();
+    }
 }

@@ -5,12 +5,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Button
-        android:textAllCaps="false"
-        android:text="Start Chat Room"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal"
+        android:id="@+id/btnStart"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:text="Start Chat Room"
+        android:textAllCaps="false" />
 
     <ListView
         android:layout_marginTop="10dp"
