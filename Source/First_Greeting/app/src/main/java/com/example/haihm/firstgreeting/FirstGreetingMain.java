@@ -28,8 +28,8 @@ public class FirstGreetingMain extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    Intent intent;
-    Bundle bund;
+    private Intent intent;
+    private Bundle bund;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="./node_modules/socket.io-client/dist/socket.io.js"></script>
+
+</head>
+<body>
+	<h1>Start</h1>
+
+	<script type="text/javascript">
+		var socket = io.connect('localhost:3000');
+		socket.emit('test', "ngon");
+	</script>
+	 
+</body>
+</html>
