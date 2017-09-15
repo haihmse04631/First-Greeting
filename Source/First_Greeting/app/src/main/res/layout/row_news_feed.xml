@@ -75,14 +75,31 @@
                 android:text="Comment"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
+
         </RelativeLayout>
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/lvListComment"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/tvComment"
+            android:visibility="gone"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+        <ListView
+            android:visibility="gone"
+            android:id="@+id/lvListComment"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"></ListView>
+
+    </LinearLayout>
+
+
 
 
 </LinearLayout>

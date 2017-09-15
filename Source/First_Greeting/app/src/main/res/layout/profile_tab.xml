@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#b8f1b6"
+    android:background="@drawable/background2"
     >
 
     <ImageView
@@ -11,12 +11,12 @@
         android:background="#0c96ec"
         android:id="@+id/imgCover"
         android:layout_width="match_parent"
-        android:layout_height="170dp" />
+        android:layout_height="180dp" />
 
     <ImageView
         android:id="@+id/imgAvatar"
         android:background="#ff0"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="120dp"
         android:layout_centerHorizontal="true"
         android:layout_width="120dp"
         android:layout_height="120dp" />
@@ -33,10 +33,95 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <TableLayout
+        android:layout_marginRight="90dp"
+        android:id="@+id/tblInfor"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/tvUserName"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent">
+
+            <TextView
+                android:textColor="#121111"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:text="Email:"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                />
+            <TextView
+                android:textColor="#121111"
+                android:textStyle="bold"
+                android:id="@+id/tvEmail"
+                android:layout_weight="1"
+                android:text="email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="5dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="#121111"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:text="Gender:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <TextView
+                android:textColor="#121111"
+                android:textStyle="bold"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/tvGender"
+                android:layout_weight="1"
+                android:text="gender"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="5dp"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            >
+
+            <TextView
+                android:textColor="#121111"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:text="Birth Day:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+            <TextView
+                android:textColor="#121111"
+                android:textStyle="bold"
+                android:text="birthday"
+                android:id="@+id/tvBirthday"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        </TableRow>
+
+    </TableLayout>
+
     <Button
         android:id="@+id/btnLogOut"
-        android:layout_marginTop="50dp"
-        android:layout_below="@+id/tvUserName"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/tblInfor"
         android:layout_centerHorizontal="true"
         android:text="Đăng Xuất"
         android:layout_width="wrap_content"

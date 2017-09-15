@@ -3,21 +3,13 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:weightSum="10"
-    android:background="#cefcca"
+    android:background="#d6f4d3"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListView
-        android:layout_weight="9.5"
-        android:background="#cefcca"
+        android:background="#dafdd7"
         android:id="@+id/listViewListChat"
         android:layout_width="match_parent"
-        android:layout_height="0dp"></ListView>
-
-    <RelativeLayout
-        android:background="#cefcca"
-        android:layout_weight="0.5"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"></RelativeLayout>
+        android:layout_height="fill_parent"></ListView>
 
 </LinearLayout>
