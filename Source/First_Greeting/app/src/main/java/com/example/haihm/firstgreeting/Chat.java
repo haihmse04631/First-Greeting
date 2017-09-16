@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +32,7 @@ public class Chat extends Fragment {
     private ListUserAdapter adapter;
     private UserList userList;
     private String fbId;
+    private SearchView svSearchUser;
     private String fbImage;
     DatabaseReference mData;
     Bundle bundle;
@@ -40,7 +42,9 @@ public class Chat extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.chat_tab, container, false);
         lvListChat = (ListView) rootView.findViewById(R.id.listViewListChat);
+        svSearchUser = (SearchView) rootView.findViewById(R.id.svSearchUser);
         mData = FirebaseDatabase.getInstance().getReference();
+
 
         fbId = getArguments().getString("fbId");
         fbImage = getArguments().getString("fbImage");
@@ -68,7 +72,34 @@ public class Chat extends Fragment {
         //Load data from Firebase
         loadData();
 
+        searchUser();
+
         return rootView;
+    }
+
+    private void searchUser(){
+        svSearchUser.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                UserList tempList = new UserList();
+                for(int i=0; i<userList.size(); i++){
+                    if(userList.get(i).getName().toLowerCase().contains(s.toLowerCase()))
+                    {
+                        tempList.add(new User(userList.get(i).getName(),userList.get(i).getLinkAvatar(),userList.get(i).getId(), userList.get(i).getRole(), userList.get(i).getLastMessage()));
+                    }
+                }
+
+                adapter = new ListUserAdapter(getActivity(), R.layout.row_list_chat, tempList);
+                lvListChat.setAdapter(adapter);
+
+                return true;
+            }
+        });
     }
 
     private void sortList() {

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.github.nkzawa.socketio.client.IO;
@@ -35,6 +36,7 @@ public class VideoCall extends Fragment {
     private String fbId;
     private String fbType;
     private String fbName;
+    private ImageButton btnAttend, btnLeave, btnReturnToCall;
     Intent intent;
 
     @Override
@@ -46,6 +48,9 @@ public class VideoCall extends Fragment {
         fbId = getArguments().getString("fbId");
         fbName = getArguments().getString("fbName");
         btnAttendance = (Button) rootView.findViewById(R.id.btnAttendance);
+        btnAttend = (ImageButton) rootView.findViewById(R.id.btnAttend);
+        btnLeave = (ImageButton) rootView.findViewById(R.id.btnLeave);
+        btnReturnToCall = (ImageButton) rootView.findViewById(R.id.btnRetunToCall);
 
         try {
             mSocket = IO.socket("http://192.168.1.3:3000");

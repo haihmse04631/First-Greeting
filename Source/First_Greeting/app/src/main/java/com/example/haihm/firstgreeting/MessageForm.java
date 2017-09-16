@@ -40,7 +40,7 @@ public class MessageForm extends AppCompatActivity {
     private ListView lvListMessage;
     private ListMessageAdapter adapter;
 
-    //  private MessageList messList;
+    //  private CommentList messList;
 
     ImageButton btnSend;
     ImageButton btnBackToChat;

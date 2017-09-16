@@ -33,6 +33,14 @@ public class User {
         };
     }
 
+    public User(String name, String linkAvatar, String id, String role, HashMap<String, SingleMessage> lastMessage) {
+        this.name = name;
+        this.linkAvatar = linkAvatar;
+        this.id = id;
+        this.role = role;
+        this.lastMessage = lastMessage;
+    }
+
     public String getName() {
         return name;
     }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="350dp"
+    android:layout_height="450dp"
+    android:orientation="vertical"
+    android:background="#d6f4d3"
+    android:weightSum="10"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageButton
+            android:id="@+id/btnBackToChatRoom"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="?attr/homeAsUpIndicator" />
+
+        <Button
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            android:id="@+id/btnStart"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:text="Start Chat Room"
+            android:textAllCaps="false" />
+
+    </RelativeLayout>
+
+
+    <ListView
+        android:id="@+id/lvListRoomChat"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"></ListView>
+
+
+</LinearLayout>

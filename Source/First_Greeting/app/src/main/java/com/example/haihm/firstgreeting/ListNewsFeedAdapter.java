@@ -7,9 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 /**
  * Created by DuyNguyen on 9/16/2017.
@@ -21,15 +24,14 @@ public class ListNewsFeedAdapter extends BaseAdapter {
     int myLayout;
     UserListNewsFeed userListNewsFeed;
     UserStatus userStatus;
+    ArrayList<ListView> lvListComment;
 
-    public ListNewsFeedAdapter(Context myContext, int myLayout, UserListNewsFeed userListNewsFeed) {
+    public ListNewsFeedAdapter(Context myContext, int myLayout, UserListNewsFeed userListNewsFeed,
+                               ArrayList<ListView> lvListComment) {
         this.myContext = myContext;
         this.myLayout = myLayout;
         this.userListNewsFeed = userListNewsFeed;
-//                new UserListNewsFeed();
-//        for (int i = userListNewsFeed.size()-1; i>=0; i--){
-//            this.userListNewsFeed.add(userListNewsFeed.get(i));
-//        }
+        this.lvListComment = lvListComment;
     }
 
     @Override
@@ -51,6 +53,7 @@ public class ListNewsFeedAdapter extends BaseAdapter {
         ImageButton imgAvatarNewsFeed;
         TextView tvUserName;
         TextView tvContentPost;
+        ListView lvListComment;
     }
 
     @Override
@@ -68,6 +71,8 @@ public class ListNewsFeedAdapter extends BaseAdapter {
         holder.tvUserName.setText(userStatus.getName());
         holder.tvContentPost.setText(userListNewsFeed.get(position).getContentPost());
         Picasso.with(myContext).load(userListNewsFeed.get(position).getLinkAvatar()).into(holder.imgAvatarNewsFeed);
+        holder.lvListComment = lvListComment.get(position);
+
         return rowView;
     }
 }

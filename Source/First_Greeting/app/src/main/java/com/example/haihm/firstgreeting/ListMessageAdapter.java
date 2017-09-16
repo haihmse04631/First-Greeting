@@ -30,6 +30,8 @@ public class ListMessageAdapter extends BaseAdapter {
         this.arrayMessage = arrayMessage;
     }
 
+
+
     @Override
     public int getCount() {
         return arrayMessage.size();
