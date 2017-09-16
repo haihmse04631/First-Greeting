@@ -33,12 +33,4 @@
 
     </LinearLayout>
 
-    <Button
-        android:layout_alignParentBottom="true"
-        android:text="Báo Danh"
-        android:layout_centerInParent="true"
-        android:id="@+id/btnAttendance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
 </RelativeLayout>

@@ -3,10 +3,10 @@ package com.example.haihm.firstgreeting;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -28,7 +28,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  */
 
 public class VideoCall extends Fragment {
-    private Button btnAttendance;
+//    private Button btnAttendance;
     private DatabaseReference mData;
     private Bundle bund;
     private int joinState = 0;
@@ -47,7 +47,7 @@ public class VideoCall extends Fragment {
         mData = FirebaseDatabase.getInstance().getReference();
         fbId = getArguments().getString("fbId");
         fbName = getArguments().getString("fbName");
-        btnAttendance = (Button) rootView.findViewById(R.id.btnAttendance);
+//        btnAttendance = (Button) rootView.findViewById(R.id.btnAttendance);
         btnAttend = (ImageButton) rootView.findViewById(R.id.btnAttend);
         btnLeave = (ImageButton) rootView.findViewById(R.id.btnLeave);
         btnReturnToCall = (ImageButton) rootView.findViewById(R.id.btnRetunToCall);
@@ -59,7 +59,7 @@ public class VideoCall extends Fragment {
         mSocket.connect();
         mSocket.emit("client-send", "Successful!");
 
-        btnAttendance.setOnClickListener(new View.OnClickListener() {
+        btnAttend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (joinState == 0) {
@@ -103,7 +103,7 @@ public class VideoCall extends Fragment {
                 } else if (joinState == 1) {
                     mSocket.emit("cancel-attendant", "");
                     joinState = 0;
-                    btnAttendance.setText("Báo Danh");
+                    btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.attend));
                 } else {
                     RoomVideoCall.mPublisher.destroy();
                     if (RoomVideoCall.mSubscriber1 != null) {
@@ -113,7 +113,7 @@ public class VideoCall extends Fragment {
                         RoomVideoCall.mSubscriber2.destroy();
                     }
                     joinState = 0;
-                    btnAttendance.setText("Báo Danh");
+                    btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.attend));
                 }
 
             }
@@ -129,11 +129,11 @@ public class VideoCall extends Fragment {
                 if (resultCode == RESULT_OK) {
                     Toast.makeText(getApplicationContext(), "joinState", Toast.LENGTH_LONG).show();
                     joinState = 2;
-                    btnAttendance.setText("Dừng Cuộc ");
+                    btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.leave));
                 } else {
                     Toast.makeText(getApplicationContext(), "not yet", Toast.LENGTH_LONG).show();
                     joinState = 1;
-                    btnAttendance.setText("Huỷ Báo Danh");
+                    btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.btn_attended));
                 }
         }
     }

@@ -194,7 +194,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         Log.i(LOG_TAG, "Session Connected");
 
         mPublisher = new Publisher.Builder(this)
-//                .audioTrack(false)
+                .audioTrack(false)
 //                .frameRate(Publisher.CameraCaptureFrameRate.FPS_30)
 //                .resolution(Publisher.CameraCaptureResolution.MEDIUM)
 //                .videoTrack(true)
@@ -310,6 +310,18 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         Log.e(LOG_TAG, "Publisher error: " + opentokError.getMessage());
     }
 
+//    private void SavePreferences(){
+//        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putBoolean("state", button.isEnabled());
+//        editor.commit();   // I missed to save the data to preference here,.
+//    }
+//
+//    private void LoadPreferences(){
+//        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+//        Boolean  state = sharedPreferences.getBoolean("state", false);
+//        button.setEnabled(state);
+//    }
 
     // Back button
     @Override
@@ -323,6 +335,6 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                 getParent().setResult(Activity.RESULT_OK, data);
             }
         }
-        finish();
+        super.onBackPressed();
     }
 }
