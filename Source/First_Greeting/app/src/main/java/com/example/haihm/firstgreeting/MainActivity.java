@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
     LoginButton btnLoginFacebook;
-    String fbId, fbName, fbImage, fbCover;
+    String fbId, fbName, fbImage, fbCover, fbEmail, fbGender, fbBirthday;
     DatabaseReference mData;
 
     @Override
@@ -90,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
         bund.putString("fbName", fbName);
         bund.putString("fbImage", fbImage);
         bund.putString("fbCover", fbCover);
+        bund.putString("fbEmail", fbEmail);
+        bund.putString("fbGender", fbGender);
+        bund.putString("fbBirthday", fbBirthday);
         intent.putExtra("MyPackage", bund);
         startActivity(intent);
         pushFirebase();
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     // Get facebook data
     public void loadData() {
         Bundle params = new Bundle();
-        params.putString("fields", "id,name,email,picture.role(large),cover");
+        params.putString("fields", "id,name,picture.role(large),cover,email,gender,birthday");
         GraphRequestAsyncTask graphRequestAsyncTask = new GraphRequest(AccessToken.getCurrentAccessToken(), "me", params, HttpMethod.GET,
                 new GraphRequest.Callback() {
                     @Override
@@ -111,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
                                 fbId = jsonObject.getString("id");
                                 fbName = jsonObject.getString("name");
                                 fbImage = "https://graph.facebook.com/" + fbId + "/picture?width=960&height=960";
-
                                 if (jsonObject.has("cover")) {
                                     String getInitialCover = jsonObject.getString("cover");
 
@@ -121,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                                         JSONObject JOCover = jsonObject.optJSONObject("cover");
 
                                         if (JOCover.has("source")) {
+
                                             fbCover = JOCover.getString("source");
                                         } else {
                                             fbCover = null;
@@ -129,6 +132,9 @@ public class MainActivity extends AppCompatActivity {
                                 } else {
                                     fbCover = null;
                                 }
+                                fbEmail = jsonObject.getString("email");
+                                fbGender = jsonObject.getString("gender");
+                                fbBirthday = jsonObject.getString("birthday");
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             } catch (Exception e) {

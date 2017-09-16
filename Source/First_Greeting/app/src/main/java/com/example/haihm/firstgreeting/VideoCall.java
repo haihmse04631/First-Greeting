@@ -30,7 +30,7 @@ public class VideoCall extends Fragment {
     private Button btnAttendance;
     private DatabaseReference mData;
     private Bundle bund;
-    private int joined = 0;
+    private int joinState = 0;
     protected static Socket mSocket;
     private String fbId;
     private String fbType;
@@ -44,10 +44,11 @@ public class VideoCall extends Fragment {
 
         mData = FirebaseDatabase.getInstance().getReference();
         fbId = getArguments().getString("fbId");
+        fbName = getArguments().getString("fbName");
         btnAttendance = (Button) rootView.findViewById(R.id.btnAttendance);
 
         try {
-            mSocket = IO.socket("http://192.168.1.157:3000");
+            mSocket = IO.socket("http://192.168.1.3:3000");
         } catch (URISyntaxException e) {
         }
         mSocket.connect();
@@ -56,10 +57,11 @@ public class VideoCall extends Fragment {
         btnAttendance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (joined == 0) {
+                if (joinState == 0) {
                     intent = new Intent(getActivity(), RoomVideoCall.class);
                     bund = new Bundle();
                     bund.putString("fbId", fbId);
+                    bund.putString("name", fbName);
                     // Get from firebase
                     mData.child("User").child(fbId).addChildEventListener(new ChildEventListener() {
                         @Override
@@ -67,13 +69,9 @@ public class VideoCall extends Fragment {
                             if (dataSnapshot.getKey().equals("role")) {
                                 fbType = dataSnapshot.getValue().toString();
                                 bund.putString("role", fbType);
+                                intent.putExtra("UserInfo", bund);
+                                startActivityForResult(intent, 0);
                             }
-                            if (dataSnapshot.getKey().equals("name")) {
-                                fbName = dataSnapshot.getValue().toString();
-                                bund.putString("name", fbName);
-                            }
-                            intent.putExtra("UserInfo", bund);
-                            startActivityForResult(intent, 0);
                         }
 
                         @Override
@@ -97,6 +95,10 @@ public class VideoCall extends Fragment {
                         }
                     });
 
+                } else if (joinState == 1) {
+                    mSocket.emit("cancel-attendant", "");
+                    joinState = 0;
+                    btnAttendance.setText("Báo Danh");
                 } else {
                     RoomVideoCall.mPublisher.destroy();
                     if (RoomVideoCall.mSubscriber1 != null) {
@@ -105,8 +107,8 @@ public class VideoCall extends Fragment {
                     if (RoomVideoCall.mSubscriber2 != null) {
                         RoomVideoCall.mSubscriber2.destroy();
                     }
-                    joined = 0;
-                    btnAttendance.setText("Attend");
+                    joinState = 0;
+                    btnAttendance.setText("Báo Danh");
                 }
 
             }
@@ -120,12 +122,13 @@ public class VideoCall extends Fragment {
         switch (requestCode) {
             case 0:
                 if (resultCode == RESULT_OK) {
-//                    String state = data.getStringExtra("state");
-                    Toast.makeText(getApplicationContext(), "joined", Toast.LENGTH_LONG).show();
-                    joined = 1;
-                    btnAttendance.setText("Leave");
+                    Toast.makeText(getApplicationContext(), "joinState", Toast.LENGTH_LONG).show();
+                    joinState = 2;
+                    btnAttendance.setText("Dừng Cuộc ");
                 } else {
                     Toast.makeText(getApplicationContext(), "not yet", Toast.LENGTH_LONG).show();
+                    joinState = 1;
+                    btnAttendance.setText("Huỷ Báo Danh");
                 }
         }
     }

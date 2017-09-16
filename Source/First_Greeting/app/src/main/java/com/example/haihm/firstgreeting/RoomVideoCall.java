@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.nkzawa.emitter.Emitter;
@@ -50,6 +51,14 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     private FrameLayout mSubscriberViewContainer1;
     private FrameLayout mSubscriberViewContainer2;
 
+    private String fbName1;
+    private String fbName2;
+    private String fbName3;
+
+    private TextView name1;
+    private TextView name2;
+    private TextView name3;
+
 
     private Socket mSocket;
 
@@ -59,6 +68,9 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         setContentView(R.layout.activity_room_video_call);
 
         mSocket = VideoCall.mSocket;
+        name1 = (TextView) findViewById(R.id.tvUser1);
+        name2 = (TextView) findViewById(R.id.tvUser2);
+        name3 = (TextView) findViewById(R.id.tvUser3);
 
         intent = getIntent();
         bund = intent.getBundleExtra("UserInfo");
@@ -89,6 +101,9 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                     try {
                         session = data.getString("sessionId");
                         token = data.getString("token");
+                        fbName1 = data.getString("name1");
+                        fbName2 = data.getString("name2");
+                        fbName3 = data.getString("name3");
 
                         Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();
                         API_KEY = "45956472";
@@ -109,6 +124,10 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         mSession = new Session.Builder(RoomVideoCall.this, API_KEY, SESSION_ID).build();
         mSession.setSessionListener(RoomVideoCall.this);
         mSession.connect(TOKEN);
+
+        name1.setText(fbName1);
+        name2.setText(fbName2);
+        name3.setText(fbName3);
     }
 
     @Override
@@ -265,7 +284,6 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     public void onBackPressed() {
         if (mPublisher != null) {
             Intent data = new Intent();
-//            data.putExtra("state","joined");
 
             if (getParent() == null) {
                 setResult(Activity.RESULT_OK, data);

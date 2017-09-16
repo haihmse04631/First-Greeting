@@ -21,7 +21,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="70dp"
         android:layout_toRightOf="@+id/avatarReceive"
-        android:layout_weight="1.78"
         android:background="@drawable/custom_shape"
         android:gravity="left"
         android:paddingBottom="8dp"

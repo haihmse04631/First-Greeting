@@ -22,7 +22,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class Profile extends Fragment {
 
     Button btnLogOut;
-    TextView tvUserName;
+    TextView tvUserName, tvEmail, tvGender, tvBirthday;
     ImageView imgCover, imgAvatar;
 
     @Override
@@ -35,7 +35,13 @@ public class Profile extends Fragment {
         tvUserName = (TextView) rootView.findViewById(R.id.tvUserName);
         imgAvatar = (ImageView) rootView.findViewById(R.id.imgAvatar);
         imgCover = (ImageView) rootView.findViewById(R.id.imgCover);
+        tvEmail = (TextView) rootView.findViewById(R.id.tvEmail);
+        tvGender = (TextView) rootView.findViewById(R.id.tvGender);
+        tvBirthday = (TextView) rootView.findViewById(R.id.tvBirthday);
 
+        tvEmail.setText(getArguments().getString("fbEmail"));
+        tvGender.setText(getArguments().getString("fbGender"));
+        tvBirthday.setText(getArguments().getString("fbBirthday"));
         tvUserName.setText(getArguments().getString("fbName"));
         String fbImage = getArguments().getString("fbImage");
         Picasso.with(getApplicationContext()).load(fbImage).into(imgAvatar);

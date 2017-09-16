@@ -8,14 +8,14 @@
 
     <ImageView
         android:scaleType="centerCrop"
-        android:background="#0c96ec"
+        android:background="#56bcfc"
         android:id="@+id/imgCover"
         android:layout_width="match_parent"
         android:layout_height="180dp" />
 
     <ImageView
         android:id="@+id/imgAvatar"
-        android:background="#ff0"
+        android:background="@drawable/custom_border_avatar"
         android:layout_marginTop="120dp"
         android:layout_centerHorizontal="true"
         android:layout_width="120dp"
