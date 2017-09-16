@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
-const socketio = require('./socketio')(io);
 const OpenTok = require('opentok');
 
 const API_KEY = '45956472';
@@ -57,7 +56,6 @@ server.listen(3000, () => {
 });
 
 io.on('connection', function(socket) {
-    // console.log('A user connected ');
 
     socket.on('test', function(data) {
         console.log(data);
@@ -70,7 +68,7 @@ io.on('connection', function(socket) {
             if (data.role != "Member") {
                 if (!member.contains(data)) {
                     var mIndex = member.length;
-                    member.push({ id: data.fbId, hasSession: "false", sesionId: "", socket: socket });
+                    member.push({ id: data.fbId, name: data.name, hasSession: "false", sesionId: "", socket: socket });
                     console.log("Member: " + member.length);
                     var ok = false;
                     var check = setInterval(function() {
@@ -79,7 +77,29 @@ io.on('connection', function(socket) {
                                 return;
                             }
                             console.log("Session ID sending to member " + (mIndex + 1) + ":\n" + member[mIndex].sessionId);
-                            socket.emit('return-session-id', { sessionId: member[mIndex].sessionId, token: opentok.generateToken(member[mIndex].sessionId) });
+                            var name2 = "";
+                            var name3 = "";
+                            var i;
+                            for (i = 0; i < m; i++) {
+                                if (cvt[i].sessionId == member[mIndex].sessionId) {
+                                    name2 = cvt[i].name;
+                                    break;
+                                }
+                            }
+                            for (var j = i + 1; j < m; j++) {
+                                if (cvt[j].sessionId == member[mIndex].sessionId) {
+                                    name3 = cvt[j].name;
+                                    break;
+                                }
+                            }
+
+                            socket.emit('return-session-id', {
+                                sessionId: member[mIndex].sessionId,
+                                token: opentok.generateToken(member[mIndex].sessionId),
+                                name1: data.name,
+                                name2: name2,
+                                name3: name3
+                            });
                             ok = true;
                         }
                     }, 1000);
@@ -88,7 +108,7 @@ io.on('connection', function(socket) {
                 }
             } else if (!cvt.contains(data)) {
                 var cIndex = cvt.length;
-                cvt.push({ id: data.fbId, hasSession: "false", sesionId: "", socket: socket });
+                cvt.push({ id: data.fbId, name: data.name, hasSession: "false", sesionId: "", socket: socket });
                 console.log("CTV: " + cvt.length);
                 var ok = false;
                 var check = setInterval(function() {
@@ -97,7 +117,53 @@ io.on('connection', function(socket) {
                             return;
                         }
                         console.log("Session ID sending to cvt " + (cIndex + 1) + ":\n" + cvt[cIndex].sessionId);
-                        socket.emit('return-session-id', { sessionId: cvt[cIndex].sessionId, token: opentok.generateToken(cvt[cIndex].sessionId) });
+                        var name2 = "";
+                        var name3 = "";
+                        for (var i = 0; i < n; i++) {
+                            if (member[i].sessionId == cvt[cIndex].sessionId) {
+                                name2 = member[i].name;
+                                break;
+                            }
+                        }
+                        console.log('name1: ' + name2);
+                        for (var i = i + 1; i < m; i++) {
+                            if (i != cIndex && cvt[i].sessionId == cvt[cIndex].sessionId) {
+                                name3 = cvt[i].name;
+                                break;
+                            }
+                        }
+                        console.log('name2: ' + name3);
+                        if (cIndex % 2 == 0) {
+                            socket.emit('return-session-id', {
+                                sessionId: cvt[cIndex].sessionId,
+                                token: opentok.generateToken(cvt[cIndex].sessionId),
+                                name1: data.name,
+                                name2: name2,
+                                name3: name3
+                            });
+                            console.log({
+                                sessionId: cvt[cIndex].sessionId,
+                                token: opentok.generateToken(cvt[cIndex].sessionId),
+                                name1: data.name,
+                                name2: name2,
+                                name3: name3
+                            });
+                        } else {
+                            socket.emit('return-session-id', {
+                                sessionId: cvt[cIndex].sessionId,
+                                token: opentok.generateToken(cvt[cIndex].sessionId),
+                                name1: data.name,
+                                name2: name2,
+                                name3: name3
+                            });
+                            console.log({
+                                sessionId: cvt[cIndex].sessionId,
+                                token: opentok.generateToken(cvt[cIndex].sessionId),
+                                name1: data.name,
+                                name2: name2,
+                                name3: name3
+                            });
+                        }
                         ok = true;
                     }
                 }, 1000);

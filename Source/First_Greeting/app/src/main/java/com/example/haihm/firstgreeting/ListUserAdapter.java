@@ -78,7 +78,6 @@ public class ListUserAdapter extends BaseAdapter {
         holder.tvName.setText(userList.get(position).getName());
         holder.tvLastMessage.setText(lasMess.getContent());
 
-
         if (lasMess.getStatus().equals("true")) {
             holder.tvCountMess.setVisibility(View.INVISIBLE);
             holder.tvLastMessage.setTypeface(null, Typeface.NORMAL);
