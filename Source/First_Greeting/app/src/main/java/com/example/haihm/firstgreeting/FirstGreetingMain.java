@@ -105,6 +105,7 @@ public class FirstGreetingMain extends AppCompatActivity {
                     return videoCallTab;
                 case 1:
                     NewsFeed newsFeedTab = new NewsFeed();
+                    newsFeedTab.setArguments(bund);
                     return newsFeedTab;
                 case 2:
                     Chat chatTab = new Chat();

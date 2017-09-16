@@ -151,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
         /*------------------------------*/
 
         final User user = new User(fbName, fbImage, fbId, "Member");
+
         mData = FirebaseDatabase.getInstance().getReference();
 
         mData.child("User").child(fbId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -158,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
                     mData.child("User").child(fbId).setValue(user);
+
                     mData.child("Message").child(fbId).setValue(friends);
                 }
             }
