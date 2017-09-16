@@ -2,14 +2,17 @@ package com.example.haihm.firstgreeting;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.github.nkzawa.emitter.Emitter;
@@ -34,6 +37,8 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
     Bundle bund;
     Intent intent;
+    ImageButton btnOpenSetting, btnBackToChatRoom;
+
 
     private static String API_KEY = "";
     private static String SESSION_ID = "";
@@ -57,6 +62,12 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_video_call);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.title_room_chat);
+
+        btnOpenSetting = (ImageButton) findViewById(R.id.btnOpenSetting);
+
+        actionDialog();
 
         mSocket = VideoCall.mSocket;
 
@@ -74,6 +85,27 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         mSocket.emit("get-session-id", user);
         mSocket.on("return-session-id", returnSessionId);
 
+    }
+
+    private void actionDialog(){
+        btnOpenSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Dialog dialog = new Dialog(RoomVideoCall.this);
+                dialog.setTitle("Thông tin phòng chat");
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.activity_setting_room_alert);
+                ImageButton btnBackToChatRoom = (ImageButton) dialog.findViewById(R.id.btnBackToChatRoom);
+                btnBackToChatRoom.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.cancel();
+                    }
+                });
+
+                dialog.show();
+            }
+        });
     }
 
     private Emitter.Listener returnSessionId = new Emitter.Listener() {

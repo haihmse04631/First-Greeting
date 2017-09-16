@@ -6,6 +6,36 @@
     android:background="#d6f4d3"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <RelativeLayout
+        android:background="#dafdd7"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <RelativeLayout
+            android:paddingBottom="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:id="@+id/tvSearch"
+                android:layout_centerVertical="true"
+                android:text="Search user:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <SearchView
+                android:id="@+id/svSearchUser"
+                android:layout_toRightOf="@+id/tvSearch"
+                android:layout_width="300dp"
+                android:layout_height="fill_parent"></SearchView>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
     <ListView
         android:background="#dafdd7"
         android:id="@+id/listViewListChat"

@@ -3,6 +3,7 @@ package com.example.haihm.firstgreeting;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -13,6 +14,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphRequestAsyncTask;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.facebook.LoggingBehavior;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -43,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         btnLoginFacebook = findViewById(R.id.login_button);
 
         checkFacebookLogin();
+//        Log.e("email", fbEmail);
+//        Log.e("birthday", fbBirthday);
     }
 
     //Check login already or not
@@ -90,9 +94,9 @@ public class MainActivity extends AppCompatActivity {
         bund.putString("fbName", fbName);
         bund.putString("fbImage", fbImage);
         bund.putString("fbCover", fbCover);
-        bund.putString("fbEmail", fbEmail);
-        bund.putString("fbGender", fbGender);
-        bund.putString("fbBirthday", fbBirthday);
+//        bund.putString("fbEmail", fbEmail);
+//        bund.putString("fbGender", fbGender);
+//        bund.putString("fbBirthday", fbBirthday);
         intent.putExtra("MyPackage", bund);
         startActivity(intent);
         pushFirebase();
@@ -102,17 +106,19 @@ public class MainActivity extends AppCompatActivity {
     // Get facebook data
     public void loadData() {
         Bundle params = new Bundle();
-        params.putString("fields", "id,name,picture.role(large),cover,email,gender,birthday");
+        params.putString("fields", "id,name,picture.role(large),cover");
         GraphRequestAsyncTask graphRequestAsyncTask = new GraphRequest(AccessToken.getCurrentAccessToken(), "me", params, HttpMethod.GET,
                 new GraphRequest.Callback() {
                     @Override
                     public void onCompleted(GraphResponse response) {
                         if (response != null) {
                             String userDetail = response.getRawResponse();
+                            FacebookSdk.addLoggingBehavior(LoggingBehavior.REQUESTS);
                             try {
                                 JSONObject jsonObject = new JSONObject(userDetail);
                                 fbId = jsonObject.getString("id");
                                 fbName = jsonObject.getString("name");
+                                Log.e("object", jsonObject.toString());
                                 fbImage = "https://graph.facebook.com/" + fbId + "/picture?width=960&height=960";
                                 if (jsonObject.has("cover")) {
                                     String getInitialCover = jsonObject.getString("cover");
@@ -132,9 +138,11 @@ public class MainActivity extends AppCompatActivity {
                                 } else {
                                     fbCover = null;
                                 }
-                                fbEmail = jsonObject.getString("email");
-                                fbGender = jsonObject.getString("gender");
-                                fbBirthday = jsonObject.getString("birthday");
+//                                fbEmail = jsonObject.getString("email");
+//                                fbGender = jsonObject.getString("gender");
+//                                fbBirthday = jsonObject.getString("user_birthday");
+//                                Log.e("email", fbEmail);
+//                                Log.e("object", jsonObject.toString());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             } catch (Exception e) {
