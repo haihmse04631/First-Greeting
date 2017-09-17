@@ -91,6 +91,7 @@ public class ListUserAdapter extends BaseAdapter {
 
         Picasso.with(myContext).load(userList.get(position).getLinkAvatar()).into(holder.imgAvatar);
 
+
         return rowView;
     }
 }

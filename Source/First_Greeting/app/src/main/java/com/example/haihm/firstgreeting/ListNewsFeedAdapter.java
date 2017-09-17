@@ -71,7 +71,7 @@ public class ListNewsFeedAdapter extends BaseAdapter {
         holder.tvUserName.setText(userStatus.getName());
         holder.tvContentPost.setText(userListNewsFeed.get(position).getContentPost());
         Picasso.with(myContext).load(userListNewsFeed.get(position).getLinkAvatar()).into(holder.imgAvatarNewsFeed);
-        holder.lvListComment = lvListComment.get(position);
+//        holder.lvListComment = lvListComment.get(position);
 
         return rowView;
     }

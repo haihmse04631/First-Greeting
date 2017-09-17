@@ -18,7 +18,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.SimpleTimeZone;
 
 /**
  * Created by haihm on 8/8/2017.
@@ -95,7 +94,7 @@ public class NewsFeed extends Fragment {
                 ListView aLvComment = (ListView) rootView.findViewById(R.id.lvListComment);
                 CommentList aCommentList = new CommentList();
                 ListCommentAdapter aCommentAdapter = new ListCommentAdapter(thisContext, R.layout.row_comment, aCommentList);
-                aLvComment.setAdapter(aCommentAdapter);
+//                aLvComment.setAdapter(aCommentAdapter);
                 mDatabase.child("Comment").child(Integer.toString(numberOfPost)).addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
