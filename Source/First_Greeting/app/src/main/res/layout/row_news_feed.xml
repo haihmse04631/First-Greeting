@@ -1,37 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:background="#EBF5EA"
+    android:background="#dafdd7"
     android:layout_marginTop="5dp"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="45dp">
 
         <ImageButton
             android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
             android:id="@+id/imgAvatarNewsFeed"
             android:layout_marginLeft="10dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_width="42dp"
+            android:layout_height="42dp" />
 
-        <TextView
-            android:text="user name"
-            android:layout_marginLeft="10dp"
-            android:layout_centerInParent="true"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/imgAvatarNewsFeed"
-            android:id="@+id/tvUserName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_marginTop="4dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:text="user name"
+                android:layout_centerInParent="true"
+                android:layout_toRightOf="@+id/imgAvatarNewsFeed"
+                android:id="@+id/tvUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:gravity="center_vertical"
+                android:textSize="13sp"
+                android:text="time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
     </RelativeLayout>
 
     <RelativeLayout
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:textSize="18sp"
             android:id="@+id/tvContentPost"
             android:padding="5dp"
             android:paddingLeft="10dp"
@@ -45,7 +69,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:weightSum="10">
 
         <RelativeLayout

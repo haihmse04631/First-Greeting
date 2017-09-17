@@ -30,7 +30,7 @@ import java.util.HashMap;
 public class Chat extends Fragment {
     private ListView lvListChat;
     private ListUserAdapter adapter;
-    private UserList userList;
+    private UserList userList, tempList;
     private String fbId;
     private SearchView svSearchUser;
     private String fbImage;
@@ -86,14 +86,13 @@ public class Chat extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                UserList tempList = new UserList();
+                tempList = new UserList();
                 for(int i=0; i<userList.size(); i++){
                     if(userList.get(i).getName().toLowerCase().contains(s.toLowerCase()))
                     {
                         tempList.add(new User(userList.get(i).getName(),userList.get(i).getLinkAvatar(),userList.get(i).getId(), userList.get(i).getRole(), userList.get(i).getLastMessage()));
                     }
                 }
-
                 adapter = new ListUserAdapter(getActivity(), R.layout.row_list_chat, tempList);
                 lvListChat.setAdapter(adapter);
 
@@ -101,6 +100,7 @@ public class Chat extends Fragment {
             }
         });
     }
+
 
     private void sortList() {
         Collections.sort(userList, new Comparator<User>() {
