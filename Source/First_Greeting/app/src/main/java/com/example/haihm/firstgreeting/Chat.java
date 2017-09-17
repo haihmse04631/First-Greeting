@@ -4,6 +4,7 @@ package com.example.haihm.firstgreeting;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,15 +71,19 @@ public class Chat extends Fragment {
         });
 
         //Load data from Firebase
+
         loadData();
 
         searchUser();
+
+
 
         return rootView;
     }
 
     private void searchUser(){
         svSearchUser.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             public boolean onQueryTextSubmit(String s) {
                 return false;
@@ -86,19 +91,27 @@ public class Chat extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                tempList = new UserList();
-                for(int i=0; i<userList.size(); i++){
-                    if(userList.get(i).getName().toLowerCase().contains(s.toLowerCase()))
-                    {
-                        tempList.add(new User(userList.get(i).getName(),userList.get(i).getLinkAvatar(),userList.get(i).getId(), userList.get(i).getRole(), userList.get(i).getLastMessage()));
+                Log.e("checklv", "searchView");
+                if(s != null && !s.isEmpty()){
+                    tempList = new UserList();
+                    for(int i=0; i<userList.size(); i++){
+                        if(userList.get(i).getName().toLowerCase().contains(s.toLowerCase()))
+                        {
+                            tempList.add(new User(userList.get(i).getName(),userList.get(i).getLinkAvatar(),userList.get(i).getId(), userList.get(i).getRole(), userList.get(i).getLastMessage()));
+                        }
                     }
-                }
-                adapter = new ListUserAdapter(getActivity(), R.layout.row_list_chat, tempList);
-                lvListChat.setAdapter(adapter);
 
+                    adapter = new ListUserAdapter(getActivity(), R.layout.row_list_chat, tempList);
+                    lvListChat.setAdapter(adapter);
+                }
+                else{
+                    adapter = new ListUserAdapter(getActivity(), R.layout.row_list_chat, userList);
+                    lvListChat.setAdapter(adapter);
+                }
                 return true;
             }
         });
+
     }
 
 
@@ -111,6 +124,7 @@ public class Chat extends Fragment {
     }
 
     private void loadData() {
+        Log.e("checklv","Load Data");
         mData.child("User").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

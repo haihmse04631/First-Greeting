@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -59,7 +59,7 @@ public class ListNewsFeedAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        ImageButton imgAvatarNewsFeed;
+        ImageView imgAvatarNewsFeed;
         TextView tvUserName;
         TextView tvContentPost;
         ListView lvListComment;
@@ -71,7 +71,7 @@ public class ListNewsFeedAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = convertView;
         rowView = inflater.inflate(myLayout, null);
-        holder.imgAvatarNewsFeed = (ImageButton) rowView.findViewById(R.id.imgAvatarNewsFeed);
+        holder.imgAvatarNewsFeed = (ImageView) rowView.findViewById(R.id.imgAvatarNewsFeed);
         holder.tvUserName = (TextView) rowView.findViewById(R.id.tvUserName);
         holder.tvContentPost = (TextView) rowView.findViewById(R.id.tvContentPost);
 

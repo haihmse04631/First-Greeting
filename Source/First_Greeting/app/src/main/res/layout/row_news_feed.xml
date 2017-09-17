@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp">
 
-        <ImageButton
+        <ImageView
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:id="@+id/imgAvatarNewsFeed"
@@ -26,6 +26,7 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:textColor="#252424"
                 android:layout_marginTop="4dp"
                 android:textSize="16sp"
                 android:textStyle="bold"
