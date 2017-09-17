@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:background="#dafdd7"
     android:layout_marginTop="5dp"
+    android:paddingTop="5dp"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:layout_alignParentLeft="true"
@@ -23,7 +24,7 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/imgAvatarNewsFeed"
             android:layout_width="fill_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:textColor="#252424"
@@ -56,6 +57,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:text="status"
+            android:textColor="#313131"
             android:textSize="18sp"
             android:id="@+id/tvContentPost"
             android:padding="5dp"
@@ -70,7 +73,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="35dp"
         android:weightSum="10">
 
         <RelativeLayout
@@ -84,7 +87,7 @@
                 android:textSize="10sp"
                 android:text="Like"
                 android:layout_width="70dp"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content" />
         </RelativeLayout>
 
         <RelativeLayout

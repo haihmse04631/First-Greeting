@@ -132,7 +132,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
             public void onClick(View view) {
                 final Dialog dialog = new Dialog(RoomVideoCall.this);
                 dialog.setTitle("Thông tin phòng chat");
-                dialog.setCancelable(false);
+                dialog.setCancelable(true);
                 dialog.setContentView(R.layout.activity_setting_room_alert);
                 ImageButton btnBackToChatRoom = (ImageButton) dialog.findViewById(R.id.btnBackToChatRoom);
                 btnBackToChatRoom.setOnClickListener(new View.OnClickListener() {
