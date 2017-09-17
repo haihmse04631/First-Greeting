@@ -94,11 +94,11 @@ public class MainActivity extends AppCompatActivity {
         bund.putString("fbName", fbName);
         bund.putString("fbImage", fbImage);
         bund.putString("fbCover", fbCover);
-
         intent.putExtra("MyPackage", bund);
         startActivity(intent);
         pushFirebase();
         processLogin();
+        overridePendingTransition(R.anim.side_in_right, R.anim.side_out_left);
     }
 
     // Get facebook data

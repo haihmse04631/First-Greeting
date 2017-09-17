@@ -94,9 +94,9 @@ public class NewsFeed extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 LinearLayout wrap_comment;
-                wrap_comment = (LinearLayout)adapterView.getItemAtPosition(i);
-                wrap_comment.findViewById(R.id.wrap_comment).setVisibility(View.VISIBLE);
-              //  wrap_comment.setVisibility(View.VISIBLE);
+//                wrap_comment = (LinearLayout)adapterView.getItemAtPosition(i);
+//                wrap_comment.findViewById(R.id.wrap_comment).setVisibility(View.VISIBLE);
+                //  wrap_comment.setVisibility(View.VISIBLE);
             }
         });
         loadData();

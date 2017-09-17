@@ -115,6 +115,7 @@ io.on('connection', function(socket) {
                             }
 
                             socket.emit('return-session-id', {
+                                indexSession: mIndex,
                                 sessionId: member[mIndex].sessionId,
                                 token: opentok.generateToken(member[mIndex].sessionId),
                                 name1: data.name,
@@ -154,6 +155,7 @@ io.on('connection', function(socket) {
                             }
 
                             socket.emit('return-session-id', {
+                                indexSession: mIndex,
                                 sessionId: member[mIndex].sessionId,
                                 token: opentok.generateToken(member[mIndex].sessionId),
                                 name1: data.name,
@@ -192,6 +194,7 @@ io.on('connection', function(socket) {
                         }
                         if (cIndex % 2 == 0) {
                             socket.emit('return-session-id', {
+                                indexSession: cIndex / 2,
                                 sessionId: cvt[cIndex].sessionId,
                                 token: opentok.generateToken(cvt[cIndex].sessionId),
                                 name1: data.name,
@@ -205,6 +208,7 @@ io.on('connection', function(socket) {
                             });
                         } else {
                             socket.emit('return-session-id', {
+                                indexSession: cIndex / 2,
                                 sessionId: cvt[cIndex].sessionId,
                                 token: opentok.generateToken(cvt[cIndex].sessionId),
                                 name1: data.name,
@@ -255,6 +259,7 @@ io.on('connection', function(socket) {
                         }
                         if (cIndex % 2 == 0) {
                             socket.emit('return-session-id', {
+                                indexSession: cIndex / 2,
                                 sessionId: cvt[cIndex].sessionId,
                                 token: opentok.generateToken(cvt[cIndex].sessionId),
                                 name1: data.name,
@@ -268,6 +273,7 @@ io.on('connection', function(socket) {
                             });
                         } else {
                             socket.emit('return-session-id', {
+                                indexSession: cIndex / 2,
                                 sessionId: cvt[cIndex].sessionId,
                                 token: opentok.generateToken(cvt[cIndex].sessionId),
                                 name1: data.name,
@@ -294,6 +300,45 @@ io.on('connection', function(socket) {
                 // console.log(fbId);
                 member.remove(fbId);
                 cvt.remove(fbId);
+            });
+
+            socket.on('get-info-rooms', function(data) {
+                console.log(data);
+                var data = [];
+                for (var i = 0; i < sessionId.length; i++) {
+                    var userId1 = "";
+                    var userName1 = "";
+                    for (var iMember = 0; iMember < member.length; iMember++) {
+                        if (member[iMember].sessionId == sessionId[i]) {
+                            userId1 = member[iMember].id;
+                            userName1 = member[iMember].name;
+                            break;
+                        }
+                    }
+                    var userId2 = "";
+                    var userName2 = "";
+                    var iCvt;
+                    for (iCvt = 0; iCvt < cvt.length; iCvt++) {
+                        if (cvt[iCvt].sessionId == sessionId[i]) {
+                            userId2 = cvt[iCvt].id;
+                            userName2 = cvt[iCvt].name;
+                            break;
+                        }
+                    }
+                    var userId3 = "";
+                    var userName3 = "";
+                    for (iCvt = iCvt + 1; iCvt < cvt.length; iCvt++) {
+                        if (cvt[iCvt].sessionId == sessionId[i]) {
+                            userId3 = cvt[iCvt].id;
+                            userName3 = cvt[iCvt].name;
+                            break;
+                        }
+                    }
+                    var aRoom = { roomNumber: i, userId1, userId2, userId3, userName1, userName2, userName3 };
+                    data.push(aRoom);
+                    console.log(data);
+                }
+                socket.emit('return-info', data);
             });
 
             socket.on('disconnect', function() {

@@ -79,6 +79,7 @@ public class FirstGreetingMain extends AppCompatActivity {
         if (id == R.id.action_settings) {
             Intent intent = new Intent(FirstGreetingMain.this, Setting.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.anim_alpha_in, R.anim.anim_alpha_out);
 
             return true;
         }
