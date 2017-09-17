@@ -11,13 +11,17 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.opentok.android.BaseVideoRenderer;
 import com.opentok.android.OpentokError;
 import com.opentok.android.Publisher;
@@ -27,8 +31,11 @@ import com.opentok.android.Stream;
 import com.opentok.android.Subscriber;
 import com.opentok.android.SubscriberKit;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -47,7 +54,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     private static final String LOG_TAG = RoomVideoCall.class.getSimpleName();
     private static final int RC_SETTINGS_SCREEN_PERM = 123;
     private static final int RC_VIDEO_APP_PERM = 124;
-    private static Session mSession;
+    public static Session mSession;
     public static Publisher mPublisher;
     public static Subscriber mSubscriber1;
     public static Subscriber mSubscriber2;
@@ -59,29 +66,35 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     private String fbName1;
     private String fbName2;
     private String fbName3;
+    private String room;
 
     private TextView name1;
     private TextView name2;
     private TextView name3;
+    private TextView roomNumber;
 
-
-    private Socket mSocket;
+    private DatabaseReference mData;
+    private static Socket mSocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_video_call);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.title_room_chat);
+        getSupportActionBar().setCustomView(R.layout.title_room_call);
 
+        mData = FirebaseDatabase.getInstance().getReference();
         btnOpenSetting = (ImageButton) findViewById(R.id.btnOpenSetting);
 
         actionDialog();
 
-        mSocket = VideoCall.mSocket;
+        if (mSocket == null) {
+            mSocket = VideoCall.mSocket;
+        }
         name1 = (TextView) findViewById(R.id.tvUser1);
         name2 = (TextView) findViewById(R.id.tvUser2);
         name3 = (TextView) findViewById(R.id.tvUser3);
+        roomNumber = (TextView) findViewById(R.id.tvRoomNumber);
 
         intent = getIntent();
         bund = intent.getBundleExtra("UserInfo");
@@ -97,7 +110,6 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
             }
             mSocket.emit("get-session-id", user);
             mSocket.on("return-session-id", returnSessionId);
-            Toast.makeText(getApplicationContext(), "Not yet", Toast.LENGTH_LONG).show();
         } else {
             loadExistData();
         }
@@ -108,7 +120,6 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         mSubscriberViewContainer1 = (FrameLayout) findViewById(R.id.frUser2);
         mSubscriberViewContainer2 = (FrameLayout) findViewById(R.id.frUser3);
 
-        Toast.makeText(getApplicationContext(), "Had", Toast.LENGTH_LONG).show();
         {
             View view = mPublisher.getView();
             view.setBackground(ContextCompat.getDrawable(getBaseContext(), R.drawable.custom_video_border));
@@ -126,6 +137,11 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         }
     }
 
+    ArrayList<RoomMembers> roomList;
+    RoomMemberAdapter roomAdapter;
+    ListView lvRoom;
+    int click = 0;
+
     private void actionDialog() {
         btnOpenSetting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,18 +150,93 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                 dialog.setTitle("Thông tin phòng chat");
                 dialog.setCancelable(true);
                 dialog.setContentView(R.layout.activity_setting_room_alert);
-                ImageButton btnBackToChatRoom = (ImageButton) dialog.findViewById(R.id.btnBackToChatRoom);
-                btnBackToChatRoom.setOnClickListener(new View.OnClickListener() {
+                Button btnStart = (Button) dialog.findViewById(R.id.btnStart);
+                if (bund.getString("role").equals("Admin")) {
+                    btnStart.setVisibility(View.VISIBLE);
+                } else {
+                    btnStart.setVisibility(View.GONE);
+                }
+
+                btnStart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        dialog.cancel();
+                        Log.e("DaTa: ", "CLicked!");
+                        if (click % 2 == 0) {
+                            mSocket.emit("start-call", "");
+                            click++;
+                        }
                     }
                 });
+//                ImageButton btnBackToChatRoom = (ImageButton) dialog.findViewById(R.id.btnBackToChatRoom);
+//                btnBackToChatRoom.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        dialog.cancel();
+//                    }
+//                });
+
+                lvRoom = dialog.findViewById(R.id.lvListRoomChat);
+                roomList = new ArrayList<RoomMembers>();
+                roomAdapter = new RoomMemberAdapter(dialog.getContext(), R.layout.row_list_room_chat, roomList);
+                lvRoom.setAdapter(roomAdapter);
+
+                mSocket.emit("get-info-rooms", "đã nhận req");
+                mSocket.on("return-info", returnInfoRooms);
 
                 dialog.show();
             }
         });
     }
+
+    private Emitter.Listener returnInfoRooms = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    roomList.clear();
+                    int index = 0;
+                    String roomNumber = "";
+                    String userId1 = "";
+                    String userId2 = "";
+                    String userId3 = "";
+                    String userName1 = "";
+                    String userName2 = "";
+                    String userName3 = "";
+                    final JSONArray data = (JSONArray) args[0];
+                    JSONObject aRoomObj = null;
+                    try {
+                        while (true) {
+                            aRoomObj = data.getJSONObject(index);
+                            roomNumber = aRoomObj.getString("roomNumber");
+                            if (roomNumber.isEmpty()) {
+                                break;
+                            }
+                            userName1 = aRoomObj.getString("userName1");
+                            userName2 = aRoomObj.getString("userName2");
+                            userName3 = aRoomObj.getString("userName3");
+
+                            userId1 = aRoomObj.getString("userId1");
+                            userId2 = aRoomObj.getString("userId2");
+                            userId3 = aRoomObj.getString("userId3");
+
+                            RoomMembers aRoom = new RoomMembers(userName1, userName2, userName3);
+                            Log.e("DAta: ", aRoom.toString());
+                            roomList.add(aRoom);
+                            Log.e("DAta: ", roomNumber);
+                            index++;
+                        }
+                    } catch (JSONException e) {
+
+                        Log.e("data", "Error!!!!!!!!!");
+                    }
+
+
+                    roomAdapter.notifyDataSetChanged();
+                }
+            });
+        }
+    };
 
     private Emitter.Listener returnSessionId = new Emitter.Listener() {
 
@@ -163,6 +254,8 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                         fbName1 = data.getString("name1");
                         fbName2 = data.getString("name2");
                         fbName3 = data.getString("name3");
+                        room = data.getString("indexSession");
+                        roomNumber.setText("Room " + (room + 1));
 
                         Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();
                         API_KEY = "45956472";
@@ -219,7 +312,11 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     @Override
     public void onConnected(Session session) {
         Log.i(LOG_TAG, "Session Connected");
-
+        if (mPublisher != null) {
+            mSession.unpublish(mPublisher);
+            mPublisher.destroy();
+            mPublisher = null;
+        }
         mPublisher = new Publisher.Builder(this)
                 .audioTrack(false)
 //                .frameRate(Publisher.CameraCaptureFrameRate.FPS_30)
@@ -304,7 +401,6 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     @Override
     public void onStreamDropped(Session session, Stream stream) {
         Log.i(LOG_TAG, "Stream Dropped");
-
         if (mSubscriber1 != null && mSubscriber1.getStream() == stream) {
             mSubscriber1 = null;
             mSubscriberViewContainer1.removeAllViews();
@@ -350,9 +446,9 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                 getParent().setResult(Activity.RESULT_OK, data);
             }
         }
-        mPublisherViewContainer.removeAllViews();
-        mSubscriberViewContainer1.removeAllViews();
-        mSubscriberViewContainer2.removeAllViews();
+        if (mPublisherViewContainer != null) mPublisherViewContainer.removeAllViews();
+        if (mSubscriberViewContainer1 != null) mSubscriberViewContainer1.removeAllViews();
+        if (mSubscriberViewContainer2 != null) mSubscriberViewContainer2.removeAllViews();
         finish();
     }
 }

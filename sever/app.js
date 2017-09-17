@@ -35,6 +35,21 @@ Array.prototype.get = function(i) {
     return this[i];
 }
 
+Array.prototype.remove = function(fbId) {
+    var position = -1;
+    for (var i = 0; i < this.length; i++) {
+        if (this[i].id == fbId) {
+            position = i;
+            break;
+        }
+    }
+    if (position != -1) {
+        this.splice(position, 1);
+        console.log('Removed id ' + fbId);
+    }
+
+}
+
 function scramble(array) {
     var tmp, current, top = array.length;
 
@@ -69,15 +84,16 @@ io.on('connection', function(socket) {
     socket.on('get-session-id', function(data) {
         {
             //==== storage data from client
-            console.log(data);
+
             if (data.role != "Member") {
                 if (!member.contains(data)) {
+                    console.log(data);
                     var mIndex = member.length;
                     member.push({ id: data.fbId, name: data.name, hasSession: "false", sesionId: "", socket: socket });
                     console.log("Member: " + member.length);
                     var ok = false;
                     var check = setInterval(function() {
-                        if (member[mIndex].hasSession === "true") {
+                        if (member[mIndex] != null && member[mIndex].hasSession === "true") {
                             if (ok === true) {
                                 return;
                             }
@@ -99,6 +115,7 @@ io.on('connection', function(socket) {
                             }
 
                             socket.emit('return-session-id', {
+                                indexSession: mIndex,
                                 sessionId: member[mIndex].sessionId,
                                 token: opentok.generateToken(member[mIndex].sessionId),
                                 name1: data.name,
@@ -110,14 +127,53 @@ io.on('connection', function(socket) {
                     }, 1000);
                 } else {
                     console.log("This user is existed");
+                    member.remove(data.fbId);
+                    var mIndex = member.length;
+                    member.push({ id: data.fbId, name: data.name, hasSession: "false", sesionId: "", socket: socket });
+                    console.log("Member: " + member.length);
+                    var ok = false;
+                    var check = setInterval(function() {
+                        if (member[mIndex] != null && member[mIndex].hasSession === "true") {
+                            if (ok === true) {
+                                return;
+                            }
+                            console.log("Session ID sending to member " + (mIndex + 1) + ":\n" + member[mIndex].sessionId);
+                            var name2 = "";
+                            var name3 = "";
+                            var i;
+                            for (i = 0; i < m; i++) {
+                                if (cvt[i].sessionId == member[mIndex].sessionId) {
+                                    name2 = cvt[i].name;
+                                    break;
+                                }
+                            }
+                            for (var j = i + 1; j < m; j++) {
+                                if (cvt[j].sessionId == member[mIndex].sessionId) {
+                                    name3 = cvt[j].name;
+                                    break;
+                                }
+                            }
+
+                            socket.emit('return-session-id', {
+                                indexSession: mIndex,
+                                sessionId: member[mIndex].sessionId,
+                                token: opentok.generateToken(member[mIndex].sessionId),
+                                name1: data.name,
+                                name2: name2,
+                                name3: name3
+                            });
+                            ok = true;
+                        }
+                    }, 1000);
                 }
             } else if (!cvt.contains(data)) {
+                console.log(data);
                 var cIndex = cvt.length;
                 cvt.push({ id: data.fbId, name: data.name, hasSession: "false", sesionId: "", socket: socket });
                 console.log("CTV: " + cvt.length);
                 var ok = false;
                 var check = setInterval(function() {
-                    if (cvt[cIndex].hasSession === "true") {
+                    if (cvt[cIndex] != null && cvt[cIndex].hasSession === "true") {
                         if (ok === true) {
                             return;
                         }
@@ -138,6 +194,7 @@ io.on('connection', function(socket) {
                         }
                         if (cIndex % 2 == 0) {
                             socket.emit('return-session-id', {
+                                indexSession: cIndex / 2,
                                 sessionId: cvt[cIndex].sessionId,
                                 token: opentok.generateToken(cvt[cIndex].sessionId),
                                 name1: data.name,
@@ -151,6 +208,7 @@ io.on('connection', function(socket) {
                             });
                         } else {
                             socket.emit('return-session-id', {
+                                indexSession: cIndex / 2,
                                 sessionId: cvt[cIndex].sessionId,
                                 token: opentok.generateToken(cvt[cIndex].sessionId),
                                 name1: data.name,
@@ -173,7 +231,116 @@ io.on('connection', function(socket) {
                 }
             } else {
                 console.log("This user is existed");
+                cvt.remove(data.fbId);
+                console.log("Updated");
+                var cIndex = cvt.length;
+                cvt.push({ id: data.fbId, name: data.name, hasSession: "false", sesionId: "", socket: socket });
+                console.log("CTV: " + cvt.length);
+                var ok = false;
+                var check = setInterval(function() {
+                    if (cvt[cIndex] != null && cvt[cIndex].hasSession === "true") {
+                        if (ok === true) {
+                            return;
+                        }
+                        console.log("Session ID sending to cvt " + (cIndex + 1) + ":\n" + cvt[cIndex].sessionId);
+                        var name2 = "";
+                        var name3 = "";
+                        for (var i = 0; i < n; i++) {
+                            if (member[i].sessionId == cvt[cIndex].sessionId) {
+                                name2 = member[i].name;
+                                break;
+                            }
+                        }
+                        for (var i = 0; i < m; i++) {
+                            if (i != cIndex && cvt[i].sessionId == cvt[cIndex].sessionId) {
+                                name3 = cvt[i].name;
+                                break;
+                            }
+                        }
+                        if (cIndex % 2 == 0) {
+                            socket.emit('return-session-id', {
+                                indexSession: cIndex / 2,
+                                sessionId: cvt[cIndex].sessionId,
+                                token: opentok.generateToken(cvt[cIndex].sessionId),
+                                name1: data.name,
+                                name2: name2,
+                                name3: name3
+                            });
+                            console.log({
+                                name1: data.name,
+                                name2: name2,
+                                name3: name3
+                            });
+                        } else {
+                            socket.emit('return-session-id', {
+                                indexSession: cIndex / 2,
+                                sessionId: cvt[cIndex].sessionId,
+                                token: opentok.generateToken(cvt[cIndex].sessionId),
+                                name1: data.name,
+                                name2: name2,
+                                name3: name3
+                            });
+                            console.log({
+                                name1: data.name,
+                                name2: name2,
+                                name3: name3
+                            });
+                        }
+                        ok = true;
+                    }
+                }, 1000);
+                if (cvt.length % 2 == 0) {
+                    if (cvt.length / 2 > sessionId.length) {
+                        createNewSession();
+                    }
+                }
             }
+
+            socket.on('cancel-attendant', function(fbId) {
+                // console.log(fbId);
+                member.remove(fbId);
+                cvt.remove(fbId);
+            });
+
+            socket.on('get-info-rooms', function(data) {
+                console.log(data);
+                var data = [];
+                for (var i = 0; i < sessionId.length; i++) {
+                    var userId1 = "";
+                    var userName1 = "";
+                    for (var iMember = 0; iMember < member.length; iMember++) {
+                        if (member[iMember].sessionId == sessionId[i]) {
+                            userId1 = member[iMember].id;
+                            userName1 = member[iMember].name;
+                            break;
+                        }
+                    }
+                    var userId2 = "";
+                    var userName2 = "";
+                    var iCvt;
+                    for (iCvt = 0; iCvt < cvt.length; iCvt++) {
+                        if (cvt[iCvt].sessionId == sessionId[i]) {
+                            userId2 = cvt[iCvt].id;
+                            userName2 = cvt[iCvt].name;
+                            break;
+                        }
+                    }
+                    var userId3 = "";
+                    var userName3 = "";
+                    for (iCvt = iCvt + 1; iCvt < cvt.length; iCvt++) {
+                        if (cvt[iCvt].sessionId == sessionId[i]) {
+                            userId3 = cvt[iCvt].id;
+                            userName3 = cvt[iCvt].name;
+                            break;
+                        }
+                    }
+                    var aRoom = { roomNumber: i, userId1, userId2, userId3, userName1, userName2, userName3 };
+                    data.push(aRoom);
+                    console.log(data);
+                }
+                socket.emit('return-info', data);
+            });
+
             socket.on('disconnect', function() {
                 console.log('user disconnected');
             });
