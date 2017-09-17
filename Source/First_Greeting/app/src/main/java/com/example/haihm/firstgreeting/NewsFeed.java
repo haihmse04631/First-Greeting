@@ -21,7 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.SimpleTimeZone;
 
 /**
  * Created by haihm on 8/8/2017.

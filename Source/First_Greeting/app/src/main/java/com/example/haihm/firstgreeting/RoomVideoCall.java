@@ -47,7 +47,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     private static final String LOG_TAG = RoomVideoCall.class.getSimpleName();
     private static final int RC_SETTINGS_SCREEN_PERM = 123;
     private static final int RC_VIDEO_APP_PERM = 124;
-    private static Session mSession;
+    public static Session mSession;
     public static Publisher mPublisher;
     public static Subscriber mSubscriber1;
     public static Subscriber mSubscriber2;
@@ -65,7 +65,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     private TextView name3;
 
 
-    private Socket mSocket;
+    private static Socket mSocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +78,9 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
         actionDialog();
 
-        mSocket = VideoCall.mSocket;
+        if (mSocket == null) {
+            mSocket = VideoCall.mSocket;
+        }
         name1 = (TextView) findViewById(R.id.tvUser1);
         name2 = (TextView) findViewById(R.id.tvUser2);
         name3 = (TextView) findViewById(R.id.tvUser3);
@@ -97,7 +99,6 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
             }
             mSocket.emit("get-session-id", user);
             mSocket.on("return-session-id", returnSessionId);
-            Toast.makeText(getApplicationContext(), "Not yet", Toast.LENGTH_LONG).show();
         } else {
             loadExistData();
         }
@@ -108,7 +109,6 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         mSubscriberViewContainer1 = (FrameLayout) findViewById(R.id.frUser2);
         mSubscriberViewContainer2 = (FrameLayout) findViewById(R.id.frUser3);
 
-        Toast.makeText(getApplicationContext(), "Had", Toast.LENGTH_LONG).show();
         {
             View view = mPublisher.getView();
             view.setBackground(ContextCompat.getDrawable(getBaseContext(), R.drawable.custom_video_border));
@@ -219,7 +219,11 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     @Override
     public void onConnected(Session session) {
         Log.i(LOG_TAG, "Session Connected");
-
+        if (mPublisher != null) {
+            mSession.unpublish(mPublisher);
+            mPublisher.destroy();
+            mPublisher = null;
+        }
         mPublisher = new Publisher.Builder(this)
                 .audioTrack(false)
 //                .frameRate(Publisher.CameraCaptureFrameRate.FPS_30)
@@ -304,7 +308,6 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     @Override
     public void onStreamDropped(Session session, Stream stream) {
         Log.i(LOG_TAG, "Stream Dropped");
-
         if (mSubscriber1 != null && mSubscriber1.getStream() == stream) {
             mSubscriber1 = null;
             mSubscriberViewContainer1.removeAllViews();
@@ -350,9 +353,9 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                 getParent().setResult(Activity.RESULT_OK, data);
             }
         }
-        mPublisherViewContainer.removeAllViews();
-        mSubscriberViewContainer1.removeAllViews();
-        mSubscriberViewContainer2.removeAllViews();
+        if (mPublisherViewContainer != null) mPublisherViewContainer.removeAllViews();
+        if (mSubscriberViewContainer1 != null) mSubscriberViewContainer1.removeAllViews();
+        if (mSubscriberViewContainer2 != null) mSubscriberViewContainer2.removeAllViews();
         finish();
     }
 }

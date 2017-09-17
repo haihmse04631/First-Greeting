@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -21,14 +20,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.net.URISyntaxException;
 
 import static android.app.Activity.RESULT_OK;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by haihm on 8/8/2017.
  */
 
 public class VideoCall extends Fragment {
-//    private Button btnAttendance;
+    //    private Button btnAttendance;
     private DatabaseReference mData;
     private Bundle bund;
     private static int attendedState = 0;
@@ -52,10 +50,13 @@ public class VideoCall extends Fragment {
         btnLeave = (ImageButton) rootView.findViewById(R.id.btnLeave);
 
         try {
-            mSocket = IO.socket("http://192.168.1.3:3000");
+            if (mSocket == null) {
+                mSocket = IO.socket("http://192.168.1.3:3000");
+                mSocket.connect();
+            }
         } catch (URISyntaxException e) {
         }
-        mSocket.connect();
+
         mSocket.emit("client-send", "Successful!");
 
         btnAttend.setOnClickListener(new View.OnClickListener() {
@@ -111,19 +112,25 @@ public class VideoCall extends Fragment {
             @Override
             public void onClick(View view) {
                 if (attendedState == 1) {
-                    mSocket.emit("cancel-attendant", "");
+                    mSocket.emit("cancel-attendant", fbId);
                     attendedState = 0;
                     btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.attend));
                     btnLeave.setVisibility(View.GONE);
                 }
                 if (attendedState == 2) {
-                    RoomVideoCall.mPublisher.destroy();
+                    mSocket.emit("cancel-attendant", fbId);
+
                     if (RoomVideoCall.mSubscriber1 != null) {
                         RoomVideoCall.mSubscriber1.destroy();
                     }
                     if (RoomVideoCall.mSubscriber2 != null) {
                         RoomVideoCall.mSubscriber2.destroy();
                     }
+
+//                    RoomVideoCall.mPublisher.destroy();
+                    RoomVideoCall.mSession.unpublish(RoomVideoCall.mPublisher);
+                    RoomVideoCall.mSession.disconnect();
+                    RoomVideoCall.mSession = null;
                     attendedState = 0;
                     btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.attend));
                     btnLeave.setVisibility(View.GONE);
@@ -139,16 +146,16 @@ public class VideoCall extends Fragment {
         switch (requestCode) {
             case 0:
                 if (resultCode == RESULT_OK) {
-                    Toast.makeText(getApplicationContext(), "joinState", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getApplicationContext(), "joinState", Toast.LENGTH_LONG).show();
                     attendedState = 2;
                     btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_room));
                     btnLeave.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.leave));
                     btnLeave.setVisibility(View.VISIBLE);
                 } else {
-                    Toast.makeText(getApplicationContext(), "not yet", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getApplicationContext(), "not yet", Toast.LENGTH_LONG).show();
                     attendedState = 1;
-                    btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.btn_attended));
-                    btnLeave.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.leave));
+                    btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.attended));
+                    btnLeave.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.stop_attend));
                     btnLeave.setVisibility(View.VISIBLE);
                 }
         }
