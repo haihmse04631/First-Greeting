@@ -147,7 +147,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
             @Override
             public void onClick(View view) {
                 final Dialog dialog = new Dialog(RoomVideoCall.this);
-                dialog.setTitle("Thông tin phòng chat");
+                dialog.setTitle("Rooms Information");
                 dialog.setCancelable(true);
                 dialog.setContentView(R.layout.activity_setting_room_alert);
                 Button btnStart = (Button) dialog.findViewById(R.id.btnStart);

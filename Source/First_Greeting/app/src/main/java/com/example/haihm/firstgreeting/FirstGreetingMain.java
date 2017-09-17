@@ -9,8 +9,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 
 public class FirstGreetingMain extends AppCompatActivity {
 
@@ -27,6 +29,7 @@ public class FirstGreetingMain extends AppCompatActivity {
     /**
      * The {@link ViewPager} that will host the section contents.
      */
+    private TabLayout tabLayout;
     private ViewPager mViewPager;
     private Intent intent;
     private Bundle bund;
@@ -50,10 +53,22 @@ public class FirstGreetingMain extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(1);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        createTabIcons();
 
+    }
+
+    private void createTabIcons(){
+        RelativeLayout videoCall = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab_videocall, null);
+        tabLayout.getTabAt(0).setCustomView(videoCall);
+        RelativeLayout newsfeed = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab_news_feed, null);
+        tabLayout.getTabAt(1).setCustomView(newsfeed);
+        RelativeLayout chat = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab_chat, null);
+        tabLayout.getTabAt(2).setCustomView(chat);
+        RelativeLayout profile = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab_profile, null);
+        tabLayout.getTabAt(3).setCustomView(profile);
     }
 
     @Override
