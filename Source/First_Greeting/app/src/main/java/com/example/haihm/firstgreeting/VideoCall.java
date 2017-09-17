@@ -31,12 +31,13 @@ public class VideoCall extends Fragment {
 //    private Button btnAttendance;
     private DatabaseReference mData;
     private Bundle bund;
-    private int joinState = 0;
+    private static int attendedState = 0;
+    private int leavedSate = 0;
     protected static Socket mSocket;
     private String fbId;
     private String fbType;
     private String fbName;
-    private ImageButton btnAttend, btnLeave, btnReturnToCall;
+    private ImageButton btnAttend, btnLeave;
     Intent intent;
 
     @Override
@@ -47,10 +48,8 @@ public class VideoCall extends Fragment {
         mData = FirebaseDatabase.getInstance().getReference();
         fbId = getArguments().getString("fbId");
         fbName = getArguments().getString("fbName");
-//        btnAttendance = (Button) rootView.findViewById(R.id.btnAttendance);
         btnAttend = (ImageButton) rootView.findViewById(R.id.btnAttend);
         btnLeave = (ImageButton) rootView.findViewById(R.id.btnLeave);
-        btnReturnToCall = (ImageButton) rootView.findViewById(R.id.btnRetunToCall);
 
         try {
             mSocket = IO.socket("http://192.168.1.3:3000");
@@ -62,7 +61,7 @@ public class VideoCall extends Fragment {
         btnAttend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (joinState == 0) {
+                if (attendedState == 0) {
                     intent = new Intent(getActivity(), RoomVideoCall.class);
                     bund = new Bundle();
                     bund.putString("fbId", fbId);
@@ -100,11 +99,24 @@ public class VideoCall extends Fragment {
                         }
                     });
 
-                } else if (joinState == 1) {
-                    mSocket.emit("cancel-attendant", "");
-                    joinState = 0;
-                    btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.attend));
+                } else if (attendedState == 1) {
+                    startActivityForResult(intent, 0);
                 } else {
+                    startActivityForResult(intent, 0);
+                }
+
+            }
+        });
+        btnLeave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (attendedState == 1) {
+                    mSocket.emit("cancel-attendant", "");
+                    attendedState = 0;
+                    btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.attend));
+                    btnLeave.setVisibility(View.GONE);
+                }
+                if (attendedState == 2) {
                     RoomVideoCall.mPublisher.destroy();
                     if (RoomVideoCall.mSubscriber1 != null) {
                         RoomVideoCall.mSubscriber1.destroy();
@@ -112,10 +124,10 @@ public class VideoCall extends Fragment {
                     if (RoomVideoCall.mSubscriber2 != null) {
                         RoomVideoCall.mSubscriber2.destroy();
                     }
-                    joinState = 0;
+                    attendedState = 0;
                     btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.attend));
+                    btnLeave.setVisibility(View.GONE);
                 }
-
             }
         });
         return rootView;
@@ -128,12 +140,16 @@ public class VideoCall extends Fragment {
             case 0:
                 if (resultCode == RESULT_OK) {
                     Toast.makeText(getApplicationContext(), "joinState", Toast.LENGTH_LONG).show();
-                    joinState = 2;
-                    btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.leave));
+                    attendedState = 2;
+                    btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_room));
+                    btnLeave.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.leave));
+                    btnLeave.setVisibility(View.VISIBLE);
                 } else {
                     Toast.makeText(getApplicationContext(), "not yet", Toast.LENGTH_LONG).show();
-                    joinState = 1;
+                    attendedState = 1;
                     btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.btn_attended));
+                    btnLeave.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.leave));
+                    btnLeave.setVisibility(View.VISIBLE);
                 }
         }
     }
