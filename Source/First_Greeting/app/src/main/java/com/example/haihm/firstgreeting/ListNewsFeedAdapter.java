@@ -77,7 +77,7 @@ public class ListNewsFeedAdapter extends BaseAdapter {
 
         rowView.setTag(holder);
         userStatus = userListNewsFeed.get(position);
-        Log.e("data adapter", userStatus.getName());
+//        Log.e("data adapter", userStatus.getName());
         holder.tvUserName.setText(userStatus.getName());
         holder.tvContentPost.setText(userListNewsFeed.get(position).getContentPost());
         Picasso.with(myContext).load(userListNewsFeed.get(position).getLinkAvatar()).into(holder.imgAvatarNewsFeed);

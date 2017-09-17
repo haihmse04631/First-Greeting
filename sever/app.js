@@ -71,8 +71,9 @@ server.listen(3000, () => {
 });
 
 app.use('/', express.static(__dirname));
-app.get('/start', function(req, res) {
-    res.sendFile(__dirname + '/start.html');
+
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/index.html');
 });
 
 io.on('connection', function(socket) {
