@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<script src="./node_modules/socket.io-client/dist/socket.io.js"></script>
-</head>
+	</head>
 <body>
 	<h1>Start</h1>
 	<input type="button" value="test" onclick="doEmit()" />
@@ -14,7 +14,7 @@
 		//socket.emit('test', "ngon");
 
 		var doEmit = function () {
-			socket.emit('test', "you clicked the button.");
+			socket.emit('start-call', "you clicked the button");
 		};
 	</script>
 	 

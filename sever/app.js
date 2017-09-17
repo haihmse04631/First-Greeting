@@ -20,7 +20,7 @@ var cvt = [];
 Array.prototype.contains = function(data) {
     var i = this.length;
     while (i--) {
-        if (this[i].id === data.id) {
+        if (this[i].id == data.fbId) {
             return true;
         }
     }
@@ -53,6 +53,11 @@ cvt = scramble(cvt);
 
 server.listen(3000, () => {
     console.log(`Server is running at localhost:3000`);
+});
+
+app.use('/', express.static(__dirname));
+app.get('/start', function(req, res) {
+    res.sendFile(__dirname + '/start.html');
 });
 
 io.on('connection', function(socket) {
@@ -125,14 +130,12 @@ io.on('connection', function(socket) {
                                 break;
                             }
                         }
-                        console.log('name1: ' + name2);
-                        for (var i = i + 1; i < m; i++) {
+                        for (var i = 0; i < m; i++) {
                             if (i != cIndex && cvt[i].sessionId == cvt[cIndex].sessionId) {
                                 name3 = cvt[i].name;
                                 break;
                             }
                         }
-                        console.log('name2: ' + name3);
                         if (cIndex % 2 == 0) {
                             socket.emit('return-session-id', {
                                 sessionId: cvt[cIndex].sessionId,
@@ -142,8 +145,6 @@ io.on('connection', function(socket) {
                                 name3: name3
                             });
                             console.log({
-                                sessionId: cvt[cIndex].sessionId,
-                                token: opentok.generateToken(cvt[cIndex].sessionId),
                                 name1: data.name,
                                 name2: name2,
                                 name3: name3
@@ -157,8 +158,6 @@ io.on('connection', function(socket) {
                                 name3: name3
                             });
                             console.log({
-                                sessionId: cvt[cIndex].sessionId,
-                                token: opentok.generateToken(cvt[cIndex].sessionId),
                                 name1: data.name,
                                 name2: name2,
                                 name3: name3

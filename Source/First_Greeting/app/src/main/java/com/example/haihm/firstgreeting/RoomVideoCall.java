@@ -47,7 +47,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     private static final String LOG_TAG = RoomVideoCall.class.getSimpleName();
     private static final int RC_SETTINGS_SCREEN_PERM = 123;
     private static final int RC_VIDEO_APP_PERM = 124;
-    private Session mSession;
+    private static Session mSession;
     public static Publisher mPublisher;
     public static Subscriber mSubscriber1;
     public static Subscriber mSubscriber2;
@@ -86,20 +86,47 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         intent = getIntent();
         bund = intent.getBundleExtra("UserInfo");
 
-        JSONObject user = new JSONObject();
-        try {
-            user.put("fbId", bund.getString("fbId"));
-            user.put("role", bund.getString("role"));
-            user.put("name", bund.getString("name"));
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (mSession == null) {
+            JSONObject user = new JSONObject();
+            try {
+                user.put("fbId", bund.getString("fbId"));
+                user.put("role", bund.getString("role"));
+                user.put("name", bund.getString("name"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            mSocket.emit("get-session-id", user);
+            mSocket.on("return-session-id", returnSessionId);
+            Toast.makeText(getApplicationContext(), "Not yet", Toast.LENGTH_LONG).show();
+        } else {
+            loadExistData();
         }
-        mSocket.emit("get-session-id", user);
-        mSocket.on("return-session-id", returnSessionId);
-
     }
 
-    private void actionDialog(){
+    public void loadExistData() {
+        mPublisherViewContainer = (FrameLayout) findViewById(R.id.frUser1);
+        mSubscriberViewContainer1 = (FrameLayout) findViewById(R.id.frUser2);
+        mSubscriberViewContainer2 = (FrameLayout) findViewById(R.id.frUser3);
+
+        Toast.makeText(getApplicationContext(), "Had", Toast.LENGTH_LONG).show();
+        {
+            View view = mPublisher.getView();
+            view.setBackground(ContextCompat.getDrawable(getBaseContext(), R.drawable.custom_video_border));
+            mPublisherViewContainer.addView(view);
+        }
+        if (mSubscriber1 != null) {
+            View view = mSubscriber1.getView();
+            view.setBackground(ContextCompat.getDrawable(getBaseContext(), R.drawable.custom_video_border));
+            mSubscriberViewContainer1.addView(view);
+        }
+        if (mSubscriber2 != null) {
+            View view = mSubscriber1.getView();
+            view.setBackground(ContextCompat.getDrawable(getBaseContext(), R.drawable.custom_video_border));
+            mSubscriberViewContainer2.addView(view);
+        }
+    }
+
+    private void actionDialog() {
         btnOpenSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -194,7 +221,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         Log.i(LOG_TAG, "Session Connected");
 
         mPublisher = new Publisher.Builder(this)
-//                .audioTrack(false)
+                .audioTrack(false)
 //                .frameRate(Publisher.CameraCaptureFrameRate.FPS_30)
 //                .resolution(Publisher.CameraCaptureResolution.MEDIUM)
 //                .videoTrack(true)
@@ -323,6 +350,9 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                 getParent().setResult(Activity.RESULT_OK, data);
             }
         }
+        mPublisherViewContainer.removeAllViews();
+        mSubscriberViewContainer1.removeAllViews();
+        mSubscriberViewContainer2.removeAllViews();
         finish();
     }
 }
