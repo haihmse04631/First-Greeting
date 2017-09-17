@@ -66,34 +66,53 @@
             android:layout_weight="5"
             android:layout_width="0dp"
             android:layout_height="match_parent">
-            <Button
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:textAllCaps="false"
-                android:id="@+id/btnComment"
-                android:layout_centerInParent="true"
-                android:textSize="10sp"
-                android:text="Comment"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+            <TextView
+                android:layout_weight="9"
+                android:id="@+id/edtNumberOfComment"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+
 
         </RelativeLayout>
 
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/wrap_comment"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/tvComment"
-            android:visibility="gone"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
+
+        <LinearLayout
+            android:weightSum="10"
             android:layout_width="match_parent"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:id="@+id/wrap_comment_post"
+            >
+
+            <EditText
+                android:layout_weight="9"
+                android:id="@+id/edtComment"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+
+            <Button
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:id="@+id/btnPostComment"
+                android:text="conment"
+                android:layout_width="0dp"
+                android:layout_height="40dp" />
+
+        </LinearLayout>
+
         <ListView
-            android:visibility="gone"
             android:id="@+id/lvListComment"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"></ListView>
