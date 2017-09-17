@@ -1,150 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_height="wrap_content"
+<RelativeLayout android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:background="#dafdd7"
-    android:layout_marginTop="5dp"
-    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="45dp">
-
-        <ImageView
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:id="@+id/imgAvatarNewsFeed"
-            android:layout_marginLeft="10dp"
-            android:layout_width="42dp"
-            android:layout_height="42dp" />
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/imgAvatarNewsFeed"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:textColor="#252424"
-                android:layout_marginTop="4dp"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:text="user name"
-                android:layout_centerInParent="true"
-                android:layout_toRightOf="@+id/imgAvatarNewsFeed"
-                android:id="@+id/tvUserName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/tvTime"
-                android:gravity="center_vertical"
-                android:textSize="13sp"
-                android:text="time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:textSize="18sp"
-            android:id="@+id/tvContentPost"
-            android:padding="5dp"
-            android:paddingLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
-
     <LinearLayout
-        android:orientation="horizontal"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:weightSum="10">
+        android:background="@drawable/custom_border_cover"
+        android:layout_marginTop="10dp"
+        android:paddingTop="5dp"
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
         <RelativeLayout
-            android:layout_weight="5"
-            android:layout_width="0dp"
-            android:layout_height="match_parent">
-            <Button
-                android:textAllCaps="false"
-                android:id="@+id/btnLike"
-                android:layout_centerInParent="true"
-                android:textSize="10sp"
-                android:text="Like"
-                android:layout_width="70dp"
-                android:layout_height="match_parent" />
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:id="@+id/imgAvatarNewsFeed"
+                android:layout_marginLeft="25dp"
+                android:layout_width="42dp"
+                android:layout_height="42dp" />
+
+            <LinearLayout
+                android:layout_centerVertical="true"
+                android:orientation="vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/imgAvatarNewsFeed"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textColor="#252424"
+                    android:layout_marginTop="4dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="user name"
+                    android:layout_toRightOf="@+id/imgAvatarNewsFeed"
+                    android:id="@+id/tvUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_weight="5"
-            android:layout_width="0dp"
-            android:layout_height="match_parent">
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
             <TextView
-                android:layout_weight="9"
-                android:id="@+id/edtNumberOfComment"
+                android:layout_centerInParent="true"
+                android:text="status"
+                android:textColor="#313131"
+                android:textSize="18sp"
+                android:id="@+id/tvContentPost"
+                android:padding="5dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <!--<LinearLayout-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="35dp"-->
+        <!--android:weightSum="10">-->
+
+        <!--<RelativeLayout-->
+        <!--android:layout_weight="10"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent">-->
+        <!--<Button-->
+        <!--android:textAllCaps="false"-->
+        <!--android:id="@+id/btnLike"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:textSize="10sp"-->
+        <!--android:text="Like"-->
+        <!--android:layout_width="70dp"-->
+
+        <!--android:layout_height="wrap_content" />-->
+        <!--</RelativeLayout>-->
+
+        <!--&lt;!&ndash;<RelativeLayout&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_weight="5"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="0dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="match_parent">&ndash;&gt;-->
+        <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_weight="9"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/edtNumberOfComment"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="40dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_marginLeft="10dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_marginRight="10dp"/>&ndash;&gt;-->
+
+
+        <!--&lt;!&ndash;</RelativeLayout>&ndash;&gt;-->
+
+        <!--</LinearLayout>-->
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/wrap_comment"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:weightSum="10"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
+                android:orientation="horizontal"
+                android:id="@+id/wrap_comment_post"
+                >
 
+                <EditText
+                    android:layout_weight="9"
+                    android:id="@+id/edtComment"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
 
-        </RelativeLayout>
+                <Button
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:id="@+id/btnPostComment"
+                    android:text="conment"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp" />
 
-    </LinearLayout>
+            </LinearLayout>
 
-    <LinearLayout
-        android:visibility="gone"
-        android:id="@+id/wrap_comment"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:weightSum="10"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal"
-            android:id="@+id/wrap_comment_post"
-            >
-
-            <EditText
-                android:layout_weight="9"
-                android:id="@+id/edtComment"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
-
-            <Button
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:id="@+id/btnPostComment"
-                android:text="conment"
-                android:layout_width="0dp"
-                android:layout_height="40dp" />
+            <ListView
+                android:id="@+id/lvListComment"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"></ListView>
 
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/lvListComment"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"></ListView>
+
+
 
     </LinearLayout>
 
+</RelativeLayout>
 
-
-
-</LinearLayout>

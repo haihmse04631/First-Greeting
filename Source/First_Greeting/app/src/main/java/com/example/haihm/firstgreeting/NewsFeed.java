@@ -83,7 +83,7 @@ public class NewsFeed extends Fragment {
                 UserStatus userStatus = new UserStatus(getArguments().getString("fbName"),
                         status, getArguments().getString("fbImage"));
                 mDatabase.child("Status").child(Integer.toString(numberOfPost)).setValue(userStatus);
-
+                edtStatus.setText("");
 //                String commentPost =  tvContentComment.getText().toString().trim();
 //                mDatabase.child("Comment").child(Integer.toString(numberOfPost)).setValue(commentPost);
             }

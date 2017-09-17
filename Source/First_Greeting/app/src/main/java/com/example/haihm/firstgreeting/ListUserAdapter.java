@@ -24,6 +24,13 @@ public class ListUserAdapter extends BaseAdapter {
     UserList userList;
     HashMap<String, Integer> count;
 
+    public ListUserAdapter(Context myContext, int myLayout, UserList userList, HashMap<String, Integer> count) {
+        this.myContext = myContext;
+        this.myLayout = myLayout;
+        this.userList = userList;
+        this.count = count;
+    }
+
     public ListUserAdapter(Context myContext, int myLayout, UserList userList) {
         this.myContext = myContext;
         this.myLayout = myLayout;

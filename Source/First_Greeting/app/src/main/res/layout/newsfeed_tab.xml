@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#dafdd7"
+    android:background="#cbf1c7"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
@@ -37,6 +37,8 @@
 
 
         <ListView
+            android:divider="@null"
+            android:dividerHeight="0dp"
             android:id="@+id/lvNewsFeed"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"

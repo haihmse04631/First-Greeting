@@ -30,7 +30,7 @@ import java.util.HashMap;
 
 public class Chat extends Fragment {
     private ListView lvListChat;
-    private ListUserAdapter adapter;
+    private ListUserAdapter adapter, tempAdapter;
     private UserList userList, tempList;
     private String fbId;
     private SearchView svSearchUser;
@@ -75,8 +75,6 @@ public class Chat extends Fragment {
         loadData();
 
         searchUser();
-
-
 
         return rootView;
     }
