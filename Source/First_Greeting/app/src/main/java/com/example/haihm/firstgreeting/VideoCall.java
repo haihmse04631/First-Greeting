@@ -51,7 +51,7 @@ public class VideoCall extends Fragment {
 
         try {
             if (mSocket == null) {
-                mSocket = IO.socket("http://192.168.1.3:3000");
+                mSocket = IO.socket("https://first-greeting.herokuapp.com");
                 mSocket.connect();
             }
         } catch (URISyntaxException e) {

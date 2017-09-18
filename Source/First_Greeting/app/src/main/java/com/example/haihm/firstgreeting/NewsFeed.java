@@ -3,7 +3,6 @@ package com.example.haihm.firstgreeting;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,7 +108,7 @@ public class NewsFeed extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 UserStatus userNF = dataSnapshot.getValue(UserStatus.class);
                 numberOfPost++;
-                Log.e("ghjkl", Integer.toString(numberOfPost));
+//                Log.e("ghjkl", Integer.toString(numberOfPost));
                 listPost.add(0, userNF);
                 adapter.notifyDataSetChanged();
 
@@ -119,7 +118,7 @@ public class NewsFeed extends Fragment {
                 mDatabase.child("Comment").addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Log.e("Dt", dataSnapshot.getValue().toString());
+//                        Log.e("Dt", dataSnapshot.getValue().toString());
                         if (Integer.parseInt(dataSnapshot.getKey()) == numberOfPost) {
                             Comment comment = dataSnapshot.getValue(Comment.class);
                             aCommentList.add(0, comment);

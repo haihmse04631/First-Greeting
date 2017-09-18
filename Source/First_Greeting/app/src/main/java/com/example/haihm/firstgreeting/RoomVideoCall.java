@@ -258,7 +258,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                         roomNumber.setText("Room " + (room + 1));
 
                         Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();
-                        API_KEY = "45956472";
+                        API_KEY = "45961352";
                         SESSION_ID = session;
                         TOKEN = token;
 

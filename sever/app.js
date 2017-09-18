@@ -4,8 +4,8 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const OpenTok = require('opentok');
 
-const API_KEY = '45956472';
-const API_SECRET = '81b2bef88a6c486fbcc6036d40b3319aa4bdbc1c';
+const API_KEY = '45961352';
+const API_SECRET = 'c9c70eda35502ae4ea2597145991abbb00aba1e6';
 
 // get initial session id 
 var opentok = new OpenTok(API_KEY, API_SECRET);
@@ -71,8 +71,9 @@ server.listen(3000, () => {
 });
 
 app.use('/', express.static(__dirname));
-app.get('/start', function(req, res) {
-    res.sendFile(__dirname + '/start.html');
+
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/index.html');
 });
 
 io.on('connection', function(socket) {
