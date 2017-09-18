@@ -74,7 +74,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     private TextView roomNumber;
 
     private DatabaseReference mData;
-    private static Socket mSocket;
+    private Socket mSocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,11 +108,73 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
             mSocket.emit("get-session-id", user);
-            mSocket.on("return-session-id", returnSessionId);
+
+            mSocket.on("resp", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    String data = args[0].toString();
+                    Log.e("respon: ", data);
+                }
+            });
+
+            getData();
+
+//            mSocket.on("return-session-id", returnSessionId);
         } else {
             loadExistData();
         }
+    }
+
+    private void getData() {
+        API_KEY = "45961352";
+        mSocket.on("return-session-id", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                SESSION_ID = args[0].toString();
+                Log.e("session: ", SESSION_ID);
+            }
+        });
+        mSocket.on("return-token-id", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                TOKEN = args[0].toString();
+                Log.e("session: ", TOKEN);
+                requestPermissions();
+            }
+        });
+        mSocket.on("return-name1", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                fbName1 = args[0].toString();
+                name1.setText(fbName1);
+
+            }
+        });
+        mSocket.on("return-name2", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                fbName2 = args[0].toString();
+                name2.setText(fbName2);
+
+            }
+        });
+        mSocket.on("return-name3", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                fbName3 = args[0].toString();
+                name3.setText(fbName3);
+            }
+        });
+        mSocket.on("return-room", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                room = args[0].toString();
+                roomNumber.setText("Room " + (room + 1));
+            }
+        });
+
     }
 
     public void loadExistData() {
@@ -160,7 +222,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                 btnStart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.e("DaTa: ", "CLicked!");
+                        Log.e("DaTa: ", "CLicked! " + click);
                         if (click % 2 == 0) {
                             mSocket.emit("start-call", "");
                             click++;
@@ -244,6 +306,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    Log.e("data nhan duoc", ": ngon");
                     JSONObject data = (JSONObject) args[0];
                     String session;
                     String token;
@@ -256,8 +319,9 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                         fbName3 = data.getString("name3");
                         room = data.getString("indexSession");
                         roomNumber.setText("Room " + (room + 1));
-
+                        
                         Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();
+
                         API_KEY = "45961352";
                         SESSION_ID = session;
                         TOKEN = token;
@@ -277,9 +341,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         mSession.setSessionListener(RoomVideoCall.this);
         mSession.connect(TOKEN);
 
-        name1.setText(fbName1);
-        name2.setText(fbName2);
-        name3.setText(fbName3);
+
     }
 
     @Override
@@ -291,6 +353,8 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
     @AfterPermissionGranted(RC_VIDEO_APP_PERM)
     private void requestPermissions() {
+//        Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();r
+
         String[] perms = {Manifest.permission.INTERNET, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
         if (EasyPermissions.hasPermissions(this, perms)) {
             // initialize view objects from your layout
