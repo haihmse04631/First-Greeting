@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,7 +41,8 @@ public class Profile extends Fragment {
         tvEmail = (TextView) rootView.findViewById(R.id.tvEmail);
         tvGender = (TextView) rootView.findViewById(R.id.tvGender);
         tvBirthday = (TextView) rootView.findViewById(R.id.tvBirthday);
-        final Animation animCover = AnimationUtils.loadAnimation(this.getActivity(),R.anim.anim_rotate);
+        ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 1.0f, 1.0f, Animation.RELATIVE_TO_SELF,0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        anim.setDuration(800);
         final Animation animAvatar = AnimationUtils.loadAnimation(this.getActivity(), R.anim.anim_rotate2);
 
         tvEmail.setText(getArguments().getString("fbEmail"));
@@ -58,7 +60,7 @@ public class Profile extends Fragment {
             }
         });
 
-        imgCover.startAnimation(animCover);
+        imgCover.startAnimation(anim);
         imgAvatar.startAnimation(animAvatar);
 
         return rootView;
