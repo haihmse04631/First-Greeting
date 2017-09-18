@@ -91,10 +91,14 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         if (mSocket == null) {
             mSocket = VideoCall.mSocket;
         }
-        name1 = (TextView) findViewById(R.id.tvUser1);
-        name2 = (TextView) findViewById(R.id.tvUser2);
-        name3 = (TextView) findViewById(R.id.tvUser3);
+        name1 = (TextView) findViewById(R.id.tvUserChat1);
+        name2 = (TextView) findViewById(R.id.tvUserChat2);
+        name3 = (TextView) findViewById(R.id.tvUserChat3);
         roomNumber = (TextView) findViewById(R.id.tvRoomNumber);
+
+        mPublisherViewContainer = (FrameLayout) findViewById(R.id.frUser1);
+        mSubscriberViewContainer1 = (FrameLayout) findViewById(R.id.frUser2);
+        mSubscriberViewContainer2 = (FrameLayout) findViewById(R.id.frUser3);
 
         intent = getIntent();
         bund = intent.getBundleExtra("UserInfo");
@@ -111,13 +115,13 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
             mSocket.emit("get-session-id", user);
 
-            mSocket.on("resp", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    String data = args[0].toString();
-                    Log.e("respon: ", data);
-                }
-            });
+//            mSocket.on("resp", new Emitter.Listener() {
+//                @Override
+//                public void call(Object... args) {
+//                    String data = args[0].toString();
+//                    Log.e("respon: ", data);
+//                }
+//            });
 
             getData();
 
@@ -129,27 +133,11 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
     private void getData() {
         API_KEY = "45961352";
-        mSocket.on("return-session-id", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                SESSION_ID = args[0].toString();
-                Log.e("session: ", SESSION_ID);
-            }
-        });
-        mSocket.on("return-token-id", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                TOKEN = args[0].toString();
-                Log.e("session: ", TOKEN);
-                requestPermissions();
-            }
-        });
         mSocket.on("return-name1", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 fbName1 = args[0].toString();
                 name1.setText(fbName1);
-
             }
         });
         mSocket.on("return-name2", new Emitter.Listener() {
@@ -157,7 +145,6 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
             public void call(Object... args) {
                 fbName2 = args[0].toString();
                 name2.setText(fbName2);
-
             }
         });
         mSocket.on("return-name3", new Emitter.Listener() {
@@ -174,14 +161,26 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                 roomNumber.setText("Room " + (room + 1));
             }
         });
+        mSocket.on("return-session-id", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                SESSION_ID = args[0].toString();
+                Log.e("session: ", SESSION_ID);
+            }
+        });
+        mSocket.on("return-token-id", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                TOKEN = args[0].toString();
+                Log.e("session: ", TOKEN);
+                requestPermissions();
+            }
+        });
+
 
     }
 
     public void loadExistData() {
-        mPublisherViewContainer = (FrameLayout) findViewById(R.id.frUser1);
-        mSubscriberViewContainer1 = (FrameLayout) findViewById(R.id.frUser2);
-        mSubscriberViewContainer2 = (FrameLayout) findViewById(R.id.frUser3);
-
         {
             View view = mPublisher.getView();
             view.setBackground(ContextCompat.getDrawable(getBaseContext(), R.drawable.custom_video_border));
@@ -204,11 +203,13 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     ListView lvRoom;
     int click = 0;
 
+    Dialog dialog;
+
     private void actionDialog() {
         btnOpenSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Dialog dialog = new Dialog(RoomVideoCall.this);
+                dialog = new Dialog(RoomVideoCall.this);
                 dialog.setTitle("Rooms Information");
                 dialog.setCancelable(true);
                 dialog.setContentView(R.layout.activity_setting_room_alert);
@@ -225,8 +226,8 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                         Log.e("DaTa: ", "CLicked! " + click);
                         if (click % 2 == 0) {
                             mSocket.emit("start-call", "");
-                            click++;
                         }
+                        click++;
                     }
                 });
 //                ImageButton btnBackToChatRoom = (ImageButton) dialog.findViewById(R.id.btnBackToChatRoom);
@@ -319,7 +320,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                         fbName3 = data.getString("name3");
                         room = data.getString("indexSession");
                         roomNumber.setText("Room " + (room + 1));
-                        
+
                         Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();
 
                         API_KEY = "45961352";
@@ -337,11 +338,12 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     };
 
     public void fetchSessionConnectionData() {
+        mPublisher = null;
+        mSubscriber1 = null;
+        mSubscriber2 = null;
         mSession = new Session.Builder(RoomVideoCall.this, API_KEY, SESSION_ID).build();
         mSession.setSessionListener(RoomVideoCall.this);
         mSession.connect(TOKEN);
-
-
     }
 
     @Override
@@ -353,15 +355,12 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
     @AfterPermissionGranted(RC_VIDEO_APP_PERM)
     private void requestPermissions() {
-//        Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();r
+//        if (!dialog.isShowing()) {
+//            Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();
+//        }
 
         String[] perms = {Manifest.permission.INTERNET, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
         if (EasyPermissions.hasPermissions(this, perms)) {
-            // initialize view objects from your layout
-            mPublisherViewContainer = (FrameLayout) findViewById(R.id.frUser1);
-            mSubscriberViewContainer1 = (FrameLayout) findViewById(R.id.frUser2);
-            mSubscriberViewContainer2 = (FrameLayout) findViewById(R.id.frUser3);
-
             // initialize and connect to the session
             fetchSessionConnectionData();
 
@@ -376,13 +375,8 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     @Override
     public void onConnected(Session session) {
         Log.i(LOG_TAG, "Session Connected");
-        if (mPublisher != null) {
-            mSession.unpublish(mPublisher);
-            mPublisher.destroy();
-            mPublisher = null;
-        }
         mPublisher = new Publisher.Builder(this)
-                .audioTrack(false)
+//                .audioTrack(false)
 //                .frameRate(Publisher.CameraCaptureFrameRate.FPS_30)
 //                .resolution(Publisher.CameraCaptureResolution.MEDIUM)
 //                .videoTrack(true)
@@ -428,7 +422,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
                 @Override
                 public void onError(SubscriberKit subscriberKit, OpentokError opentokError) {
-                    Log.e("Data: ", "Can't subscribe!");
+                    Log.e("Data: ", "Can't subscribe for view 1!");
                 }
             });
 
@@ -455,7 +449,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
                 @Override
                 public void onError(SubscriberKit subscriberKit, OpentokError opentokError) {
-                    Log.e("Data: ", "Can't subscribe!");
+                    Log.e("Data: ", "Can't subscribe for view 2!");
                 }
             });
         }

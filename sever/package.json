@@ -1,6 +1,7 @@
 {
   "name": "servercoding",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -21,13 +22,8 @@
     "opentok": "^2.6.0",
     "socket.io": "^2.0.3"
   },
-<<<<<<< HEAD
-  "devDependencies": {},
-  "description": ""
-=======
   "engines": {
   "node": "6.11.2",
   "npm": "3.10.10"
 }
->>>>>>> aad0d355598d8188e417637942f951e5c8b2973d
 }

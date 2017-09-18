@@ -52,7 +52,7 @@ public class VideoCall extends Fragment {
         try {
             if (mSocket == null) {
 
-                mSocket = IO.socket("https://first-greeting.herokuapp.com/");
+                mSocket = IO.socket("https://firstgreeting.herokuapp.com/");
 
                 mSocket.connect();
             }
@@ -124,13 +124,16 @@ public class VideoCall extends Fragment {
 
                     if (RoomVideoCall.mSubscriber1 != null) {
                         RoomVideoCall.mSubscriber1.destroy();
+                        RoomVideoCall.mSubscriber1 = null;
                     }
                     if (RoomVideoCall.mSubscriber2 != null) {
                         RoomVideoCall.mSubscriber2.destroy();
+                        RoomVideoCall.mSubscriber2 = null;
                     }
 
-//                    RoomVideoCall.mPublisher.destroy();
                     RoomVideoCall.mSession.unpublish(RoomVideoCall.mPublisher);
+                    RoomVideoCall.mPublisher.destroy();
+                    RoomVideoCall.mPublisher = null;
                     RoomVideoCall.mSession.disconnect();
                     RoomVideoCall.mSession = null;
                     attendedState = 0;

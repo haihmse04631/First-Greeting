@@ -12,21 +12,22 @@
         android:layout_weight="5.5"
         android:layout_width="match_parent"
         android:layout_height="0dp">
+
         <FrameLayout
-            android:background="@drawable/custom_shape_border"
-            android:layout_weight="6"
             android:id="@+id/frUser3"
             android:layout_width="0dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="6"
+            android:background="@drawable/custom_shape_border">
 
             <TextView
-                android:layout_marginTop="10dp"
-                android:layout_gravity="center_horizontal"
-                android:textSize="18sp"
-                android:textColor="#ffffff"
-                android:text="Waiting for user..."
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="Waiting for user..."
+                android:textColor="#ffffff"
+                android:textSize="18sp" />
 
         </FrameLayout>
 
@@ -42,35 +43,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp">
                 <TextView
-                    android:layout_centerHorizontal="true"
                     android:textColor="#ffffff"
                     android:text="Waiting User 1..."
-                    android:id="@+id/tvUser1"
+                    android:id="@+id/tvUserChat1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="30dp"
-                    android:layout_alignBottom="@+id/tvUser2"
-                    android:layout_alignStart="@+id/tvUser2" />
+                    android:layout_marginBottom="15dp"
+                    android:layout_above="@+id/tvUserChat2"
+                    android:layout_alignStart="@+id/tvUserChat3" />
 
                 <TextView
                     android:layout_centerInParent="true"
                     android:layout_marginTop="50dp"
                     android:textColor="#ffffff"
                     android:text="Waiting user 2..."
-                    android:id="@+id/tvUser2"
+                    android:id="@+id/tvUserChat2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <TextView
-                    android:layout_centerHorizontal="true"
                     android:textColor="#ffffff"
                     android:text="Waiting User 3..."
-                    android:id="@+id/tvUser3"
+                    android:id="@+id/tvUserChat3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvUser1"
-                    android:layout_alignStart="@+id/tvUser2"
-                    android:layout_marginTop="13dp" />
+                    android:layout_marginTop="14dp"
+                    android:layout_below="@+id/tvUserChat1"
+                    android:layout_alignStart="@+id/tvUserChat2" />
 
 
             </RelativeLayout>

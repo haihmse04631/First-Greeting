@@ -90,7 +90,7 @@ io.on('connection', function(socket) {
         console.log(data);
 
         //==== storage data from client
-        
+
         if (data.role != "Member") {
             if (!member.contains(data)) {
                 member.push({ id: data.fbId, name: data.name, sesionId: '', token: '', socket: socket });
@@ -190,9 +190,9 @@ function sendToMember(index) {
         member[index].socket.emit('return-name3', name3);
         member[index].socket.emit('return-room', index);
 
-
-
-        console.log('Token: ' + member[index].token);
+        // console.log('Token: ' + member[index].token);
+        console.log('name1: ' + name1);
+        console.log('name2: ' + name2);
 
         // member[index].socket.emit('return-session-id', {
         //     indexSession: index,
@@ -231,7 +231,10 @@ function sendToCtv(index) {
         cvt[index].socket.emit('return-name3', name3);
         cvt[index].socket.emit('return-room', index);
 
-        console.log('Token: ' + cvt[index].token);
+        // console.log('Token: ' + cvt[index].token);
+        console.log('name1: ' + name1);
+        console.log('name2: ' + name2);
+
 
         // cvt[index].socket.emit('return-session-id', {
         //     indexSession: mIndex,
@@ -271,7 +274,6 @@ function start() {
     scramble(member);
     scramble(cvt);
     scramble(sessionId);
-    member[0].socket.emit('resp', 'emit thu phat');
     n = member.length;
     m = cvt.length;
     console.log("Total member: " + n);
