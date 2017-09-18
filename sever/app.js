@@ -45,7 +45,6 @@ Array.prototype.remove = function(fbId) {
     }
     if (position != -1) {
         this.splice(position, 1);
-        console.log('Removed id ' + fbId);
     }
 
 }
@@ -88,21 +87,26 @@ app.get('/', function(req, res) {
 io.on('connection', function(socket) {
 
     socket.on('get-session-id', function(data) {
+        console.log(data);
+
         //==== storage data from client
+        
         if (data.role != "Member") {
             if (!member.contains(data)) {
-                console.log(data);
-                member.push({ id: data.fbId, name: data.name, sesionId: "", socket: socket });
+                member.push({ id: data.fbId, name: data.name, sesionId: '', token: '', socket: socket });
                 console.log("Total Member: " + member.length);
                 if (cvt.length / 2 < sessionId.length) {
                     // createNewSession();
                 }
             } else {
                 console.log("This user is existed");
+                member.remove(data.fbId);
+                member.push({ id: data.fbId, name: data.name, sesionId: '', token: '', socket: socket });
+                console.log("Updated this user");
             }
         } else if (!cvt.contains(data)) {
-            console.log(data);
-            cvt.push({ id: data.fbId, name: data.name, sesionId: "", socket: socket });
+
+            cvt.push({ id: data.fbId, name: data.name, sesionId: '', token: '', socket: socket });
             console.log("Total ctv: " + cvt.length);
             if (cvt.length % 2 == 0) {
                 if (cvt.length / 2 > sessionId.length) {
@@ -111,12 +115,14 @@ io.on('connection', function(socket) {
             }
         } else {
             console.log("This user is existed");
+            cvt.remove(data.fbId);
+            cvt.push({ id: data.fbId, name: data.name, sesionId: '', token: '', socket: socket });
+            console.log("Updated this user");
         }
 
         socket.on('cancel-attendant', function(fbId) {
             // console.log(fbId);
             member.remove(fbId);
-            cvt.remove(fbId);
         });
 
         // socket.on('get-info-rooms', function(data) {
@@ -177,13 +183,8 @@ function sendToMember(index) {
         if (index * 2 < m) name2 = cvt[index * 2].name;
         if (index * 2 + 1 < m) name3 = cvt[index * 2 + 1].name;
 
-        // member[index].socket.emit('resp', "test thu");
-
-        // console.log('Dang tao token');
-        var tk = opentok.generateToken(member[index].sessionId);
-
         member[index].socket.emit('return-session-id', member[index].sessionId);
-        member[index].socket.emit('return-token-id', tk);
+        member[index].socket.emit('return-token-id', member[index].token);
         member[index].socket.emit('return-name1', name1);
         member[index].socket.emit('return-name2', name2);
         member[index].socket.emit('return-name3', name3);
@@ -191,16 +192,17 @@ function sendToMember(index) {
 
 
 
-        // console.log('Token: ' + tk);
+        console.log('Token: ' + member[index].token);
 
         // member[index].socket.emit('return-session-id', {
         //     indexSession: index,
         //     sessionId: member[index].sessionId,
-        //     token: tk,
+        //     token: member[index].token,
         //     name1: name1,
         //     name2: name2,
         //     name3: name3
         // });
+
 
     }
 }
@@ -220,14 +222,16 @@ function sendToCtv(index) {
             name3 = cvt[index - 1].name
         }
 
-        var tk = opentok.generateToken(cvt[index].sessionId);
+        // var tk = opentok.generateToken(cvt[index].sessionId);
 
         cvt[index].socket.emit('return-session-id', cvt[index].sessionId);
-        cvt[index].socket.emit('return-token-id', tk);
+        cvt[index].socket.emit('return-token-id', cvt[index].token);
         cvt[index].socket.emit('return-name1', name1);
         cvt[index].socket.emit('return-name2', name2);
         cvt[index].socket.emit('return-name3', name3);
         cvt[index].socket.emit('return-room', index);
+
+        console.log('Token: ' + cvt[index].token);
 
         // cvt[index].socket.emit('return-session-id', {
         //     indexSession: mIndex,
@@ -238,6 +242,7 @@ function sendToCtv(index) {
         //     name3: name3
         // });
         // cvt[index].socket.emit('resp', 'emit thu phat');
+
     }
 }
 
@@ -248,7 +253,7 @@ function createNewSession() {
         } else {
             sessionId.push(session.sessionId);
             console.log("Session ID: " + sessionId[sessionId.length - 1]);
-            if (sessionId.length < 70) {
+            if (sessionId.length < 50) {
                 createNewSession();
             }
         }
@@ -273,18 +278,25 @@ function start() {
     console.log("Total ctv:" + m);
     var numberOfSession = Math.max(n, Math.trunc(m / 2))
     console.log("max: " + numberOfSession);
-    for (var index = 0; index < sessionId.length; index++) {
+    for (var index = 0; index < numberOfSession; index++) {
         if (index < n) {
             member[index].sessionId = sessionId[index];
+            member[index].token = opentok.generateToken(member[index].sessionId);
             sendToMember(index);
         }
         if (index * 2 < m) {
             cvt[index * 2].sessionId = sessionId[index];
+            cvt[index * 2].token = opentok.generateToken(cvt[index * 2].sessionId);
             sendToCtv(index * 2);
         }
         if (index * 2 + 1 < m) {
             cvt[index * 2 + 1].sessionId = sessionId[index];
+            cvt[index * 2 + 1].token = opentok.generateToken(cvt[index * 2].sessionId);
             sendToCtv(index * 2 + 1);
         }
+        member.splice(index, 1);
+        cvt.splice(index, 2);
     }
+    sessionId.splice(0, numberOfSession);
+    createNewSession();
 }

@@ -16,7 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
@@ -142,7 +141,6 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                 TOKEN = args[0].toString();
                 Log.e("session: ", TOKEN);
                 requestPermissions();
-                Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();
             }
         });
         mSocket.on("return-name1", new Emitter.Listener() {
@@ -307,6 +305,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    Log.e("data nhan duoc", ": ngon");
                     JSONObject data = (JSONObject) args[0];
                     String session;
                     String token;
@@ -320,7 +319,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                         room = data.getString("indexSession");
                         roomNumber.setText("Room " + (room + 1));
 
-                        Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();
                         API_KEY = "45961352";
                         SESSION_ID = session;
                         TOKEN = token;
@@ -352,6 +351,8 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
     @AfterPermissionGranted(RC_VIDEO_APP_PERM)
     private void requestPermissions() {
+//        Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();r
+
         String[] perms = {Manifest.permission.INTERNET, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
         if (EasyPermissions.hasPermissions(this, perms)) {
             // initialize view objects from your layout

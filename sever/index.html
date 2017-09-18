@@ -10,10 +10,8 @@
 	<input type="button" value="Start Call" onclick="doEmit()" />
 
 	<script type="text/javascript">
-		var socket = io.connect('113.190.82.202' + process.env.PORT);
-
 		var doEmit = function () {
-			socket.emit('start-call', "you clicked the button");
+			start();
 		};
 	</script>
 	 
