@@ -1,6 +1,9 @@
 package com.example.haihm.firstgreeting.new_feed;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +17,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.haihm.firstgreeting.R;
+import com.example.haihm.firstgreeting.main.FirstGreetingMain;
+import com.example.haihm.firstgreeting.video_call.VideoCallActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,7 +41,7 @@ public class NewsFeedTab extends Fragment {
     // private Status userNewsFeed;
     private ListView lvListNewsFeed;
     private ArrayList<ListView> lvListComment;
-    private ListStatus listPost;
+    public static ListStatus listPost;
     private ArrayList<CommentList> commentList;
 
     private DatabaseReference mDatabase;
@@ -46,6 +51,8 @@ public class NewsFeedTab extends Fragment {
     // private FirebaseAuth firebaseAuth;
     public static int numberOfPost = 0;
     public static String avatar, name;
+    CommentList listComment;
+    Intent intent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,10 +64,12 @@ public class NewsFeedTab extends Fragment {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+
+
         lvListNewsFeed = (ListView) rootView.findViewById(R.id.lvNewsFeed);
         listPost = new ListStatus();
         thisContext = this.getContext();
-        adapter = new ListStatusAdapter(this.getContext(), R.layout.row_news_feed, listPost, lvListComment);
+        adapter = new ListStatusAdapter(this, this.getContext(), R.layout.row_news_feed, listPost, lvListComment);
         lvListNewsFeed.setAdapter(adapter);
 
         adapterComment = new ArrayList<>();
@@ -93,14 +102,18 @@ public class NewsFeedTab extends Fragment {
         lvListNewsFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                LinearLayout wrap_comment;
-//                wrap_comment = (LinearLayout)adapterView.getItemAtPosition(i);
-//                wrap_comment.findViewById(R.id.wrap_comment).setVisibility(View.VISIBLE);
-                //  wrap_comment.setVisibility(View.VISIBLE);
+
             }
         });
+
+        //startActivityForResult(intent, 0);
         loadData();
         return rootView;
+    }
+
+    public void startIntent(){
+        intent = new Intent(getActivity(), CommentActivity.class);
+        startActivity(intent);
     }
 
     private void loadData() {

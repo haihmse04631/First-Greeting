@@ -1,6 +1,8 @@
 package com.example.haihm.firstgreeting.new_feed;
 
+import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 
 public class ListStatusAdapter extends BaseAdapter {
 
+    NewsFeedTab par;
     Context myContext;
     int myLayout;
     ListStatus userListNewsFeed;
@@ -32,8 +35,10 @@ public class ListStatusAdapter extends BaseAdapter {
     private TextView tvContentComment;
     private DatabaseReference mDatabase;
     private LinearLayout wrap_comment;
-    public ListStatusAdapter(Context myContext, int myLayout, ListStatus userListNewsFeed,
+    public static int positionStatus;
+    public ListStatusAdapter(NewsFeedTab par, Context myContext, int myLayout, ListStatus userListNewsFeed,
                              ArrayList<ListView> lvListComment) {
+        this.par = par;
         this.myContext = myContext;
         this.myLayout = myLayout;
         this.userListNewsFeed = userListNewsFeed;
@@ -63,11 +68,13 @@ public class ListStatusAdapter extends BaseAdapter {
         TextView tvUserName;
         TextView tvContentPost;
         ListView lvListComment;
+        Button btnComment;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
         final ViewHolder holder = new ViewHolder();
+        positionStatus = position;
         LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = convertView;
         rowView = inflater.inflate(myLayout, null);
@@ -81,6 +88,19 @@ public class ListStatusAdapter extends BaseAdapter {
         holder.tvUserName.setText(userStatus.getName());
         holder.tvContentPost.setText(userListNewsFeed.get(position).getContentPost());
         Picasso.with(myContext).load(userListNewsFeed.get(position).getLinkAvatar()).into(holder.imgAvatarNewsFeed);
+
+        final CommentList aCommentList = new CommentList();
+        holder.btnComment = (Button) rowView.findViewById(R.id.btnComment);
+        holder.btnComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CommentActivity commentActivity = new CommentActivity();
+                Intent intent = new Intent(myContext, CommentActivity.class);
+                par.startIntent();
+
+            }
+        });
+
 
         return rowView;
     }
