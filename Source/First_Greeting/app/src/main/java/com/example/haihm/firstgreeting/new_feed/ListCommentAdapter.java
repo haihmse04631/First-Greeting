@@ -52,7 +52,7 @@ public class ListCommentAdapter extends BaseAdapter{
         LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         rowView = inflater.inflate(myLayout, null);
         holder.imgAvatarComment = (ImageView) rowView.findViewById(R.id.imgAvatarComment);
-        holder.tvComment = (TextView) rowView.findViewById(R.id.tvComment);
+        holder.tvComment = (TextView) rowView.findViewById(R.id.tvShowComment);
         rowView.setTag(holder);
         holder.tvComment.setText(commentList.get(position).getCommentUser());
         Picasso.with(myContext).load(commentList.get(position).getLinkAvatar()).into(holder.imgAvatarComment);

@@ -5,7 +5,7 @@
     android:background="#d6f4d3"
     android:weightSum="10"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -27,7 +27,7 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/lvListRoomChat"
+        android:id="@+id/lvListComment"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"></ListView>
 
