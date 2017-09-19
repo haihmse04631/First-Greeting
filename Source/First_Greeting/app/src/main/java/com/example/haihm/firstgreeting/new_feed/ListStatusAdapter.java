@@ -84,9 +84,9 @@ public class ListStatusAdapter extends BaseAdapter {
 
         final CommentList aCommentList = new CommentList();
 
-        ListView aLvComment = (ListView) rowView.findViewById(R.id.lvListComment);
+        ListView aLvComment = (ListView) rowView.findViewById(R.id.lvNewsFeed);
 
-        ListCommentAdapter aCommentAdapter = new ListCommentAdapter(myContext, R.layout.row_comment, aCommentList);
+        ListCommentAdapter aCommentAdapter = new ListCommentAdapter(myContext, R.layout.row_news_feed, aCommentList);
         aLvComment.setAdapter(aCommentAdapter);
 
         holder.lvListComment = aLvComment;
