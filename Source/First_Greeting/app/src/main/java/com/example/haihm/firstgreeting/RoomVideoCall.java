@@ -115,70 +115,49 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 
             mSocket.emit("get-session-id", user);
 
-//            mSocket.on("resp", new Emitter.Listener() {
-//                @Override
-//                public void call(Object... args) {
-//                    String data = args[0].toString();
-//                    Log.e("respon: ", data);
-//                }
-//            });
-
-            getData();
-
-//            mSocket.on("return-session-id", returnSessionId);
+            mSocket.on("return-session-id", returnSessionId);
         } else {
             loadExistData();
         }
     }
 
-    private void getData() {
-        API_KEY = "45961352";
-        mSocket.on("return-name1", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                fbName1 = args[0].toString();
-                name1.setText(fbName1);
-            }
-        });
-        mSocket.on("return-name2", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                fbName2 = args[0].toString();
-                name2.setText(fbName2);
-            }
-        });
-        mSocket.on("return-name3", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                fbName3 = args[0].toString();
-                name3.setText(fbName3);
-            }
-        });
-        mSocket.on("return-room", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                room = args[0].toString();
-                roomNumber.setText("Room " + (room + 1));
-            }
-        });
-        mSocket.on("return-session-id", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                SESSION_ID = args[0].toString();
-                Log.e("session: ", SESSION_ID);
-            }
-        });
-        mSocket.on("return-token-id", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                TOKEN = args[0].toString();
-                Log.e("session: ", TOKEN);
-                requestPermissions();
-            }
-        });
+    private Emitter.Listener returnSessionId = new Emitter.Listener() {
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e("data nhan duoc", ": ngon");
+                    JSONObject data = (JSONObject) args[0];
+                    String session;
+                    String token;
 
+                    try {
+                        session = data.getString("sessionId");
+                        token = data.getString("token");
+                        fbName1 = data.getString("name1");
+                        name1.setText(fbName1);
+                        fbName2 = data.getString("name2");
+                        name2.setText(fbName2);
+                        fbName3 = data.getString("name3");
+                        name3.setText(fbName3);
+                        room = data.getString("indexSession");
+                        roomNumber.setText("Room " + (room + 1));
 
-    }
+                        Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();
+
+                        API_KEY = "45961352";
+                        SESSION_ID = session;
+                        TOKEN = token;
+
+                        requestPermissions();
+
+                    } catch (JSONException e) {
+                        return;
+                    }
+                }
+            });
+        }
+    };
 
     public void loadExistData() {
         {
@@ -301,41 +280,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         }
     };
 
-    private Emitter.Listener returnSessionId = new Emitter.Listener() {
 
-        public void call(final Object... args) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.e("data nhan duoc", ": ngon");
-                    JSONObject data = (JSONObject) args[0];
-                    String session;
-                    String token;
-
-                    try {
-                        session = data.getString("sessionId");
-                        token = data.getString("token");
-                        fbName1 = data.getString("name1");
-                        fbName2 = data.getString("name2");
-                        fbName3 = data.getString("name3");
-                        room = data.getString("indexSession");
-                        roomNumber.setText("Room " + (room + 1));
-
-                        Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();
-
-                        API_KEY = "45961352";
-                        SESSION_ID = session;
-                        TOKEN = token;
-
-                        requestPermissions();
-
-                    } catch (JSONException e) {
-                        return;
-                    }
-                }
-            });
-        }
-    };
 
     public void fetchSessionConnectionData() {
         mPublisher = null;

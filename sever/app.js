@@ -65,10 +65,6 @@ function scramble(array) {
 member = scramble(member);
 cvt = scramble(cvt);
 
-// server.listen(process.env.PORT, () => {
-//     console.log(`Server is running at localhost: ` + process.env.PORT);
-// });
-
 server.listen(process.env.PORT || 3000, function() {
     console.log("Express server listening on port %d", this.address().port);
 });
@@ -169,9 +165,10 @@ io.on('connection', function(socket) {
     });
 
     socket.on('start-call', function(data) {
+        console.log('You clicked on the button!')
         start();
     });
-});
+})
 
 function sendToMember(index) {
     if (member[index] != null) {
@@ -180,28 +177,25 @@ function sendToMember(index) {
         var name2 = "";
         var name3 = "";
 
-        if (index * 2 < m) name2 = cvt[index * 2].name;
-        if (index * 2 + 1 < m) name3 = cvt[index * 2 + 1].name;
+        if (index * 2 < m) nametwo = cvt[index * 2].name;
+        if (index * 2 + 1 < m) namethree = cvt[index * 2 + 1].name;
 
-        member[index].socket.emit('return-session-id', member[index].sessionId);
-        member[index].socket.emit('return-token-id', member[index].token);
-        member[index].socket.emit('return-name1', name1);
-        member[index].socket.emit('return-name2', name2);
-        member[index].socket.emit('return-name3', name3);
-        member[index].socket.emit('return-room', index);
+        // var name1 = "Pham Hong Son";
+        // var name2 = "Ngon";
+        // var name3 = "Ngot";
 
-        // console.log('Token: ' + member[index].token);
-        console.log('name1: ' + name1);
-        console.log('name2: ' + name2);
+        name1 = convertString(name1);
+        name2 = convertString(name2);
+        name3 = convertString(name3);
 
-        // member[index].socket.emit('return-session-id', {
-        //     indexSession: index,
-        //     sessionId: member[index].sessionId,
-        //     token: member[index].token,
-        //     name1: name1,
-        //     name2: name2,
-        //     name3: name3
-        // });
+        member[index].socket.emit('return-session-id', {
+            indexSession: index,
+            sessionId: member[index].sessionId,
+            token: member[index].token,
+            name1: name1,
+            name2: name2,
+            name3: name3
+        });
 
 
     }
@@ -222,29 +216,22 @@ function sendToCtv(index) {
             name3 = cvt[index - 1].name
         }
 
-        // var tk = opentok.generateToken(cvt[index].sessionId);
+        // var name1 = "Pham Hong Son";
+        // var name2 = "Ngon";
+        // var name3 = "Ngot";
 
-        cvt[index].socket.emit('return-session-id', cvt[index].sessionId);
-        cvt[index].socket.emit('return-token-id', cvt[index].token);
-        cvt[index].socket.emit('return-name1', name1);
-        cvt[index].socket.emit('return-name2', name2);
-        cvt[index].socket.emit('return-name3', name3);
-        cvt[index].socket.emit('return-room', index);
+        name1 = convertString(name1);
+        name2 = convertString(name2);
+        name3 = convertString(name);
 
-        // console.log('Token: ' + cvt[index].token);
-        console.log('name1: ' + name1);
-        console.log('name2: ' + name2);
-
-
-        // cvt[index].socket.emit('return-session-id', {
-        //     indexSession: mIndex,
-        //     sessionId: cvt[index].sessionId,
-        //     token: opentok.generateToken(cvt[index].sessionId),
-        //     name1: name1,
-        //     name2: name2,
-        //     name3: name3
-        // });
-        // cvt[index].socket.emit('resp', 'emit thu phat');
+        cvt[index].socket.emit('return-session-id', {
+            indexSession: mIndex,
+            sessionId: cvt[index].sessionId,
+            token: opentok.generateToken(cvt[index].sessionId),
+            name1: name1,
+            name2: name2,
+            name3: name3
+        });
 
     }
 }
@@ -301,4 +288,19 @@ function start() {
     }
     sessionId.splice(0, numberOfSession);
     createNewSession();
+}
+
+function convertString(str) {
+    str = str.toLowerCase();
+    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+    str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+    str = str.replace(/đ/g, "d");
+    // str = str.replace(/!|@|\$|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\'| |\"|\&|\#|\[|\]|~/g, "-");
+    str = str.replace(/-+-/g, "-");
+    str = str.replace(/^\-+|\-+$/g, "");
+    return str;
 }

@@ -48,9 +48,9 @@
                     android:id="@+id/tvUserChat1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginBottom="11dp"
                     android:layout_above="@+id/tvUserChat2"
-                    android:layout_alignStart="@+id/tvUserChat3" />
+                    android:layout_alignEnd="@+id/tvUserChat2" />
 
                 <TextView
                     android:layout_centerInParent="true"
