@@ -64,12 +64,12 @@ public class NewsFeedTab extends Fragment {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        intent = new Intent(getActivity(), CommentActivity.class);
+
 
         lvListNewsFeed = (ListView) rootView.findViewById(R.id.lvNewsFeed);
         listPost = new ListStatus();
         thisContext = this.getContext();
-        adapter = new ListStatusAdapter(this.getContext(), R.layout.row_news_feed, listPost, lvListComment);
+        adapter = new ListStatusAdapter(this, this.getContext(), R.layout.row_news_feed, listPost, lvListComment);
         lvListNewsFeed.setAdapter(adapter);
 
         adapterComment = new ArrayList<>();
@@ -105,12 +105,16 @@ public class NewsFeedTab extends Fragment {
 
             }
         });
-        startActivity(intent);
+
         //startActivityForResult(intent, 0);
         loadData();
         return rootView;
     }
 
+    public void startIntent(){
+        intent = new Intent(getActivity(), CommentActivity.class);
+        startActivity(intent);
+    }
 
     private void loadData() {
         mDatabase.child("Status").addChildEventListener(new ChildEventListener() {

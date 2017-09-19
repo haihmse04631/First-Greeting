@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -33,6 +34,8 @@ import android.widget.ListView;
 
 import com.example.haihm.firstgreeting.R;
 import com.example.haihm.firstgreeting.video_call.VideoCallActivity;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * Created by DuyNguyen on 9/19/2017.
@@ -44,16 +47,27 @@ public class CommentActivity extends AppCompatActivity {
     ListCommentAdapter commentAdapter;
     ListView lvCommentList;
     CommentList listComment;
-
+    private DatabaseReference mDatabase;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         setContentView(R.layout.activity_comment_alert);
         intent = getIntent();
         listComment = new CommentList();
         lvCommentList = findViewById(R.id.lvListComment);
         commentAdapter = new ListCommentAdapter(CommentActivity.this, R.layout.row_comment, listComment);
         lvCommentList.setAdapter(commentAdapter);
+        ImageButton btnSendComment = findViewById(R.id.btnSendComment);
+        btnSendComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText edtComment = findViewById(R.id.edtComment);
+                if(!edtComment.getText().equals("")){
+
+                }
+            }
+        });
     }
 }

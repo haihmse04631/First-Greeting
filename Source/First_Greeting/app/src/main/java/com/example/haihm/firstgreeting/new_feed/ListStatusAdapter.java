@@ -2,6 +2,7 @@ package com.example.haihm.firstgreeting.new_feed;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 
 public class ListStatusAdapter extends BaseAdapter {
 
+    NewsFeedTab par;
     Context myContext;
     int myLayout;
     ListStatus userListNewsFeed;
@@ -33,8 +35,9 @@ public class ListStatusAdapter extends BaseAdapter {
     private TextView tvContentComment;
     private DatabaseReference mDatabase;
     private LinearLayout wrap_comment;
-    public ListStatusAdapter(Context myContext, int myLayout, ListStatus userListNewsFeed,
+    public ListStatusAdapter(NewsFeedTab par, Context myContext, int myLayout, ListStatus userListNewsFeed,
                              ArrayList<ListView> lvListComment) {
+        this.par = par;
         this.myContext = myContext;
         this.myLayout = myLayout;
         this.userListNewsFeed = userListNewsFeed;
@@ -86,14 +89,13 @@ public class ListStatusAdapter extends BaseAdapter {
 
         final CommentList aCommentList = new CommentList();
         holder.btnComment = (Button) rowView.findViewById(R.id.btnComment);
-        final NewsFeedTab newsFeedTab = new NewsFeedTab();
         holder.btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                newsFeedTab.actionDialog();
                 CommentActivity commentActivity = new CommentActivity();
-                //commentActivity.showDialog();
-             //   commentActivity.showDialog();
+                Intent intent = new Intent(myContext, CommentActivity.class);
+                par.startIntent();
+
             }
         });
 
