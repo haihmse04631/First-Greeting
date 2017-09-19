@@ -67,9 +67,9 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
     private FrameLayout mSubscriberViewContainer1;
     private FrameLayout mSubscriberViewContainer2;
 
-    private String fbId1;
-    private String fbId2;
-    private String fbId3;
+    private static String fbId1;
+    private static String fbId2;
+    private static String fbId3;
     private String fbName1;
     private String fbName2;
     private String fbName3;
@@ -86,7 +86,7 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
     private DatabaseReference mData;
     private Socket mSocket;
 
-    ArrayList<Member> roomList;
+    ArrayList<Room> roomList;
     ListMemberAdapter roomAdapter;
     ListView lvRoom;
     int click = 0;
@@ -149,6 +149,26 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
         btnOpenSetting = (ImageButton) findViewById(R.id.btnOpenSetting);
     }
 
+    private void setNames() {
+        fbName1 = bund.getString("name");
+        fbImg1 = bund.getString("fbImage");
+
+        for (User user : ChatTab.userList) {
+            if (user.getId().equals(fbId2)) {
+                fbName2 = user.getName();
+                fbImg2 = user.getLinkAvatar();
+            }
+            if (user.getId().equals(fbId3)) {
+                fbName3 = user.getName();
+                fbImg3 = user.getLinkAvatar();
+            }
+        }
+
+        name1.setText(fbName1);
+        name2.setText(fbName2);
+        name3.setText(fbName3);
+    }
+
     private Emitter.Listener returnSessionId = new Emitter.Listener() {
         public void call(final Object... args) {
             runOnUiThread(new Runnable() {
@@ -166,22 +186,7 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
                         fbId2 = data.getString("id2");
                         fbId3 = data.getString("id3");
 
-                        fbName1 = bund.getString("name");
-                        name1.setText(fbName1);
-                        fbImg1 = bund.getString("fbImage");
-
-                        for (User user : ChatTab.userList) {
-                            if (user.getId().equals(fbId2)) {
-                                fbName2 = user.getName();
-                                name2.setText(fbName2);
-                                fbImg2 = user.getLinkAvatar();
-                            }
-                            if (user.getId().equals(fbId3)) {
-                                fbName3 = user.getName();
-                                name3.setText(fbName3);
-                                fbImg3 = user.getLinkAvatar();
-                            }
-                        }
+                        setNames();
 
                         room = data.getString("indexSession");
                         roomNumber.setText("Room " + (room + 1));
@@ -203,6 +208,7 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
     };
 
     public void loadExistData() {
+        setNames();
         {
             View view = mPublisher.getView();
             view.setBackground(ContextCompat.getDrawable(getBaseContext(), R.drawable.custom_video_border));
@@ -247,7 +253,7 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
         });
 
         lvRoom = dialog.findViewById(R.id.lvListRoomChat);
-        roomList = new ArrayList<Member>();
+        roomList = new ArrayList<Room>();
         roomAdapter = new ListMemberAdapter(dialog.getContext(), R.layout.row_list_room_chat, roomList);
         lvRoom.setAdapter(roomAdapter);
 
@@ -256,6 +262,7 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
 
         dialog.show();
     }
+
 
     private Emitter.Listener returnInfoRooms = new Emitter.Listener() {
         @Override
@@ -270,32 +277,89 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
                     String userId2 = "";
                     String userId3 = "";
                     final JSONArray data = (JSONArray) args[0];
-                    JSONObject aRoomObj = null;
+                    JSONObject aRoomObj;
                     try {
                         while (true) {
-                            aRoomObj = data.getJSONObject(index);
-                            roomNumber = aRoomObj.getString("roomNumber");
-
-                            if (roomNumber.isEmpty()) {
+                            aRoomObj = null;
+                            try {
+                                aRoomObj = data.getJSONObject(index);
+                            } catch (Exception ex) {
+                                Log.e("Room: ", "no more");
+                            }
+                            if (aRoomObj == null) {
                                 break;
                             }
-                            Log.e("Room : ", roomNumber);
-                            userId1 = aRoomObj.getString("userId1");
-                            userId2 = aRoomObj.getString("userId2");
-                            userId3 = aRoomObj.getString("userId3");
-                            Log.e("Room : ", userId1);
-                            Log.e("Room : ", userId2);
-                            Log.e("Room : ", userId3);
 
-//                            Member aRoom = new Member(userName1, userName2, userName3);
+                            roomNumber = aRoomObj.getString("roomNumber");
+                            Log.e("Room : ", roomNumber);
+
+                            try {
+                                userId1 = aRoomObj.getString("userId1");
+                            } catch (Exception e) {
+                                Log.e("Name 1 : ", "Unkown");
+                            }
+
+                            try {
+                                userId2 = aRoomObj.getString("userId2");
+                            } catch (Exception e) {
+                                Log.e("Name 2 : ", "Unkown");
+                            }
+
+                            try {
+                                userId3 = aRoomObj.getString("userId3");
+                            } catch (Exception e) {
+                                Log.e("Name 3 : ", "Unkown");
+                            }
+
+                            Log.e("index : ", Integer.toString(index));
+                            Log.e("Name 1 : ", userId1);
+                            Log.e("Name 2 : ", userId2);
+                            Log.e("Name 3 : ", userId3);
+
+                            Member mem1 = new Member("","");
+                            Member mem2 = new Member("","");
+                            Member mem3 = new Member("","");
+
+                            if (userId1.equals(fbId1)) {
+                                mem1 = new Member(fbName1, fbImg1);
+                            } else {
+                                for (User user : ChatTab.userList) {
+                                    if (userId1.equals(user.getId())) {
+                                        mem1 = new Member(user.getName(), user.getLinkAvatar());
+                                    }
+                                }
+                            }
+
+                            if (userId2.equals(fbId1)) {
+                                mem2 = new Member(fbName1, fbImg1);
+                            } else {
+                                for (User user : ChatTab.userList) {
+                                    if (userId2.equals(user.getId())) {
+                                        mem2 = new Member(user.getName(), user.getLinkAvatar());
+                                    }
+                                }
+                            }
+
+                            if (userId3.equals(fbId1)) {
+                                mem3 = new Member(fbName1, fbImg1);
+                            } else {
+                                for (User user : ChatTab.userList) {
+                                    if (userId3.equals(user.getId())) {
+                                        mem3 = new Member(user.getName(), user.getLinkAvatar());
+                                    }
+                                }
+                            }
+
+                            Room aRoom = new Room(mem1, mem2, mem3);
 //                            Log.e("DAta: ", aRoom.toString());
-//                            roomList.add(aRoom);
+                            roomList.add(aRoom);
 
                             index++;
                         }
-                    } catch (JSONException e) {
+                    } catch (JSONException e)
 
-                        Log.e("data", "Error!!!!!!!!!");
+                    {
+                        Log.e("data", "No more room");
                     }
 
 
