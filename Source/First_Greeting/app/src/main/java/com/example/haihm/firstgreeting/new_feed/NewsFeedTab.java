@@ -41,7 +41,7 @@ public class NewsFeedTab extends Fragment {
     // private Status userNewsFeed;
     private ListView lvListNewsFeed;
     private ArrayList<ListView> lvListComment;
-    private ListStatus listPost;
+    public static ListStatus listPost;
     private ArrayList<CommentList> commentList;
 
     private DatabaseReference mDatabase;

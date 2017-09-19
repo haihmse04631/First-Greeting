@@ -35,6 +35,7 @@ public class ListStatusAdapter extends BaseAdapter {
     private TextView tvContentComment;
     private DatabaseReference mDatabase;
     private LinearLayout wrap_comment;
+    public static int positionStatus;
     public ListStatusAdapter(NewsFeedTab par, Context myContext, int myLayout, ListStatus userListNewsFeed,
                              ArrayList<ListView> lvListComment) {
         this.par = par;
@@ -73,6 +74,7 @@ public class ListStatusAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
         final ViewHolder holder = new ViewHolder();
+        positionStatus = position;
         LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = convertView;
         rowView = inflater.inflate(myLayout, null);

@@ -105,7 +105,6 @@
 
             <LinearLayout
 
-
                 android:visibility="visible"
                 android:id="@+id/wrap_comment"
                 android:orientation="horizontal"
