@@ -1,14 +1,14 @@
-package com.example.haihm.firstgreeting;
+package com.example.haihm.firstgreeting.new_feed;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.haihm.firstgreeting.R;
 import com.squareup.picasso.Picasso;
 
 /**

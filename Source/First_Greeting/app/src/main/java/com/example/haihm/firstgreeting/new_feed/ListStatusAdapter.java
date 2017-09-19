@@ -1,7 +1,6 @@
-package com.example.haihm.firstgreeting;
+package com.example.haihm.firstgreeting.new_feed;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.haihm.firstgreeting.R;
 import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
 
@@ -21,26 +21,26 @@ import java.util.ArrayList;
  * Created by DuyNguyen on 9/16/2017.
  */
 
-public class ListNewsFeedAdapter extends BaseAdapter {
+public class ListStatusAdapter extends BaseAdapter {
 
     Context myContext;
     int myLayout;
-    UserListNewsFeed userListNewsFeed;
-    UserStatus userStatus;
+    ListStatus userListNewsFeed;
+    Status userStatus;
     ArrayList<ListView> lvListComment;
     private Button btnComment;
     private TextView tvContentComment;
     private DatabaseReference mDatabase;
     private LinearLayout wrap_comment;
-    public ListNewsFeedAdapter(Context myContext, int myLayout, UserListNewsFeed userListNewsFeed,
-                               ArrayList<ListView> lvListComment) {
+    public ListStatusAdapter(Context myContext, int myLayout, ListStatus userListNewsFeed,
+                             ArrayList<ListView> lvListComment) {
         this.myContext = myContext;
         this.myLayout = myLayout;
         this.userListNewsFeed = userListNewsFeed;
         this.lvListComment = lvListComment;
     }
 
-    public ListNewsFeedAdapter() {
+    public ListStatusAdapter() {
     }
 
     @Override

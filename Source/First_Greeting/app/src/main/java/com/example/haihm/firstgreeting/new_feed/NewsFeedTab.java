@@ -1,4 +1,4 @@
-package com.example.haihm.firstgreeting;
+package com.example.haihm.firstgreeting.new_feed;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.haihm.firstgreeting.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,17 +26,17 @@ import java.util.ArrayList;
  * Created by haihm on 8/8/2017.
  */
 
-public class NewsFeed extends Fragment {
+public class NewsFeedTab extends Fragment {
     private Button btnPostStatus;
     private Button btnComment;
     private EditText edtStatus;
     private TextView tvContentComment;
-    private ListNewsFeedAdapter adapter;
+    private ListStatusAdapter adapter;
     private ArrayList<ListCommentAdapter> adapterComment;
-    // private UserStatus userNewsFeed;
+    // private Status userNewsFeed;
     private ListView lvListNewsFeed;
     private ArrayList<ListView> lvListComment;
-    private UserListNewsFeed listPost;
+    private ListStatus listPost;
     private ArrayList<CommentList> commentList;
 
     private DatabaseReference mDatabase;
@@ -57,9 +58,9 @@ public class NewsFeed extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         lvListNewsFeed = (ListView) rootView.findViewById(R.id.lvNewsFeed);
-        listPost = new UserListNewsFeed();
+        listPost = new ListStatus();
         thisContext = this.getContext();
-        adapter = new ListNewsFeedAdapter(this.getContext(), R.layout.row_news_feed, listPost, lvListComment);
+        adapter = new ListStatusAdapter(this.getContext(), R.layout.row_news_feed, listPost, lvListComment);
         lvListNewsFeed.setAdapter(adapter);
 
         adapterComment = new ArrayList<>();
@@ -80,7 +81,7 @@ public class NewsFeed extends Fragment {
                 if (status.equals("")) {
                     return;
                 }
-                UserStatus userStatus = new UserStatus(getArguments().getString("fbName"),
+                Status userStatus = new Status(getArguments().getString("fbName"),
                         status, getArguments().getString("fbImage"));
                 mDatabase.child("Status").child(Integer.toString(numberOfPost)).setValue(userStatus);
                 edtStatus.setText("");
@@ -106,7 +107,7 @@ public class NewsFeed extends Fragment {
         mDatabase.child("Status").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                UserStatus userNF = dataSnapshot.getValue(UserStatus.class);
+                Status userNF = dataSnapshot.getValue(Status.class);
                 numberOfPost++;
 //                Log.e("ghjkl", Integer.toString(numberOfPost));
                 listPost.add(0, userNF);

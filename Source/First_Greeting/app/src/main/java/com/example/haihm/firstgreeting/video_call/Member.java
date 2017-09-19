@@ -1,10 +1,10 @@
-package com.example.haihm.firstgreeting;
+package com.example.haihm.firstgreeting.video_call;
 
 /**
  * Created by HongSonPham on 9/17/17.
  */
 
-public class RoomMembers {
+public class Member {
     private String member1;
     private String member2;
     private String member3;
@@ -61,7 +61,7 @@ public class RoomMembers {
         this.member3 = member3;
     }
 
-    public RoomMembers(String member1, String member2, String member3) {
+    public Member(String member1, String member2, String member3) {
         this.member1 = member1;
         this.member2 = member2;
         this.member3 = member3;
@@ -69,7 +69,7 @@ public class RoomMembers {
 
     @Override
     public String toString() {
-        return "RoomMembers{" +
+        return "Member{" +
                 "member1='" + member1 + '\'' +
                 ", member2='" + member2 + '\'' +
                 ", member3='" + member3 + '\'' +

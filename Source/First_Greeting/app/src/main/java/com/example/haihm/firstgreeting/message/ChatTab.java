@@ -1,4 +1,4 @@
-package com.example.haihm.firstgreeting;
+package com.example.haihm.firstgreeting.message;
 
 
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.example.haihm.firstgreeting.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,7 +29,7 @@ import java.util.HashMap;
  * Created by haihm on 8/8/2017.
  */
 
-public class Chat extends Fragment {
+public class ChatTab extends Fragment {
     private ListView lvListChat;
     private ListUserAdapter adapter, tempAdapter;
     private UserList userList, tempList;

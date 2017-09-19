@@ -1,4 +1,4 @@
-package com.example.haihm.firstgreeting;
+package com.example.haihm.firstgreeting.new_feed;
 
 /**
  * Created by DuyNguyen on 9/17/2017.

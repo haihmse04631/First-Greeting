@@ -1,10 +1,13 @@
-package com.example.haihm.firstgreeting;
+package com.example.haihm.firstgreeting.main;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.haihm.firstgreeting.R;
+import com.example.haihm.firstgreeting.message.Message;
+import com.example.haihm.firstgreeting.message.User;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;

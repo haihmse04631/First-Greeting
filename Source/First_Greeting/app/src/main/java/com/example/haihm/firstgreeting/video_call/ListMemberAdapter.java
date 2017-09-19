@@ -1,4 +1,4 @@
-package com.example.haihm.firstgreeting;
+package com.example.haihm.firstgreeting.video_call;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,18 +8,20 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.haihm.firstgreeting.R;
+
 import java.util.ArrayList;
 
 /**
  * Created by HongSonPham on 9/17/17.
  */
 
-public class RoomMemberAdapter extends BaseAdapter {
+public class ListMemberAdapter extends BaseAdapter {
     Context MessContext;
     int layout;
-    ArrayList<RoomMembers> roomList;
+    ArrayList<Member> roomList;
 
-    public RoomMemberAdapter(Context messContext, int layout, ArrayList<RoomMembers> roomList) {
+    public ListMemberAdapter(Context messContext, int layout, ArrayList<Member> roomList) {
         MessContext = messContext;
         this.layout = layout;
         this.roomList = roomList;

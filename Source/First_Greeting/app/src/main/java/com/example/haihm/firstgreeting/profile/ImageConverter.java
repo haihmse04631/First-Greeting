@@ -1,4 +1,4 @@
-package com.example.haihm.firstgreeting;
+package com.example.haihm.firstgreeting.profile;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

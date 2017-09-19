@@ -1,4 +1,4 @@
-package com.example.haihm.firstgreeting;
+package com.example.haihm.firstgreeting.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
+
+import com.example.haihm.firstgreeting.R;
+import com.example.haihm.firstgreeting.message.ChatTab;
+import com.example.haihm.firstgreeting.new_feed.NewsFeedTab;
+import com.example.haihm.firstgreeting.profile.Profile;
+import com.example.haihm.firstgreeting.video_call.VideoCallTab;
 
 public class FirstGreetingMain extends AppCompatActivity {
 
@@ -92,7 +98,7 @@ public class FirstGreetingMain extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(FirstGreetingMain.this, Setting.class);
+            Intent intent = new Intent(FirstGreetingMain.this, SettingActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.anim_alpha_in, R.anim.anim_alpha_out);
 
@@ -116,15 +122,15 @@ public class FirstGreetingMain extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    VideoCall videoCallTab = new VideoCall();
+                    VideoCallTab videoCallTab = new VideoCallTab();
                     videoCallTab.setArguments(bund);
                     return videoCallTab;
                 case 1:
-                    NewsFeed newsFeedTab = new NewsFeed();
+                    NewsFeedTab newsFeedTab = new NewsFeedTab();
                     newsFeedTab.setArguments(bund);
                     return newsFeedTab;
                 case 2:
-                    Chat chatTab = new Chat();
+                    ChatTab chatTab = new ChatTab();
                     chatTab.setArguments(bund);
                     return chatTab;
                 case 3:
@@ -150,7 +156,7 @@ public class FirstGreetingMain extends AppCompatActivity {
                 case 1:
                     return "News Feed";
                 case 2:
-                    return "Chat";
+                    return "ChatTab";
                 case 3:
                     return "Profile";
             }

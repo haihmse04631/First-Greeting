@@ -1,4 +1,4 @@
-package com.example.haihm.firstgreeting;
+package com.example.haihm.firstgreeting.video_call;
 
 import android.Manifest;
 import android.app.Activity;
@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.haihm.firstgreeting.R;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.firebase.database.DatabaseReference;
@@ -40,7 +41,7 @@ import java.util.ArrayList;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class RoomVideoCall extends AppCompatActivity implements Session.SessionListener,
+public class VideoCallActivity extends AppCompatActivity implements Session.SessionListener,
         PublisherKit.PublisherListener {
 
     Bundle bund;
@@ -51,7 +52,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
     private static String API_KEY = "";
     private static String SESSION_ID = "";
     private static String TOKEN = "";
-    private static final String LOG_TAG = RoomVideoCall.class.getSimpleName();
+    private static final String LOG_TAG = VideoCallActivity.class.getSimpleName();
     private static final int RC_SETTINGS_SCREEN_PERM = 123;
     private static final int RC_VIDEO_APP_PERM = 124;
     public static Session mSession;
@@ -89,7 +90,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         actionDialog();
 
         if (mSocket == null) {
-            mSocket = VideoCall.mSocket;
+            mSocket = VideoCallTab.mSocket;
         }
         name1 = (TextView) findViewById(R.id.tvUserChat1);
         name2 = (TextView) findViewById(R.id.tvUserChat2);
@@ -177,8 +178,8 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         }
     }
 
-    ArrayList<RoomMembers> roomList;
-    RoomMemberAdapter roomAdapter;
+    ArrayList<Member> roomList;
+    ListMemberAdapter roomAdapter;
     ListView lvRoom;
     int click = 0;
 
@@ -188,7 +189,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         btnOpenSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog = new Dialog(RoomVideoCall.this);
+                dialog = new Dialog(VideoCallActivity.this);
                 dialog.setTitle("Rooms Information");
                 dialog.setCancelable(true);
                 dialog.setContentView(R.layout.activity_setting_room_alert);
@@ -218,8 +219,8 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
 //                });
 
                 lvRoom = dialog.findViewById(R.id.lvListRoomChat);
-                roomList = new ArrayList<RoomMembers>();
-                roomAdapter = new RoomMemberAdapter(dialog.getContext(), R.layout.row_list_room_chat, roomList);
+                roomList = new ArrayList<Member>();
+                roomAdapter = new ListMemberAdapter(dialog.getContext(), R.layout.row_list_room_chat, roomList);
                 lvRoom.setAdapter(roomAdapter);
 
                 mSocket.emit("get-info-rooms", "đã nhận req");
@@ -262,7 +263,7 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
                             userId2 = aRoomObj.getString("userId2");
                             userId3 = aRoomObj.getString("userId3");
 
-                            RoomMembers aRoom = new RoomMembers(userName1, userName2, userName3);
+                            Member aRoom = new Member(userName1, userName2, userName3);
                             Log.e("DAta: ", aRoom.toString());
                             roomList.add(aRoom);
                             Log.e("DAta: ", roomNumber);
@@ -286,8 +287,8 @@ public class RoomVideoCall extends AppCompatActivity implements Session.SessionL
         mPublisher = null;
         mSubscriber1 = null;
         mSubscriber2 = null;
-        mSession = new Session.Builder(RoomVideoCall.this, API_KEY, SESSION_ID).build();
-        mSession.setSessionListener(RoomVideoCall.this);
+        mSession = new Session.Builder(VideoCallActivity.this, API_KEY, SESSION_ID).build();
+        mSession.setSessionListener(VideoCallActivity.this);
         mSession.connect(TOKEN);
     }
 

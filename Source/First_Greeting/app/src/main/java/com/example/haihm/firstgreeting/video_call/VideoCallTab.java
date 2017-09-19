@@ -1,4 +1,4 @@
-package com.example.haihm.firstgreeting;
+package com.example.haihm.firstgreeting.video_call;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.example.haihm.firstgreeting.R;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.firebase.database.ChildEventListener;
@@ -25,7 +26,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by haihm on 8/8/2017.
  */
 
-public class VideoCall extends Fragment {
+public class VideoCallTab extends Fragment {
     //    private Button btnAttendance;
     private DatabaseReference mData;
     private Bundle bund;
@@ -65,7 +66,7 @@ public class VideoCall extends Fragment {
             @Override
             public void onClick(View view) {
                 if (attendedState == 0) {
-                    intent = new Intent(getActivity(), RoomVideoCall.class);
+                    intent = new Intent(getActivity(), VideoCallActivity.class);
                     bund = new Bundle();
                     bund.putString("fbId", fbId);
                     bund.putString("name", fbName);
@@ -122,20 +123,20 @@ public class VideoCall extends Fragment {
                 if (attendedState == 2) {
                     mSocket.emit("cancel-attendant", fbId);
 
-                    if (RoomVideoCall.mSubscriber1 != null) {
-                        RoomVideoCall.mSubscriber1.destroy();
-                        RoomVideoCall.mSubscriber1 = null;
+                    if (VideoCallActivity.mSubscriber1 != null) {
+                        VideoCallActivity.mSubscriber1.destroy();
+                        VideoCallActivity.mSubscriber1 = null;
                     }
-                    if (RoomVideoCall.mSubscriber2 != null) {
-                        RoomVideoCall.mSubscriber2.destroy();
-                        RoomVideoCall.mSubscriber2 = null;
+                    if (VideoCallActivity.mSubscriber2 != null) {
+                        VideoCallActivity.mSubscriber2.destroy();
+                        VideoCallActivity.mSubscriber2 = null;
                     }
 
-                    RoomVideoCall.mSession.unpublish(RoomVideoCall.mPublisher);
-                    RoomVideoCall.mPublisher.destroy();
-                    RoomVideoCall.mPublisher = null;
-                    RoomVideoCall.mSession.disconnect();
-                    RoomVideoCall.mSession = null;
+                    VideoCallActivity.mSession.unpublish(VideoCallActivity.mPublisher);
+                    VideoCallActivity.mPublisher.destroy();
+                    VideoCallActivity.mPublisher = null;
+                    VideoCallActivity.mSession.disconnect();
+                    VideoCallActivity.mSession = null;
                     attendedState = 0;
                     btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.attend));
                     btnLeave.setVisibility(View.GONE);

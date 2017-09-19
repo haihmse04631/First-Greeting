@@ -1,19 +1,19 @@
-package com.example.haihm.firstgreeting;
+package com.example.haihm.firstgreeting.new_feed;
 
 /**
  * Created by DuyNguyen on 9/16/2017.
  */
 
-public class UserStatus {
+public class Status {
     String name;
     String contentPost;
     String linkAvatar;
 
-    public UserStatus() {
+    public Status() {
 
     }
 
-    public UserStatus(String name, String contentPost, String linkAvatar) {
+    public Status(String name, String contentPost, String linkAvatar) {
         this.name = name;
         this.contentPost = contentPost;
         this.linkAvatar = linkAvatar;
@@ -41,7 +41,7 @@ public class UserStatus {
 
     @Override
     public String toString() {
-        return "UserStatus{" +
+        return "Status{" +
                 "name='" + name + '\'' +
                 '}';
     }

@@ -1,13 +1,15 @@
-package com.example.haihm.firstgreeting;
+package com.example.haihm.firstgreeting.video_call;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.example.haihm.firstgreeting.R;
 
 /**
  * Created by haihm on 9/17/2017.
  */
 
-public class SettingRoomAlert extends AppCompatActivity {
+public class SettingDialog extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

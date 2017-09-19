@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FirstGreetingMain"
+            android:name=".main.FirstGreetingMain"
             android:label="@string/title_activity_first_greeting_main"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -31,10 +31,10 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".MessageForm"
+            android:name=".message.MessageForm"
             android:label="Message" />
-        <activity android:name=".RoomVideoCall" />
-        <activity android:name=".Setting"></activity>
+        <activity android:name=".video_call.VideoCallActivity" />
+        <activity android:name=".main.SettingActivity"></activity>
     </application>
 
 </manifest>
