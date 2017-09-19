@@ -41,7 +41,7 @@
         android:layout_marginTop="35dp"
         android:layout_below="@+id/tvUserName"
         android:layout_centerHorizontal="true"
-        android:text="Go to facebook profile page"
+        android:text="Go to Facebook..."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
