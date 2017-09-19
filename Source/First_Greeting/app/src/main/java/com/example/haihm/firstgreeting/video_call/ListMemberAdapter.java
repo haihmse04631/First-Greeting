@@ -18,12 +18,12 @@ import java.util.ArrayList;
  */
 
 public class ListMemberAdapter extends BaseAdapter {
-    Context MessContext;
+    Context context;
     int layout;
     ArrayList<Room> roomList;
 
-    public ListMemberAdapter(Context messContext, int layout, ArrayList<Room> roomList) {
-        MessContext = messContext;
+    public ListMemberAdapter(Context context, int layout, ArrayList<Room> roomList) {
+        context = context;
         this.layout = layout;
         this.roomList = roomList;
     }
@@ -48,7 +48,7 @@ public class ListMemberAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder holder = new ViewHolder();
 
-        LayoutInflater inflater = (LayoutInflater) MessContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         view = inflater.inflate(layout, null);
         holder.tvRoomNumber = (TextView) view.findViewById(R.id.tvRoomNumber);
@@ -66,11 +66,11 @@ public class ListMemberAdapter extends BaseAdapter {
         holder.tvUser2.setText(roomList.get(i).getName2());
         holder.tvUser3.setText(roomList.get(i).getName3());
         if (!roomList.get(i).getImg1().isEmpty())
-            Picasso.with(MessContext).load(roomList.get(i).getImg1()).into(holder.imgAvatarUser1);
+            Picasso.with(context).load(roomList.get(i).getImg1()).into(holder.imgAvatarUser1);
         if (!roomList.get(i).getImg2().isEmpty())
-            Picasso.with(MessContext).load(roomList.get(i).getImg2()).into(holder.imgAvatarUser2);
+            Picasso.with(context).load(roomList.get(i).getImg2()).into(holder.imgAvatarUser2);
         if (!roomList.get(i).getImg3().isEmpty())
-            Picasso.with(MessContext).load(roomList.get(i).getImg3()).into(holder.imgAvatarUser3);
+            Picasso.with(context).load(roomList.get(i).getImg3()).into(holder.imgAvatarUser3);
 
         return view;
     }

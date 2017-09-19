@@ -38,7 +38,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -96,7 +95,9 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_room_video_call);
+
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.title_room_call);
 
@@ -316,9 +317,9 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
                             Log.e("Name 2 : ", userId2);
                             Log.e("Name 3 : ", userId3);
 
-                            Member mem1 = new Member("","");
-                            Member mem2 = new Member("","");
-                            Member mem3 = new Member("","");
+                            Member mem1 = new Member("", "");
+                            Member mem2 = new Member("", "");
+                            Member mem3 = new Member("", "");
 
                             if (userId1.equals(fbId1)) {
                                 mem1 = new Member(fbName1, fbImg1);
@@ -388,10 +389,6 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
 
     @AfterPermissionGranted(RC_VIDEO_APP_PERM)
     private void requestPermissions() {
-//        if (!dialog.isShowing()) {
-//            Toast.makeText(getApplicationContext(), "Loading", Toast.LENGTH_LONG).show();
-//        }
-
         String[] perms = {Manifest.permission.INTERNET, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
         if (EasyPermissions.hasPermissions(this, perms)) {
             // initialize and connect to the session
@@ -408,6 +405,11 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
     @Override
     public void onConnected(Session session) {
         Log.i(LOG_TAG, "Session Connected");
+        if (mPublisher != null) {
+            VideoCallActivity.mPublisher.destroy();
+        }
+        mPublisher = null;
+        System.gc();
         mPublisher = new Publisher.Builder(this)
 //                .audioTrack(false)
 //                .frameRate(Publisher.CameraCaptureFrameRate.FPS_30)
@@ -421,7 +423,6 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
         mPublisherViewContainer.addView(view);
         mSession.publish(mPublisher);
     }
-
 
     @Override
     public void onDisconnected(Session session) {
@@ -540,6 +541,7 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
         if (mPublisherViewContainer != null) mPublisherViewContainer.removeAllViews();
         if (mSubscriberViewContainer1 != null) mSubscriberViewContainer1.removeAllViews();
         if (mSubscriberViewContainer2 != null) mSubscriberViewContainer2.removeAllViews();
+        System.gc();
         finish();
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,16 @@ public class VideoCallTab extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.video_call_tab, container, false);
+
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
+        try {
+            rootView = inflater.inflate(R.layout.video_call_tab, container, false);
+        } catch (InflateException e) {
+
+        }
 
         mData = FirebaseDatabase.getInstance().getReference();
         fbId = getArguments().getString("fbId");
@@ -134,9 +145,6 @@ public class VideoCallTab extends Fragment {
                         VideoCallActivity.mSubscriber2 = null;
                     }
 
-                    VideoCallActivity.mSession.unpublish(VideoCallActivity.mPublisher);
-                    VideoCallActivity.mPublisher.destroy();
-                    VideoCallActivity.mPublisher = null;
                     VideoCallActivity.mSession.disconnect();
                     VideoCallActivity.mSession = null;
                     attendedState = 0;
