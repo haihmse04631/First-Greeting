@@ -1,6 +1,5 @@
 package com.example.haihm.firstgreeting.new_feed;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -68,7 +67,7 @@ public class ListStatusAdapter extends BaseAdapter {
         TextView tvUserName;
         TextView tvContentPost;
         ListView lvListComment;
-        Button btnComment;
+        ImageView btnComment;
     }
 
     @Override
@@ -90,7 +89,7 @@ public class ListStatusAdapter extends BaseAdapter {
         Picasso.with(myContext).load(userListNewsFeed.get(position).getLinkAvatar()).into(holder.imgAvatarNewsFeed);
 
         final CommentList aCommentList = new CommentList();
-        holder.btnComment = (Button) rowView.findViewById(R.id.btnComment);
+        holder.btnComment = (ImageView) rowView.findViewById(R.id.btnComment);
         holder.btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
