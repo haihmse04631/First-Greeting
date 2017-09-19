@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.haihm.firstgreeting.R;
+import com.example.haihm.firstgreeting.message.ChatTab;
+import com.example.haihm.firstgreeting.message.User;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.firebase.database.DatabaseReference;
@@ -36,6 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -64,9 +67,15 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
     private FrameLayout mSubscriberViewContainer1;
     private FrameLayout mSubscriberViewContainer2;
 
+    private String fbId1;
+    private String fbId2;
+    private String fbId3;
     private String fbName1;
     private String fbName2;
     private String fbName3;
+    private String fbImg1;
+    private String fbImg2;
+    private String fbImg3;
     private String room;
 
     private TextView name1;
@@ -77,6 +86,13 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
     private DatabaseReference mData;
     private Socket mSocket;
 
+    ArrayList<Member> roomList;
+    ListMemberAdapter roomAdapter;
+    ListView lvRoom;
+    int click = 0;
+
+    Dialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,25 +100,14 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.title_room_call);
 
-        mData = FirebaseDatabase.getInstance().getReference();
-        btnOpenSetting = (ImageButton) findViewById(R.id.btnOpenSetting);
+        init();
 
-        actionDialog();
-
-        if (mSocket == null) {
-            mSocket = VideoCallTab.mSocket;
-        }
-        name1 = (TextView) findViewById(R.id.tvUserChat1);
-        name2 = (TextView) findViewById(R.id.tvUserChat2);
-        name3 = (TextView) findViewById(R.id.tvUserChat3);
-        roomNumber = (TextView) findViewById(R.id.tvRoomNumber);
-
-        mPublisherViewContainer = (FrameLayout) findViewById(R.id.frUser1);
-        mSubscriberViewContainer1 = (FrameLayout) findViewById(R.id.frUser2);
-        mSubscriberViewContainer2 = (FrameLayout) findViewById(R.id.frUser3);
-
-        intent = getIntent();
-        bund = intent.getBundleExtra("UserInfo");
+        btnOpenSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                actionDialog();
+            }
+        });
 
         if (mSession == null) {
             JSONObject user = new JSONObject();
@@ -122,6 +127,28 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
         }
     }
 
+    private void init() {
+        mData = FirebaseDatabase.getInstance().getReference();
+
+        if (mSocket == null) {
+            mSocket = VideoCallTab.mSocket;
+        }
+
+        intent = getIntent();
+        bund = intent.getBundleExtra("UserInfo");
+
+        name1 = (TextView) findViewById(R.id.tvUserChat1);
+        name2 = (TextView) findViewById(R.id.tvUserChat2);
+        name3 = (TextView) findViewById(R.id.tvUserChat3);
+        roomNumber = (TextView) findViewById(R.id.tvRoomNumber);
+
+        mPublisherViewContainer = (FrameLayout) findViewById(R.id.frUser1);
+        mSubscriberViewContainer1 = (FrameLayout) findViewById(R.id.frUser2);
+        mSubscriberViewContainer2 = (FrameLayout) findViewById(R.id.frUser3);
+
+        btnOpenSetting = (ImageButton) findViewById(R.id.btnOpenSetting);
+    }
+
     private Emitter.Listener returnSessionId = new Emitter.Listener() {
         public void call(final Object... args) {
             runOnUiThread(new Runnable() {
@@ -135,12 +162,27 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
                     try {
                         session = data.getString("sessionId");
                         token = data.getString("token");
-                        fbName1 = data.getString("name1");
+                        fbId1 = bund.getString("fbId");
+                        fbId2 = data.getString("id2");
+                        fbId3 = data.getString("id3");
+
+                        fbName1 = bund.getString("name");
                         name1.setText(fbName1);
-                        fbName2 = data.getString("name2");
-                        name2.setText(fbName2);
-                        fbName3 = data.getString("name3");
-                        name3.setText(fbName3);
+                        fbImg1 = bund.getString("fbImage");
+
+                        for (User user : ChatTab.userList) {
+                            if (user.getId().equals(fbId2)) {
+                                fbName2 = user.getName();
+                                name2.setText(fbName2);
+                                fbImg2 = user.getLinkAvatar();
+                            }
+                            if (user.getId().equals(fbId3)) {
+                                fbName3 = user.getName();
+                                name3.setText(fbName3);
+                                fbImg3 = user.getLinkAvatar();
+                            }
+                        }
+
                         room = data.getString("indexSession");
                         roomNumber.setText("Room " + (room + 1));
 
@@ -178,57 +220,41 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
         }
     }
 
-    ArrayList<Member> roomList;
-    ListMemberAdapter roomAdapter;
-    ListView lvRoom;
-    int click = 0;
-
-    Dialog dialog;
 
     private void actionDialog() {
-        btnOpenSetting.setOnClickListener(new View.OnClickListener() {
+        dialog = new Dialog(VideoCallActivity.this);
+        dialog.setTitle("Rooms Information");
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.activity_setting_room_alert);
+
+        Button btnStart = (Button) dialog.findViewById(R.id.btnStart);
+
+        if (bund.getString("role").equals("Admin")) {
+            btnStart.setVisibility(View.VISIBLE);
+        } else {
+            btnStart.setVisibility(View.GONE);
+        }
+
+        btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog = new Dialog(VideoCallActivity.this);
-                dialog.setTitle("Rooms Information");
-                dialog.setCancelable(true);
-                dialog.setContentView(R.layout.activity_setting_room_alert);
-                Button btnStart = (Button) dialog.findViewById(R.id.btnStart);
-                if (bund.getString("role").equals("Admin")) {
-                    btnStart.setVisibility(View.VISIBLE);
-                } else {
-                    btnStart.setVisibility(View.GONE);
+                Log.e("DaTa: ", "CLicked! " + click);
+                if (click % 2 == 0) {
+                    mSocket.emit("start-call", "");
                 }
-
-                btnStart.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Log.e("DaTa: ", "CLicked! " + click);
-                        if (click % 2 == 0) {
-                            mSocket.emit("start-call", "");
-                        }
-                        click++;
-                    }
-                });
-//                ImageButton btnBackToChatRoom = (ImageButton) dialog.findViewById(R.id.btnBackToChatRoom);
-//                btnBackToChatRoom.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        dialog.cancel();
-//                    }
-//                });
-
-                lvRoom = dialog.findViewById(R.id.lvListRoomChat);
-                roomList = new ArrayList<Member>();
-                roomAdapter = new ListMemberAdapter(dialog.getContext(), R.layout.row_list_room_chat, roomList);
-                lvRoom.setAdapter(roomAdapter);
-
-                mSocket.emit("get-info-rooms", "đã nhận req");
-                mSocket.on("return-info", returnInfoRooms);
-
-                dialog.show();
+                click++;
             }
         });
+
+        lvRoom = dialog.findViewById(R.id.lvListRoomChat);
+        roomList = new ArrayList<Member>();
+        roomAdapter = new ListMemberAdapter(dialog.getContext(), R.layout.row_list_room_chat, roomList);
+        lvRoom.setAdapter(roomAdapter);
+
+        mSocket.emit("get-info-rooms", "đã nhận req");
+        mSocket.on("return-info", returnInfoRooms);
+
+        dialog.show();
     }
 
     private Emitter.Listener returnInfoRooms = new Emitter.Listener() {
@@ -243,30 +269,28 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
                     String userId1 = "";
                     String userId2 = "";
                     String userId3 = "";
-                    String userName1 = "";
-                    String userName2 = "";
-                    String userName3 = "";
                     final JSONArray data = (JSONArray) args[0];
                     JSONObject aRoomObj = null;
                     try {
                         while (true) {
                             aRoomObj = data.getJSONObject(index);
                             roomNumber = aRoomObj.getString("roomNumber");
+
                             if (roomNumber.isEmpty()) {
                                 break;
                             }
-                            userName1 = aRoomObj.getString("userName1");
-                            userName2 = aRoomObj.getString("userName2");
-                            userName3 = aRoomObj.getString("userName3");
-
+                            Log.e("Room : ", roomNumber);
                             userId1 = aRoomObj.getString("userId1");
                             userId2 = aRoomObj.getString("userId2");
                             userId3 = aRoomObj.getString("userId3");
+                            Log.e("Room : ", userId1);
+                            Log.e("Room : ", userId2);
+                            Log.e("Room : ", userId3);
 
-                            Member aRoom = new Member(userName1, userName2, userName3);
-                            Log.e("DAta: ", aRoom.toString());
-                            roomList.add(aRoom);
-                            Log.e("DAta: ", roomNumber);
+//                            Member aRoom = new Member(userName1, userName2, userName3);
+//                            Log.e("DAta: ", aRoom.toString());
+//                            roomList.add(aRoom);
+
                             index++;
                         }
                     } catch (JSONException e) {
@@ -280,7 +304,6 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
             });
         }
     };
-
 
 
     public void fetchSessionConnectionData() {
