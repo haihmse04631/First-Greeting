@@ -3,6 +3,7 @@ package com.example.haihm.firstgreeting.new_feed;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,7 +89,7 @@ public class ListStatusAdapter extends BaseAdapter {
         holder.tvUserName.setText(userStatus.getName());
         holder.tvContentPost.setText(userListNewsFeed.get(position).getContentPost());
         Picasso.with(myContext).load(userListNewsFeed.get(position).getLinkAvatar()).into(holder.imgAvatarNewsFeed);
-
+        Log.e("vi tri bai status", String.valueOf(positionStatus));
         final CommentList aCommentList = new CommentList();
         holder.btnComment = (Button) rowView.findViewById(R.id.btnComment);
         holder.btnComment.setOnClickListener(new View.OnClickListener() {
