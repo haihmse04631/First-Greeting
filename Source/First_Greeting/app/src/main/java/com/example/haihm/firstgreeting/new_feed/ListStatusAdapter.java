@@ -82,16 +82,6 @@ public class ListStatusAdapter extends BaseAdapter {
         holder.tvContentPost.setText(userListNewsFeed.get(position).getContentPost());
         Picasso.with(myContext).load(userListNewsFeed.get(position).getLinkAvatar()).into(holder.imgAvatarNewsFeed);
 
-        final CommentList aCommentList = new CommentList();
-
-        ListView aLvComment = (ListView) rowView.findViewById(R.id.lvListComment);
-
-        ListCommentAdapter aCommentAdapter = new ListCommentAdapter(myContext, R.layout.row_comment, aCommentList);
-        aLvComment.setAdapter(aCommentAdapter);
-
-        holder.lvListComment = aLvComment;
-
-
         return rowView;
     }
 }

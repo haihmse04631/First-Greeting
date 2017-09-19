@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="350dp"
+    android:layout_height="450dp"
+    android:orientation="vertical"
+    android:background="#d6f4d3"
+    android:weightSum="10"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <EditText
+            android:id="@+id/txtComment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8.5" />
+
+        <ImageButton
+            android:id="@+id/btnSendComment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:background="@android:drawable/ic_menu_send" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lvListRoomChat"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"></ListView>
+
+</LinearLayout>
