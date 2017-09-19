@@ -14,10 +14,4 @@
         android:text="Start Chat Room"
         android:textAllCaps="false" />
 
-    <ListView
-        android:layout_marginTop="10dp"
-        android:id="@+id/lvListRoomChat"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
-
 </LinearLayout>
