@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="350dp"
-    android:layout_height="450dp"
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#d6f4d3"
     android:weightSum="10"
@@ -12,7 +12,7 @@
         android:layout_centerInParent="true"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:background="@drawable/custom_border_status"
+        android:background="@drawable/custom_shape_alert"
         android:layout_marginTop="10dp"
         android:paddingTop="5dp"
         android:orientation="vertical"
@@ -49,8 +49,8 @@
                     android:id="@+id/tvUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-
             </LinearLayout>
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -92,32 +92,46 @@
 
     </LinearLayout>
 
+
     <LinearLayout
-        android:layout_marginTop="30dp"
+        android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
+        android:background="@drawable/custom_shape_alert"
+        android:orientation="vertical"
+        android:layout_marginTop="12dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:weightSum="10">
+        android:layout_height="fill_parent">
 
-        <EditText
-            android:id="@+id/edtComment"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="8.5" />
+        <LinearLayout
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:weightSum="10">
+            <EditText
+                android:id="@+id/edtComment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8.5" />
 
-        <ImageButton
-            android:id="@+id/btnSendComment"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.5"
-            android:background="@android:drawable/ic_menu_send" />
+            <ImageButton
+                android:id="@+id/btnSendComment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:background="@android:drawable/ic_menu_send" />
+        </LinearLayout>
+
+        <ListView
+            android:layout_marginRight="10dp"
+            android:id="@+id/lvListComment"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
+
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/lvListComment"
-        android:layout_marginLeft="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"></ListView>
 
 </LinearLayout>
