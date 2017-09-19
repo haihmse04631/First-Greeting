@@ -107,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
     // Get facebook data
     public void loadData() {
         Bundle params = new Bundle();
-
         params.putString("fields", "id,name,picture.role(large),cover");
         GraphRequestAsyncTask graphRequestAsyncTask = new GraphRequest(AccessToken.getCurrentAccessToken(), "me", params, HttpMethod.GET,
                 new GraphRequest.Callback() {
@@ -118,9 +117,10 @@ public class MainActivity extends AppCompatActivity {
                             FacebookSdk.addLoggingBehavior(LoggingBehavior.REQUESTS);
                             try {
                                 JSONObject jsonObject = new JSONObject(userDetail);
+                                Log.e("object", jsonObject.toString());
                                 fbId = jsonObject.getString("id");
                                 fbName = jsonObject.getString("name");
-                                Log.e("object", jsonObject.toString());
+
                                 fbImage = "https://graph.facebook.com/" + fbId + "/picture?width=960&height=960";
                                 if (jsonObject.has("cover")) {
                                     String getInitialCover = jsonObject.getString("cover");
@@ -141,11 +141,6 @@ public class MainActivity extends AppCompatActivity {
                                     fbCover = null;
                                 }
 
-                                fbEmail = jsonObject.getString("email");
-                                fbGender = jsonObject.getString("gender");
-                                fbBirthday = jsonObject.getString("birthday");
-
-
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -160,13 +155,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void pushFirebase() {
         final Message friends = new Message();
-        /* Temporary Data */
-//        ArrayList messageList = new ArrayList();
-//        messageList.add(new SingleMessage(new Date(), "Hello guy!", fbImage));
-//        messageList.add(new SingleMessage(new Date(), "Hello dude!", fbImage));
-//        friends.put("1234", messageList);
-//        friends.put("2222", messageList);
-        /*------------------------------*/
 
         final User user = new User(fbName, fbImage, fbId, "Member");
 

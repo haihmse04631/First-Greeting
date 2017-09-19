@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.haihm.firstgreeting.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -19,9 +20,9 @@ import java.util.ArrayList;
 public class ListMemberAdapter extends BaseAdapter {
     Context MessContext;
     int layout;
-    ArrayList<Member> roomList;
+    ArrayList<Room> roomList;
 
-    public ListMemberAdapter(Context messContext, int layout, ArrayList<Member> roomList) {
+    public ListMemberAdapter(Context messContext, int layout, ArrayList<Room> roomList) {
         MessContext = messContext;
         this.layout = layout;
         this.roomList = roomList;
@@ -60,11 +61,16 @@ public class ListMemberAdapter extends BaseAdapter {
 
         view.setTag(holder);
 
-        holder.tvRoomNumber.setText("Room " + i);
-        holder.tvUser1.setText(roomList.get(i).getMember1());
-        holder.tvUser2.setText(roomList.get(i).getMember2());
-        holder.tvUser3.setText(roomList.get(i).getMember3());
-//        Picasso.with(MessContext).load(arrayMessage.get(i).getAvatarLink()).into(holderSend.imgAvatarSend);
+        holder.tvRoomNumber.setText("Room " + (i + 1));
+        holder.tvUser1.setText(roomList.get(i).getName1());
+        holder.tvUser2.setText(roomList.get(i).getName2());
+        holder.tvUser3.setText(roomList.get(i).getName3());
+        if (!roomList.get(i).getImg1().isEmpty())
+            Picasso.with(MessContext).load(roomList.get(i).getImg1()).into(holder.imgAvatarUser1);
+        if (!roomList.get(i).getImg2().isEmpty())
+            Picasso.with(MessContext).load(roomList.get(i).getImg2()).into(holder.imgAvatarUser2);
+        if (!roomList.get(i).getImg3().isEmpty())
+            Picasso.with(MessContext).load(roomList.get(i).getImg3()).into(holder.imgAvatarUser3);
 
         return view;
     }

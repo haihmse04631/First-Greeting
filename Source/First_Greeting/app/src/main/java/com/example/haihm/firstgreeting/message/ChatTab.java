@@ -31,8 +31,8 @@ import java.util.HashMap;
 
 public class ChatTab extends Fragment {
     private ListView lvListChat;
-    private ListUserAdapter adapter, tempAdapter;
-    private UserList userList, tempList;
+    private ListUserAdapter adapter;
+    public static UserList userList, tempList;
     private String fbId;
     private SearchView svSearchUser;
     private String fbImage;

@@ -93,7 +93,7 @@ public class ListStatusAdapter extends BaseAdapter {
 //                newsFeedTab.actionDialog();
                 CommentActivity commentActivity = new CommentActivity();
                 //commentActivity.showDialog();
-                commentActivity.showDialog();
+             //   commentActivity.showDialog();
             }
         });
 

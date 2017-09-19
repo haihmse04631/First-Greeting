@@ -31,11 +31,11 @@ public class VideoCallTab extends Fragment {
     private DatabaseReference mData;
     private Bundle bund;
     private static int attendedState = 0;
-    private int leavedSate = 0;
     protected static Socket mSocket;
     private String fbId;
     private String fbType;
     private String fbName;
+    private String fbImg;
     private ImageButton btnAttend, btnLeave;
     Intent intent;
 
@@ -47,6 +47,7 @@ public class VideoCallTab extends Fragment {
         mData = FirebaseDatabase.getInstance().getReference();
         fbId = getArguments().getString("fbId");
         fbName = getArguments().getString("fbName");
+        fbImg = getArguments().getString("fbImage");
         btnAttend = (ImageButton) rootView.findViewById(R.id.btnAttend);
         btnLeave = (ImageButton) rootView.findViewById(R.id.btnLeave);
 
@@ -70,6 +71,7 @@ public class VideoCallTab extends Fragment {
                     bund = new Bundle();
                     bund.putString("fbId", fbId);
                     bund.putString("name", fbName);
+                    bund.putString("fbImage", fbImg);
                     // Get from firebase
                     mData.child("User").child(fbId).addChildEventListener(new ChildEventListener() {
                         @Override

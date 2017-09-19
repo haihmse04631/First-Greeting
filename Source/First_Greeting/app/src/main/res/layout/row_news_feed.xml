@@ -76,11 +76,14 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp"
                 android:weightSum="2"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="20dp">
                 <TextView
+                    android:textColor="#313131"
                     android:id="@+id/tvNumberLike"
                     android:layout_marginLeft="10dp"
                     android:textSize="12sp"
@@ -90,6 +93,7 @@
                     android:layout_height="wrap_content" />
 
                 <TextView
+                    android:textColor="#313131"
                     android:id="@+id/tvNumberComment"
                     android:layout_marginLeft="10dp"
                     android:textSize="12sp"
@@ -100,7 +104,10 @@
             </LinearLayout>
 
             <LinearLayout
+<<<<<<< HEAD
 
+=======
+>>>>>>> e6f8dea55bd918b2d0e17ed9d6bf223e3d0f6cfa
                 android:visibility="visible"
                 android:id="@+id/wrap_comment"
                 android:orientation="horizontal"
