@@ -76,31 +76,46 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:layout_marginRight="35dp"
-                android:layout_marginLeft="35dp"
+                android:layout_marginBottom="-5dp"
                 android:weightSum="2"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="20dp">
-                <TextView
-                    android:textColor="#202020"
-                    android:id="@+id/tvNumberLike"
-                    android:layout_marginLeft="10dp"
-                    android:textSize="12sp"
-                    android:text="Like: "
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
 
-                <TextView
-                    android:textColor="#202020"
-                    android:id="@+id/tvNumberComment"
-                    android:layout_marginLeft="20dp"
-                    android:textSize="12sp"
-                    android:text="Comment: "
+                <RelativeLayout
                     android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_centerInParent="true"
+                        android:textColor="#202020"
+                        android:id="@+id/tvNumberLike"
+                        android:textSize="13sp"
+                        android:text="Like: "
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tvNumberComment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="50dp"
+                        android:layout_weight="1"
+                        android:text="Comment: "
+                        android:textColor="#202020"
+                        android:textSize="13sp" />
+
+                </RelativeLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -120,8 +135,8 @@
                         android:id="@+id/btnLike"
                         android:background="@drawable/like"
                         android:layout_centerInParent="true"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp" />
+                        android:layout_width="28dp"
+                        android:layout_height="28dp" />
 
 
                 </RelativeLayout>
@@ -135,8 +150,8 @@
                         android:id="@+id/btnComment"
                         android:background="@drawable/comment"
                         android:layout_centerInParent="true"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp" />
+                        android:layout_width="28dp"
+                        android:layout_height="28dp" />
 
                 </RelativeLayout>
 
