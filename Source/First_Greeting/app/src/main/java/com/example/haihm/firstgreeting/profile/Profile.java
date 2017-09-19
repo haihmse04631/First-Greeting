@@ -1,5 +1,8 @@
 package com.example.haihm.firstgreeting.profile;
 
+import android.content.Intent;
+import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -26,7 +29,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class Profile extends Fragment {
 
     Button btnLogOut;
-    TextView tvUserName, tvEmail, tvGender, tvBirthday;
+    TextView tvUserName, tvGoToFacebook;
     ImageView imgCover, imgAvatar;
 
     @Override
@@ -39,16 +42,12 @@ public class Profile extends Fragment {
         tvUserName = (TextView) rootView.findViewById(R.id.tvUserName);
         imgAvatar = (ImageView) rootView.findViewById(R.id.imgAvatar);
         imgCover = (ImageView) rootView.findViewById(R.id.imgCover);
-        tvEmail = (TextView) rootView.findViewById(R.id.tvEmail);
-        tvGender = (TextView) rootView.findViewById(R.id.tvGender);
-        tvBirthday = (TextView) rootView.findViewById(R.id.tvBirthday);
+        tvGoToFacebook = (TextView) rootView.findViewById(R.id.tvGoToFacebook);
+        tvGoToFacebook.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
         ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 1.0f, 1.0f, Animation.RELATIVE_TO_SELF,0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         anim.setDuration(800);
         final Animation animAvatar = AnimationUtils.loadAnimation(this.getActivity(), R.anim.anim_rotate2);
 
-        tvEmail.setText(getArguments().getString("fbEmail"));
-        tvGender.setText(getArguments().getString("fbGender"));
-        tvBirthday.setText(getArguments().getString("fbBirthday"));
         tvUserName.setText(getArguments().getString("fbName"));
         String fbImage = getArguments().getString("fbImage");
         Picasso.with(getApplicationContext()).load(fbImage).into(imgAvatar);
@@ -58,6 +57,14 @@ public class Profile extends Fragment {
             @Override
             public void onClick(View v) {
                 logout();
+            }
+        });
+
+        tvGoToFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + getArguments().getString("fbId")));
+                startActivity(browserIntent);
             }
         });
 
