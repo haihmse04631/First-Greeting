@@ -73,9 +73,7 @@ public class NewsFeedTab extends Fragment {
 
         btnPostStatus = (Button) rootView.findViewById(R.id.btnPostStatus);
 
-
         edtStatus = (EditText) rootView.findViewById(R.id.edtStatus);
-
 
         btnPostStatus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,7 +180,6 @@ public class NewsFeedTab extends Fragment {
 
             }
         });
-
 
     }
 }
