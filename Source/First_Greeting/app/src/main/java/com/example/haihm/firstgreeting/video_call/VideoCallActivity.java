@@ -532,7 +532,7 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
         if (mPublisher != null) {
             Intent data = new Intent();
 
-            if (getParent() == null) {
+            if (getParent() != null) {
                 setResult(Activity.RESULT_OK, data);
             } else {
                 getParent().setResult(Activity.RESULT_OK, data);

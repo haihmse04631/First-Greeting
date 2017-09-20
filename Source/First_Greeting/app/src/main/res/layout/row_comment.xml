@@ -25,12 +25,18 @@
         android:layout_weight="8.5">
 
         <TextView
-            android:id="@+id/tvComment"
-            android:layout_width="match_parent"
+            android:text="Name"
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:layout_marginRight="10dp"
             android:layout_marginTop="20dp" />
+
+        <TextView
+            android:layout_below="@+id/tvName"
+            android:id="@+id/tvComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 
 

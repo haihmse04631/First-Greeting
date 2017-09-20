@@ -1,7 +1,6 @@
 package com.example.haihm.firstgreeting.new_feed;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +82,7 @@ public class ListStatusAdapter extends BaseAdapter {
         holder.tvUserName.setText(userStatus.getName());
         holder.tvContentPost.setText(userListNewsFeed.get(position).getContentPost());
         Picasso.with(myContext).load(userListNewsFeed.get(position).getLinkAvatar()).into(holder.imgAvatarNewsFeed);
-        holder.tvLiked.setText("Like: " + userListNewsFeed.get(position).getLikedNumber());
+        holder.tvLiked.setText("Like: (" + userListNewsFeed.get(position).getLikedNumber() + ")");
         holder.tvCommented.setText("Comment: " + userListNewsFeed.get(position).getCommentedNumber());
 
         holder.btnComment.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +102,6 @@ public class ListStatusAdapter extends BaseAdapter {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         boolean liked = false;
                         for (DataSnapshot data : dataSnapshot.getChildren()) {
-                            Log.e("ID: ", data.getValue().toString());
                             if (data.getValue().equals(id)) {
                                 liked = true;
                                 break;
@@ -113,7 +111,7 @@ public class ListStatusAdapter extends BaseAdapter {
                             userStatus.setLikedNumber(userStatus.getLikedNumber() + 1);
                             mDatabase.child("Status").child(Integer.toString(position)).child("likedNumber").setValue(userStatus.getLikedNumber());
                             mDatabase.child("Status").child(Integer.toString(position)).child("likedUsers").child(Integer.toString(userStatus.getLikedNumber())).setValue(id);
-                            holder.tvLiked.setText("Like: " + Integer.toString(userStatus.getLikedNumber()));
+                            holder.tvLiked.setText("Like: (" + Integer.toString(userStatus.getLikedNumber()) + ")");
                         }
                     }
 

@@ -32,31 +32,24 @@ public class NewsFeedTab extends Fragment {
     private ListStatusAdapter adapter;
     private ArrayList<ListCommentAdapter> adapterComment;
     private ListView lvListNewsFeed;
-    private ArrayList<ListView> lvListComment;
     private ListStatus listPost;
-    private ArrayList<CommentList> commentList;
 
     private DatabaseReference mDatabase;
 
-    public int numberOfPost = 0;
-    public String avatar, name, fbId;
-    private String imgAvatar;
-
+    private int numberOfPost = 0;
+    private String fbId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.newsfeed_tab, container, false);
 
-        avatar = getArguments().getString("fbImage");
-        name = getArguments().getString("fbName");
         fbId = getArguments().getString("fbId");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         lvListNewsFeed = (ListView) rootView.findViewById(R.id.lvNewsFeed);
         listPost = new ListStatus();
-        lvListComment = new ArrayList<>();
         adapter = new ListStatusAdapter(this, getContext(), R.layout.row_news_feed, listPost);
         lvListNewsFeed.setAdapter(adapter);
 
@@ -82,7 +75,7 @@ public class NewsFeedTab extends Fragment {
         lvListNewsFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                imgAvatar = listPost.get(i).getLinkAvatar();
+                startIntent(i);
             }
         });
 
@@ -94,11 +87,12 @@ public class NewsFeedTab extends Fragment {
     public void startIntent(int position) {
         Intent intent = new Intent(getActivity(), CommentActivity.class);
         Bundle bundle = new Bundle();
+        bundle.putInt("postIndex", position);
         bundle.putString("fbName", listPost.get(position).getName());
         bundle.putString("fbImg", listPost.get(position).getLinkAvatar());
         bundle.putString("contentPost", listPost.get(position).getContentPost());
         intent.putExtra("MyPackage", bundle);
-        startActivity(intent);
+        startActivityForResult(intent, 0);
     }
 
     public String getFbId() {
@@ -113,41 +107,6 @@ public class NewsFeedTab extends Fragment {
                 numberOfPost++;
                 listPost.add(0, post);
                 adapter.notifyDataSetChanged();
-
-
-                final CommentList aCommentList = new CommentList();
-
-                mDatabase.child("Comment").addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                        Log.e("Dt", dataSnapshot.getValue().toString());
-                        if (Integer.parseInt(dataSnapshot.getKey()) == numberOfPost) {
-                            Comment comment = dataSnapshot.getValue(Comment.class);
-                            aCommentList.add(0, comment);
-                            adapter.notifyDataSetChanged();
-                        }
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
             }
 
             @Override
@@ -172,5 +131,17 @@ public class NewsFeedTab extends Fragment {
         });
 
 
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 0:
+                Bundle bund = data.getBundleExtra("ReturnPackage");
+                int position = bund.getInt("Position");
+                int numberComment = bund.getInt("Comment");
+                listPost.get(position).setCommentedNumber(numberComment);
+                adapter.notifyDataSetChanged();
+                mDatabase.child("Status").child(Integer.toString(position)).child("commentedNumber").setValue(numberComment);
+        }
     }
 }

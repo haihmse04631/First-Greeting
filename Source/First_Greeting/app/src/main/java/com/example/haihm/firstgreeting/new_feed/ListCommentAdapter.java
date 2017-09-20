@@ -44,6 +44,7 @@ public class ListCommentAdapter extends BaseAdapter{
 
     private class ViewHolder {
         ImageView imgAvatarComment;
+        TextView tvName;
         TextView tvComment;
     }
     @Override
@@ -52,9 +53,12 @@ public class ListCommentAdapter extends BaseAdapter{
         LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         rowView = inflater.inflate(myLayout, null);
         holder.imgAvatarComment = (ImageView) rowView.findViewById(R.id.imgAvatarComment);
+        holder.tvComment = (TextView) rowView.findViewById(R.id.tvComment);
+        holder.tvName = (TextView) rowView.findViewById(R.id.tvName);
 
         rowView.setTag(holder);
         holder.tvComment.setText(commentList.get(position).getCommentUser());
+        holder.tvName.setText(commentList.get(position).getNameUser());
         Picasso.with(myContext).load(commentList.get(position).getLinkAvatar()).into(holder.imgAvatarComment);
         return rowView;
     }

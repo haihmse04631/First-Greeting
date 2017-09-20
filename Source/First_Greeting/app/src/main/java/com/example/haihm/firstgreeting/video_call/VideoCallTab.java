@@ -162,13 +162,11 @@ public class VideoCallTab extends Fragment {
         switch (requestCode) {
             case 0:
                 if (resultCode == RESULT_OK) {
-//                    Toast.makeText(getApplicationContext(), "joinState", Toast.LENGTH_LONG).show();
                     attendedState = 2;
                     btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_room));
                     btnLeave.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.leave));
                     btnLeave.setVisibility(View.VISIBLE);
                 } else {
-//                    Toast.makeText(getApplicationContext(), "not yet", Toast.LENGTH_LONG).show();
                     attendedState = 1;
                     btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.attended));
                     btnLeave.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.stop_attend));
