@@ -19,25 +19,53 @@
     </RelativeLayout>
 
 
-    <RelativeLayout
+    <LinearLayout
+        android:weightSum="2"
+        android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="8.5">
 
-        <TextView
-            android:text="Name"
-            android:id="@+id/tvName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp" />
+        <RelativeLayout
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
 
-        <TextView
-            android:layout_below="@+id/tvName"
-            android:id="@+id/tvComment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
+            <TextView
+                android:textStyle="bold"
+                android:textColor="#1b1b1b"
+                android:textSize="15sp"
+                android:layout_marginLeft="5dp"
+                android:layout_centerVertical="true"
+                android:text="hoang minh hai"
+                android:id="@+id/tvComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <TextView
+                android:textColor="#161616"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_centerVertical="true"
+                android:text="handsome"
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
 
 
 </LinearLayout>
