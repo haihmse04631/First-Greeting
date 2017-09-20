@@ -66,7 +66,7 @@ public class FirstGreetingMain extends AppCompatActivity {
 
     }
 
-    private void createTabIcons(){
+    private void createTabIcons() {
         RelativeLayout videoCall = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab_videocall, null);
         tabLayout.getTabAt(0).setCustomView(videoCall);
         RelativeLayout newsfeed = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab_news_feed, null);
@@ -80,6 +80,11 @@ public class FirstGreetingMain extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // do nothing.
+        Intent  intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+//        finish();
     }
 
     @Override
@@ -99,7 +104,7 @@ public class FirstGreetingMain extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intent = new Intent(FirstGreetingMain.this, SettingActivity.class);
-            intent.putExtra("MyPackage",bund);
+            intent.putExtra("MyPackage", bund);
             startActivity(intent);
             overridePendingTransition(R.anim.anim_alpha_in, R.anim.anim_alpha_out);
 

@@ -3,6 +3,7 @@ package com.example.haihm.firstgreeting.new_feed;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.haihm.firstgreeting.R;
 import com.google.firebase.database.ChildEventListener;
@@ -103,7 +103,12 @@ public class NewsFeedTab extends Fragment {
         mDatabase.child("Status").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                ArrayList<String> likedUser = new ArrayList<String>();
+                for (DataSnapshot data : dataSnapshot.child("likedUsers").getChildren()) {
+                    likedUser.add(data.getValue().toString());
+                }
                 Status post = dataSnapshot.getValue(Status.class);
+                post.likedUsers = likedUser;
                 numberOfPost++;
                 listPost.add(0, post);
                 adapter.notifyDataSetChanged();
@@ -111,7 +116,16 @@ public class NewsFeedTab extends Fragment {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                ArrayList<String> likedUser = new ArrayList<String>();
+                for (DataSnapshot data : dataSnapshot.child("likedUsers").getChildren()) {
+                    likedUser.add(data.getValue().toString());
+                }
+                Status post = dataSnapshot.getValue(Status.class);
+                post.likedUsers = likedUser;
+                Log.e("Data: ", post.toString());
 
+                listPost.set(listPost.size() - Integer.parseInt(dataSnapshot.getKey()) - 1, post);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -132,15 +146,4 @@ public class NewsFeedTab extends Fragment {
 
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case 0:
-                Bundle bund = data.getBundleExtra("ReturnPackage");
-                int position = bund.getInt("Position");
-                int numberComment = bund.getInt("Comment");
-                listPost.get(position).setCommentedNumber(numberComment);
-                adapter.notifyDataSetChanged();
-                mDatabase.child("Status").child(Integer.toString(listPost.size() - position - 1)).child("commentedNumber").setValue(numberComment);
-        }
-    }
 }

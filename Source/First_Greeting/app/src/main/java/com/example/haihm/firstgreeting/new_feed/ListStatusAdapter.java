@@ -1,6 +1,7 @@
 package com.example.haihm.firstgreeting.new_feed;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.haihm.firstgreeting.R;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
+import static com.example.haihm.firstgreeting.R.drawable.like;
 
 /**
  * Created by DuyNguyen on 9/16/2017.
@@ -82,32 +84,25 @@ public class ListStatusAdapter extends BaseAdapter {
         final Status userStatus = userListNewsFeed.get(position);
         holder.tvUserName.setText(userStatus.getName());
         holder.tvContentPost.setText(userListNewsFeed.get(position).getContentPost());
-        mDatabase.child("Status").child(Integer.toString(size - position)).child("likedUsers").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean liked = false;
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    if (data.getValue().equals(par.getFbId())) {
-                        liked = true;
-                        break;
-                    }
-                }
-                if (liked) {
-                    holder.btnLike.setBackgroundResource(R.drawable.liked);
-                } else {
-                    holder.btnLike.setBackgroundResource(R.drawable.like);
-                }
+        boolean liked = false;
+        if (userStatus.likedUsers == null) {
+            userStatus.likedUsers = new ArrayList<String>();
+        }
+        for (String liker : userStatus.likedUsers) {
+            if (liker.equals(par.getFbId())) {
+                liked = true;
+                break;
             }
+        }
+        if (liked) {
+            holder.btnLike.setBackgroundResource(R.drawable.liked);
+        } else {
+            holder.btnLike.setBackgroundResource(like);
+        }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        Picasso.with(myContext).load(userListNewsFeed.get(position).getLinkAvatar()).into(holder.imgAvatarNewsFeed);
-        holder.tvLiked.setText("Like: (" + userListNewsFeed.get(position).getLikedNumber() + ")");
-        holder.tvCommented.setText("Comment: (" + userListNewsFeed.get(position).getCommentedNumber() + ")");
+        Picasso.with(myContext).load(userStatus.getLinkAvatar()).into(holder.imgAvatarNewsFeed);
+        holder.tvLiked.setText("Like: (" + userStatus.getLikedNumber() + ")");
+        holder.tvCommented.setText("Comment: (" + userStatus.getCommentedNumber() + ")");
 
         holder.btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,31 +115,22 @@ public class ListStatusAdapter extends BaseAdapter {
         holder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String id = par.getFbId();
-                mDatabase.child("Status").child(Integer.toString(size - position)).child("likedUsers").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        boolean liked = false;
-                        for (DataSnapshot data : dataSnapshot.getChildren()) {
-                            if (data.getValue().equals(id)) {
-                                liked = true;
-                                break;
-                            }
-                        }
-                        if (!liked) {
-                            userStatus.setLikedNumber(userStatus.getLikedNumber() + 1);
-                            mDatabase.child("Status").child(Integer.toString(size - position)).child("likedNumber").setValue(userStatus.getLikedNumber());
-                            mDatabase.child("Status").child(Integer.toString(size - position)).child("likedUsers").child(Integer.toString(userStatus.getLikedNumber())).setValue(id);
-                            holder.tvLiked.setText("Like: (" + Integer.toString(userStatus.getLikedNumber()) + ")");
-                            holder.btnLike.setBackgroundResource(R.drawable.liked);
-                        }
+                boolean liked = false;
+                for (String liker : userStatus.likedUsers) {
+                    if (liker.equals(par.getFbId())) {
+                        liked = true;
+                        break;
                     }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                }
+                if (!liked) {
+                    userStatus.likedUsers.add(par.getFbId());
+                    Log.e("Data: ", userStatus.toString());
+                    userStatus.setLikedNumber(userStatus.likedUsers.size());
+                    mDatabase.child("Status").child(Integer.toString(size - position)).child("likedNumber").setValue(userStatus.getLikedNumber());
+                    mDatabase.child("Status").child(Integer.toString(size - position)).child("likedUsers").child(Integer.toString(userStatus.getLikedNumber() - 1)).setValue(par.getFbId());
+                    holder.tvLiked.setText("Like: (" + Integer.toString(userStatus.getLikedNumber()) + ")");
+                    holder.btnLike.setBackgroundResource(R.drawable.liked);
+                }
             }
         });
 

@@ -1,6 +1,5 @@
 package com.example.haihm.firstgreeting.new_feed;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -65,6 +64,7 @@ public class CommentActivity extends AppCompatActivity {
                 if (!contentComment.isEmpty()) {
                     Comment aComment = new Comment(bundle.getString("fbImg"), bundle.getString("fbName"), contentComment);
                     mDatabase.child("Comment").child(Integer.toString(postSize - postIndex - 1)).child(Integer.toString(numberOfComment)).setValue(aComment);
+                    mDatabase.child("Status").child(Integer.toString(postSize - postIndex - 1)).child("commentedNumber").setValue(numberOfComment+1);
                     edtComment.setText("");
                 }
             }
@@ -120,14 +120,4 @@ public class CommentActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        Intent data = new Intent();
-        Bundle bund = new Bundle();
-        bund.putInt("Position", postIndex);
-        bund.putInt("Comment", numberOfComment);
-        data.putExtra("ReturnPackage", bund);
-        setResult(Activity.RESULT_OK, data);
-        finish();
-    }
 }

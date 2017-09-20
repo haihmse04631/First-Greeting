@@ -24,7 +24,7 @@ public class Status {
         this.linkAvatar = linkAvatar;
         this.likedNumber = 0;
         this.commentedNumber = 0;
-        likedUsers = new ArrayList<>();
+        this.likedUsers = new ArrayList<>();
     }
 
     public String getContentPost() {
@@ -67,12 +67,11 @@ public class Status {
         this.commentedNumber = commentedNumber;
     }
 
+
     @Override
     public String toString() {
-        return "Status{" +
-                "name='" + name + '\'' +
+        return "Status{" + name + " , " +
+                "likedUsers=" + likedUsers +
                 '}';
     }
-
-
 }
