@@ -1,20 +1,21 @@
 package com.example.haihm.firstgreeting.new_feed;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.haihm.firstgreeting.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 /**
  * Created by DuyNguyen on 9/16/2017.
@@ -22,28 +23,18 @@ import java.util.ArrayList;
 
 public class ListStatusAdapter extends BaseAdapter {
 
-    NewsFeedTab par;
-    Context myContext;
-    int myLayout;
-    ListStatus userListNewsFeed;
-    Status userStatus;
-    ArrayList<ListView> lvListComment;
-    // private Button btnComment;
-    private TextView tvContentComment;
+    private NewsFeedTab par;
+    private Context myContext;
+    private int myLayout;
+    private ListStatus userListNewsFeed;
     private DatabaseReference mDatabase;
-    private LinearLayout wrap_comment;
-    public static int positionStatus;
 
-    public ListStatusAdapter(NewsFeedTab par, Context myContext, int myLayout, ListStatus userListNewsFeed,
-                             ArrayList<ListView> lvListComment) {
+    public ListStatusAdapter(NewsFeedTab par, Context myContext, int myLayout, ListStatus userListNewsFeed) {
         this.par = par;
         this.myContext = myContext;
         this.myLayout = myLayout;
         this.userListNewsFeed = userListNewsFeed;
-        this.lvListComment = lvListComment;
-    }
-
-    public ListStatusAdapter() {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -67,26 +58,34 @@ public class ListStatusAdapter extends BaseAdapter {
         TextView tvContentPost;
         ImageView btnComment;
         ImageView btnLike;
+        TextView tvLiked;
+        TextView tvCommented;
     }
 
     //  public static
     @Override
     public View getView(final int position, View convertView, ViewGroup viewGroup) {
         final ViewHolder holder = new ViewHolder();
-        positionStatus = position;
         LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = convertView;
         rowView = inflater.inflate(myLayout, null);
         holder.imgAvatarNewsFeed = (ImageView) rowView.findViewById(R.id.imgAvatarNewsFeed);
         holder.tvUserName = (TextView) rowView.findViewById(R.id.tvUserName);
         holder.tvContentPost = (TextView) rowView.findViewById(R.id.tvContentPost);
+        holder.tvLiked = (TextView) rowView.findViewById(R.id.tvNumberLike);
+        holder.tvCommented = (TextView) rowView.findViewById(R.id.tvNumberComment);
+        holder.btnLike = (ImageView) rowView.findViewById(R.id.btnLike);
+        holder.btnComment = (ImageView) rowView.findViewById(R.id.btnComment);
         rowView.setTag(holder);
 
-        userStatus = userListNewsFeed.get(position);
+        //Set value
+        final Status userStatus = userListNewsFeed.get(position);
         holder.tvUserName.setText(userStatus.getName());
         holder.tvContentPost.setText(userListNewsFeed.get(position).getContentPost());
         Picasso.with(myContext).load(userListNewsFeed.get(position).getLinkAvatar()).into(holder.imgAvatarNewsFeed);
-        holder.btnComment = (ImageView) rowView.findViewById(R.id.btnComment);
+        holder.tvLiked.setText("Like: " + userListNewsFeed.get(position).getLikedNumber());
+        holder.tvCommented.setText("Comment: " + userListNewsFeed.get(position).getCommentedNumber());
+
         holder.btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,11 +93,35 @@ public class ListStatusAdapter extends BaseAdapter {
             }
         });
 
-        holder.btnLike = (ImageView) rowView.findViewById(R.id.btnLike);
+
         holder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final String id = par.getFbId();
+                mDatabase.child("Status").child(Integer.toString(position)).child("likedUsers").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        boolean liked = false;
+                        for (DataSnapshot data : dataSnapshot.getChildren()) {
+                            Log.e("ID: ", data.getValue().toString());
+                            if (data.getValue().equals(id)) {
+                                liked = true;
+                                break;
+                            }
+                        }
+                        if (!liked) {
+                            userStatus.setLikedNumber(userStatus.getLikedNumber() + 1);
+                            mDatabase.child("Status").child(Integer.toString(position)).child("likedNumber").setValue(userStatus.getLikedNumber());
+                            mDatabase.child("Status").child(Integer.toString(position)).child("likedUsers").child(Integer.toString(userStatus.getLikedNumber())).setValue(id);
+                            holder.tvLiked.setText("Like: " + Integer.toString(userStatus.getLikedNumber()));
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
