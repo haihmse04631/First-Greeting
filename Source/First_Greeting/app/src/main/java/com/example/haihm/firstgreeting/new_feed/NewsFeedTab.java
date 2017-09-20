@@ -54,7 +54,7 @@ public class NewsFeedTab extends Fragment {
     public static String avatar, name;
     CommentList listComment;
     Intent intent;
-
+    public static String imgAvatar;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -103,7 +103,7 @@ public class NewsFeedTab extends Fragment {
         lvListNewsFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.e("vi tri chon: ", String.valueOf(i));
+                imgAvatar = listPost.get(i).getLinkAvatar();
             }
         });
 

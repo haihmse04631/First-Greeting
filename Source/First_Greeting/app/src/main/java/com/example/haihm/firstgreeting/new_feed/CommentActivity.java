@@ -3,6 +3,7 @@ package com.example.haihm.firstgreeting.new_feed;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -51,6 +52,11 @@ public class CommentActivity extends AppCompatActivity {
     CommentList listComment;
     private DatabaseReference mDatabase;
     ListStatus userListNewsFeed;
+
+    public  static ImageView imgAvatarNewsFeed;
+    public  static TextView tvContentPost;
+    public  static TextView tvUserName;
+    public static Context commentContext;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -65,25 +71,30 @@ public class CommentActivity extends AppCompatActivity {
         ImageButton btnSendComment = findViewById(R.id.btnSendComment);
 
         userListNewsFeed = NewsFeedTab.listPost;
-        Log.e("vi tri:", String.valueOf(ListStatusAdapter.positionStatus));
-//        ImageView imgAvatarNewsFeed = (ImageView)findViewById(R.id.imgAvatarNewsFeed);
-//        //Log.e("anh avatar", String.valueOf(userListNewsFeed.get(ListStatusAdapter.positionStatus)));
-//        Picasso.with(getApplicationContext()).load(userListNewsFeed.get(ListStatusAdapter.positionStatus).getLinkAvatar()).into(imgAvatarNewsFeed);
-//
-//        TextView tvUserName = (TextView)findViewById(R.id.tvUserName);
-//        tvUserName.setText(userListNewsFeed.get(ListStatusAdapter.positionStatus).getName());
-//
-//        TextView tvContentPost = (TextView)findViewById(R.id.tvContentPost);
-//        tvContentPost.setText(userListNewsFeed.get(ListStatusAdapter.positionStatus).getContentPost());
+        //Log.e("vi tri:", String.valueOf(ListStatusAdapter.positionStatus));
+
+        imgAvatarNewsFeed = (ImageView)findViewById(R.id.imgAvatarNewsFeed);
+        Picasso.with(getApplicationContext()).load(NewsFeedTab.imgAvatar).into(imgAvatarNewsFeed);
+
+        tvUserName = (TextView)findViewById(R.id.tvUserName);
+        //tvUserName.setText(userListNewsFeed.get(ListStatusAdapter.positionStatus).getName());
+
+        tvContentPost = (TextView)findViewById(R.id.tvContentPost);
+        commentContext = getApplicationContext();
 
         btnSendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EditText edtComment = findViewById(R.id.edtComment);
                 if(!edtComment.getText().equals("")){
-
+                    //mDatabase.child("Comment").child(Integer.toString(numberOfPost)).setValue(edtComment.getText());
                 }
             }
         });
+    }
+    public void showNameAndStatus(int position){
+
+        tvUserName.setText(userListNewsFeed.get(position).getName());
+        tvContentPost.setText(userListNewsFeed.get(position).getContentPost());
     }
 }

@@ -32,7 +32,7 @@ public class ListStatusAdapter extends BaseAdapter {
     ListStatus userListNewsFeed;
     Status userStatus;
     ArrayList<ListView> lvListComment;
-    private Button btnComment;
+   // private Button btnComment;
     private TextView tvContentComment;
     private DatabaseReference mDatabase;
     private LinearLayout wrap_comment;
@@ -69,11 +69,11 @@ public class ListStatusAdapter extends BaseAdapter {
         TextView tvUserName;
         TextView tvContentPost;
         ListView lvListComment;
-        Button btnComment;
+        ImageView btnComment;
     }
-
+  //  public static
     @Override
-    public View getView(int position, View convertView, ViewGroup viewGroup) {
+    public View getView(final int position, View convertView, ViewGroup viewGroup) {
         final ViewHolder holder = new ViewHolder();
         positionStatus = position;
         LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -89,20 +89,19 @@ public class ListStatusAdapter extends BaseAdapter {
         holder.tvUserName.setText(userStatus.getName());
         holder.tvContentPost.setText(userListNewsFeed.get(position).getContentPost());
         Picasso.with(myContext).load(userListNewsFeed.get(position).getLinkAvatar()).into(holder.imgAvatarNewsFeed);
-        Log.e("vi tri bai status", String.valueOf(positionStatus));
+        //Log.e("vi tri bai status", String.valueOf(position));
         final CommentList aCommentList = new CommentList();
-        holder.btnComment = (Button) rowView.findViewById(R.id.btnComment);
+        holder.btnComment = (ImageView) rowView.findViewById(R.id.btnComment);
         holder.btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CommentActivity commentActivity = new CommentActivity();
-                Intent intent = new Intent(myContext, CommentActivity.class);
+                Log.e("vi tri status:", String.valueOf(position));
+                Intent  intent = new Intent(myContext, CommentActivity.class);
                 par.startIntent();
 
+               Picasso.with(CommentActivity.commentContext).load(userListNewsFeed.get(position).getLinkAvatar()).into(CommentActivity.imgAvatarNewsFeed);
             }
         });
-
-
         return rowView;
     }
 }
