@@ -17,8 +17,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import static android.R.attr.id;
-
 /**
  * Created by DuyNguyen on 9/16/2017.
  */
@@ -85,15 +83,12 @@ public class ListStatusAdapter extends BaseAdapter {
         final Status userStatus = userListNewsFeed.get(position);
         holder.tvUserName.setText(userStatus.getName());
         holder.tvContentPost.setText(userListNewsFeed.get(position).getContentPost());
-
         mDatabase.child("Status").child(Integer.toString(size - position)).child("likedUsers").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean liked = false;
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    Log.e("ID: ", data.getValue().toString());
-                    if (data.getValue().equals(id)) {
-                        Log.e("ID: ", "true");
+                    if (data.getValue().equals(par.getFbId())) {
                         liked = true;
                         break;
                     }

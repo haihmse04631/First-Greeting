@@ -89,8 +89,8 @@ public class NewsFeedTab extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putInt("postIndex", position);
         bundle.putInt("postSize", listPost.size());
-        bundle.putString("fbName", listPost.get(position).getName());
-        bundle.putString("fbImg", listPost.get(position).getLinkAvatar());
+        bundle.putString("fbName", getArguments().getString("fbName"));
+        bundle.putString("fbImg", getArguments().getString("fbImage"));
         bundle.putString("contentPost", listPost.get(position).getContentPost());
         intent.putExtra("MyPackage", bundle);
         startActivityForResult(intent, 0);
