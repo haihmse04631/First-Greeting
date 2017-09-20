@@ -19,12 +19,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.haihm.firstgreeting.R;
-import com.example.haihm.firstgreeting.message.ChatTab;
+import com.example.haihm.firstgreeting.message.SingleMessage;
 import com.example.haihm.firstgreeting.message.User;
+import com.example.haihm.firstgreeting.message.UserList;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.opentok.android.BaseVideoRenderer;
 import com.opentok.android.OpentokError;
 import com.opentok.android.Publisher;
@@ -39,6 +44,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -69,9 +76,9 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
     private static String fbId1;
     private static String fbId2;
     private static String fbId3;
-    private String fbName1;
-    private String fbName2;
-    private String fbName3;
+    private static String fbName1;
+    private static String fbName2;
+    private static String fbName3;
     private String fbImg1;
     private String fbImg2;
     private String fbImg3;
@@ -91,6 +98,7 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
     int click = 0;
 
     Dialog dialog;
+    UserList userList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,13 +156,77 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
         mSubscriberViewContainer2 = (FrameLayout) findViewById(R.id.frUser3);
 
         btnOpenSetting = (ImageButton) findViewById(R.id.btnOpenSetting);
+
+        userList = new UserList();
+        mData.child("User").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                final String friendId = (String) dataSnapshot.getKey();
+                if (friendId.equals(bund.getString("fbId"))) {
+                    return;
+                }
+                final User user = dataSnapshot.getValue(User.class);
+                final HashMap<String, SingleMessage> lastMessages = new HashMap<String, SingleMessage>();
+                final SingleMessage[] lastMess1 = {new SingleMessage()};
+                final SingleMessage[] lastMess2 = {new SingleMessage()};
+                mData.child("Message").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        long indexOfLastMess = dataSnapshot.child(bund.getString("fbId")).child(friendId).getChildrenCount();
+                        if (indexOfLastMess == 0) {
+                            Date date = new Date();
+                            date.setTime(0);
+                            lastMess1[0] = new SingleMessage(date, " ", "");
+                        } else {
+                            lastMess1[0] = dataSnapshot.child(bund.getString("fbId")).child(friendId).child(Long.toString(indexOfLastMess - 1)).getValue(SingleMessage.class);
+                        }
+
+                        indexOfLastMess = dataSnapshot.child(friendId).child(bund.getString("fbId")).getChildrenCount();
+                        if (indexOfLastMess == 0) {
+                            lastMess2[0] = new SingleMessage(lastMess1[0].getDate(), " ", "");
+                        } else {
+                            lastMess2[0] = dataSnapshot.child(friendId).child(bund.getString("fbId")).child(Long.toString(indexOfLastMess - 1)).getValue(SingleMessage.class);
+                        }
+                        SingleMessage lastMess = lastMess1[0].getDate().compareTo(lastMess2[0].getDate()) >= 0 ? lastMess1[0] : lastMess2[0];
+                        lastMessages.put(friendId, lastMess);
+                        user.setLastMessage(lastMessages);
+                        userList.add(user);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void setNames() {
         fbName1 = bund.getString("name");
         fbImg1 = bund.getString("fbImage");
 
-        for (User user : ChatTab.userList) {
+        for (User user : userList) {
             if (user.getId().equals(fbId2)) {
                 fbName2 = user.getName();
                 fbImg2 = user.getLinkAvatar();
@@ -218,13 +290,16 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
         if (mSubscriber1 != null) {
             View view = mSubscriber1.getView();
             view.setBackground(ContextCompat.getDrawable(getBaseContext(), R.drawable.custom_video_border));
+            mSubscriberViewContainer1.removeAllViews();
             mSubscriberViewContainer1.addView(view);
         }
         if (mSubscriber2 != null) {
-            View view = mSubscriber1.getView();
+            View view = mSubscriber2.getView();
             view.setBackground(ContextCompat.getDrawable(getBaseContext(), R.drawable.custom_video_border));
+            mSubscriberViewContainer2.removeAllViews();
             mSubscriberViewContainer2.addView(view);
         }
+
     }
 
 
@@ -324,7 +399,7 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
                             if (userId1.equals(fbId1)) {
                                 mem1 = new Member(fbName1, fbImg1);
                             } else {
-                                for (User user : ChatTab.userList) {
+                                for (User user : userList) {
                                     if (userId1.equals(user.getId())) {
                                         mem1 = new Member(user.getName(), user.getLinkAvatar());
                                     }
@@ -334,7 +409,7 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
                             if (userId2.equals(fbId1)) {
                                 mem2 = new Member(fbName1, fbImg1);
                             } else {
-                                for (User user : ChatTab.userList) {
+                                for (User user : userList) {
                                     if (userId2.equals(user.getId())) {
                                         mem2 = new Member(user.getName(), user.getLinkAvatar());
                                     }
@@ -344,7 +419,7 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
                             if (userId3.equals(fbId1)) {
                                 mem3 = new Member(fbName1, fbImg1);
                             } else {
-                                for (User user : ChatTab.userList) {
+                                for (User user : userList) {
                                     if (userId3.equals(user.getId())) {
                                         mem3 = new Member(user.getName(), user.getLinkAvatar());
                                     }
@@ -532,7 +607,7 @@ public class VideoCallActivity extends AppCompatActivity implements Session.Sess
         if (mPublisher != null) {
             Intent data = new Intent();
 
-            if (getParent() != null) {
+            if (getParent() == null) {
                 setResult(Activity.RESULT_OK, data);
             } else {
                 getParent().setResult(Activity.RESULT_OK, data);

@@ -32,7 +32,7 @@ import java.util.HashMap;
 public class ChatTab extends Fragment {
     private ListView lvListChat;
     private ListUserAdapter adapter;
-    public static UserList userList, tempList;
+    private UserList userList, tempList;
     private String fbId;
     private SearchView svSearchUser;
     private String fbImage;
@@ -90,7 +90,6 @@ public class ChatTab extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                Log.e("checklv", "searchView");
                 if(s != null && !s.isEmpty()){
                     tempList = new UserList();
                     for(int i=0; i<userList.size(); i++){
@@ -123,7 +122,6 @@ public class ChatTab extends Fragment {
     }
 
     private void loadData() {
-        Log.e("checklv","Load Data");
         mData.child("User").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

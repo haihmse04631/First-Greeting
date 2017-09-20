@@ -23,7 +23,7 @@ public class ListMemberAdapter extends BaseAdapter {
     ArrayList<Room> roomList;
 
     public ListMemberAdapter(Context context, int layout, ArrayList<Room> roomList) {
-        context = context;
+        this.context = context;
         this.layout = layout;
         this.roomList = roomList;
     }

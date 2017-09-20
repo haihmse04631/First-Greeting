@@ -75,9 +75,9 @@ public class CommentActivity extends AppCompatActivity {
         intent = getIntent();
         bundle = intent.getBundleExtra("MyPackage");
         imgAvatarNewsFeed = (ImageView) findViewById(R.id.imgAvatarNewsFeed);
-        Picasso.with(getApplicationContext()).load(bundle.getString("fbImg")).into(imgAvatarNewsFeed);
+        Picasso.with(getApplicationContext()).load(bundle.getString("avatar")).into(imgAvatarNewsFeed);
         tvUserName = (TextView) findViewById(R.id.tvUserName);
-        tvUserName.setText(bundle.getString("fbName"));
+        tvUserName.setText(bundle.getString("name"));
         tvContentPost = (TextView) findViewById(R.id.tvContentPost);
         tvContentPost.setText(bundle.getString("contentPost"));
 
