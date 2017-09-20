@@ -88,6 +88,7 @@ public class NewsFeedTab extends Fragment {
         Intent intent = new Intent(getActivity(), CommentActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt("postIndex", position);
+        bundle.putInt("postSize", listPost.size());
         bundle.putString("fbName", listPost.get(position).getName());
         bundle.putString("fbImg", listPost.get(position).getLinkAvatar());
         bundle.putString("contentPost", listPost.get(position).getContentPost());
@@ -140,7 +141,7 @@ public class NewsFeedTab extends Fragment {
                 int numberComment = bund.getInt("Comment");
                 listPost.get(position).setCommentedNumber(numberComment);
                 adapter.notifyDataSetChanged();
-                mDatabase.child("Status").child(Integer.toString(position)).child("commentedNumber").setValue(numberComment);
+                mDatabase.child("Status").child(Integer.toString(listPost.size() - position - 1)).child("commentedNumber").setValue(numberComment);
         }
     }
 }

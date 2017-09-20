@@ -1,6 +1,7 @@
 package com.example.haihm.firstgreeting.new_feed;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,25 +81,27 @@ public class ListStatusAdapter extends BaseAdapter {
         rowView.setTag(holder);
 
         //Set value
+        final int size = userListNewsFeed.size() - 1;
         final Status userStatus = userListNewsFeed.get(position);
         holder.tvUserName.setText(userStatus.getName());
         holder.tvContentPost.setText(userListNewsFeed.get(position).getContentPost());
 
-        mDatabase.child("Status").child(Integer.toString(position)).child("likedUsers").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("Status").child(Integer.toString(size - position)).child("likedUsers").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean liked = false;
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    Log.e("ID: ", data.getValue().toString());
                     if (data.getValue().equals(id)) {
+                        Log.e("ID: ", "true");
                         liked = true;
                         break;
                     }
-                    if (liked) {
-                        holder.btnLike.setBackgroundResource(R.drawable.liked);
-                    } else {
-                        holder.btnLike.setBackgroundResource(R.drawable.like);
-                    }
-
+                }
+                if (liked) {
+                    holder.btnLike.setBackgroundResource(R.drawable.liked);
+                } else {
+                    holder.btnLike.setBackgroundResource(R.drawable.like);
                 }
             }
 
@@ -124,7 +127,7 @@ public class ListStatusAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 final String id = par.getFbId();
-                mDatabase.child("Status").child(Integer.toString(position)).child("likedUsers").addListenerForSingleValueEvent(new ValueEventListener() {
+                mDatabase.child("Status").child(Integer.toString(size - position)).child("likedUsers").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         boolean liked = false;
@@ -136,8 +139,8 @@ public class ListStatusAdapter extends BaseAdapter {
                         }
                         if (!liked) {
                             userStatus.setLikedNumber(userStatus.getLikedNumber() + 1);
-                            mDatabase.child("Status").child(Integer.toString(position)).child("likedNumber").setValue(userStatus.getLikedNumber());
-                            mDatabase.child("Status").child(Integer.toString(position)).child("likedUsers").child(Integer.toString(userStatus.getLikedNumber())).setValue(id);
+                            mDatabase.child("Status").child(Integer.toString(size - position)).child("likedNumber").setValue(userStatus.getLikedNumber());
+                            mDatabase.child("Status").child(Integer.toString(size - position)).child("likedUsers").child(Integer.toString(userStatus.getLikedNumber())).setValue(id);
                             holder.tvLiked.setText("Like: (" + Integer.toString(userStatus.getLikedNumber()) + ")");
                             holder.btnLike.setBackgroundResource(R.drawable.liked);
                         }

@@ -40,6 +40,7 @@ public class CommentActivity extends AppCompatActivity {
 
     private int numberOfComment = 0;
     private int postIndex;
+    private int postSize;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,7 @@ public class CommentActivity extends AppCompatActivity {
                 String contentComment = edtComment.getText().toString().trim();
                 if (!contentComment.isEmpty()) {
                     Comment aComment = new Comment(bundle.getString("fbImg"), bundle.getString("fbName"), contentComment);
-                    mDatabase.child("Comment").child(Integer.toString(postIndex)).child(Integer.toString(numberOfComment)).setValue(aComment);
+                    mDatabase.child("Comment").child(Integer.toString(postSize - postIndex - 1)).child(Integer.toString(numberOfComment)).setValue(aComment);
                     edtComment.setText("");
                 }
             }
@@ -81,13 +82,14 @@ public class CommentActivity extends AppCompatActivity {
         tvContentPost.setText(bundle.getString("contentPost"));
 
         postIndex = bundle.getInt("postIndex");
+        postSize = bundle.getInt("postSize");
         edtComment = findViewById(R.id.edtComment);
 
         loadComment();
     }
 
     public void loadComment() {
-        mDatabase.child("Comment").child(Integer.toString(postIndex)).addChildEventListener(new ChildEventListener() {
+        mDatabase.child("Comment").child(Integer.toString(postSize - postIndex - 1)).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Comment comment = dataSnapshot.getValue(Comment.class);
