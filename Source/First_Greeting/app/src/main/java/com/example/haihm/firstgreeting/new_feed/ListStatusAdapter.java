@@ -1,6 +1,5 @@
 package com.example.haihm.firstgreeting.new_feed;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
