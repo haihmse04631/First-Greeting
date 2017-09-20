@@ -28,7 +28,6 @@ import java.util.ArrayList;
 public class NewsFeedTab extends Fragment {
     private Button btnPostStatus;
     private EditText edtStatus;
-    private TextView tvContentComment;
     private ListStatusAdapter adapter;
     private ArrayList<ListCommentAdapter> adapterComment;
     private ListView lvListNewsFeed;
@@ -67,8 +66,6 @@ public class NewsFeedTab extends Fragment {
                         status, getArguments().getString("fbImage"));
                 mDatabase.child("Status").child(Integer.toString(numberOfPost)).setValue(userStatus);
                 edtStatus.setText("");
-//                String commentPost =  tvContentComment.getText().toString().trim();
-//                mDatabase.child("Comment").child(Integer.toString(numberOfPost)).setValue(commentPost);
             }
         });
 

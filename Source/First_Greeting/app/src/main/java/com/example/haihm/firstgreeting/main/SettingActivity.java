@@ -8,8 +8,11 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.haihm.firstgreeting.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class SettingActivity extends AppCompatActivity {
     DatabaseReference mData;
@@ -21,8 +24,25 @@ public class SettingActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("MyPackage");
         final String id = bundle.getString("fbId");
-        mData = FirebaseDatabase.getInstance().getReference();
         final RadioGroup radio = (RadioGroup) findViewById(R.id.grbtn);
+        mData = FirebaseDatabase.getInstance().getReference();
+        mData.child("User").child(id).child("role").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String role = (String) dataSnapshot.getValue();
+                if (role.equals("Member")) {
+                    radio.check(R.id.rbtnNewbie);
+                } else {
+                    radio.check(R.id.rbtnMember);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {

@@ -33,11 +33,13 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="Newbie"
+            android:id="@+id/rbtnNewbie"
             android:textStyle="bold" />
 
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:id="@+id/rbtnMember"
             android:text="Old member"
             android:textStyle="bold" />
     </RadioGroup>
