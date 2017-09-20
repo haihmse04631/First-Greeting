@@ -1,13 +1,10 @@
 package com.example.haihm.firstgreeting.new_feed;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -31,11 +28,12 @@ public class ListStatusAdapter extends BaseAdapter {
     ListStatus userListNewsFeed;
     Status userStatus;
     ArrayList<ListView> lvListComment;
-   // private Button btnComment;
+    // private Button btnComment;
     private TextView tvContentComment;
     private DatabaseReference mDatabase;
     private LinearLayout wrap_comment;
     public static int positionStatus;
+
     public ListStatusAdapter(NewsFeedTab par, Context myContext, int myLayout, ListStatus userListNewsFeed,
                              ArrayList<ListView> lvListComment) {
         this.par = par;
@@ -67,10 +65,11 @@ public class ListStatusAdapter extends BaseAdapter {
         ImageView imgAvatarNewsFeed;
         TextView tvUserName;
         TextView tvContentPost;
-        ListView lvListComment;
         ImageView btnComment;
+        ImageView btnLike;
     }
-  //  public static
+
+    //  public static
     @Override
     public View getView(final int position, View convertView, ViewGroup viewGroup) {
         final ViewHolder holder = new ViewHolder();
@@ -81,26 +80,28 @@ public class ListStatusAdapter extends BaseAdapter {
         holder.imgAvatarNewsFeed = (ImageView) rowView.findViewById(R.id.imgAvatarNewsFeed);
         holder.tvUserName = (TextView) rowView.findViewById(R.id.tvUserName);
         holder.tvContentPost = (TextView) rowView.findViewById(R.id.tvContentPost);
-
         rowView.setTag(holder);
+
         userStatus = userListNewsFeed.get(position);
-//        Log.e("data adapter", userStatus.getName());
         holder.tvUserName.setText(userStatus.getName());
         holder.tvContentPost.setText(userListNewsFeed.get(position).getContentPost());
         Picasso.with(myContext).load(userListNewsFeed.get(position).getLinkAvatar()).into(holder.imgAvatarNewsFeed);
-        //Log.e("vi tri bai status", String.valueOf(position));
-        final CommentList aCommentList = new CommentList();
         holder.btnComment = (ImageView) rowView.findViewById(R.id.btnComment);
         holder.btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("vi tri status:", String.valueOf(position));
-                Intent  intent = new Intent(myContext, CommentActivity.class);
-                par.startIntent();
-
-               Picasso.with(CommentActivity.commentContext).load(userListNewsFeed.get(position).getLinkAvatar()).into(CommentActivity.imgAvatarNewsFeed);
+                par.startIntent(position);
             }
         });
+
+        holder.btnLike = (ImageView) rowView.findViewById(R.id.btnLike);
+        holder.btnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         return rowView;
     }
 }

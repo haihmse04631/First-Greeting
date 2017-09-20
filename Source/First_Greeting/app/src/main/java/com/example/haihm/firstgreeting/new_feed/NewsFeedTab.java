@@ -1,25 +1,19 @@
 package com.example.haihm.firstgreeting.new_feed;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.haihm.firstgreeting.R;
-import com.example.haihm.firstgreeting.main.FirstGreetingMain;
-import com.example.haihm.firstgreeting.video_call.VideoCallActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -112,8 +106,13 @@ public class NewsFeedTab extends Fragment {
         return rootView;
     }
 
-    public void startIntent(){
+    public void startIntent(int position){
         intent = new Intent(getActivity(), CommentActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("fbName", listPost.get(position).getName());
+        bundle.putString("fbImg", listPost.get(position).getLinkAvatar());
+        bundle.putString("contentPost", listPost.get(position).getContentPost());
+        intent.putExtra("MyPackage", bundle);
         startActivity(intent);
     }
 
