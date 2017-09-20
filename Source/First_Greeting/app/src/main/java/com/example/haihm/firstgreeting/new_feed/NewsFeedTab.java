@@ -1,6 +1,5 @@
 package com.example.haihm.firstgreeting.new_feed;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,60 +27,46 @@ import java.util.ArrayList;
 
 public class NewsFeedTab extends Fragment {
     private Button btnPostStatus;
-    private Button btnComment;
     private EditText edtStatus;
     private TextView tvContentComment;
     private ListStatusAdapter adapter;
     private ArrayList<ListCommentAdapter> adapterComment;
-    // private Status userNewsFeed;
     private ListView lvListNewsFeed;
     private ArrayList<ListView> lvListComment;
-    public static ListStatus listPost;
+    private ListStatus listPost;
     private ArrayList<CommentList> commentList;
 
     private DatabaseReference mDatabase;
-    View rootView;
-    Context thisContext;
 
-    // private FirebaseAuth firebaseAuth;
-    public static int numberOfPost = 0;
-    public static String avatar, name;
-    CommentList listComment;
-    Intent intent;
-    public static String imgAvatar;
+    public int numberOfPost = 0;
+    public String avatar, name, fbId;
+    private String imgAvatar;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.newsfeed_tab, container, false);
+        View rootView = inflater.inflate(R.layout.newsfeed_tab, container, false);
 
         avatar = getArguments().getString("fbImage");
         name = getArguments().getString("fbName");
+        fbId = getArguments().getString("fbId");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-
-
         lvListNewsFeed = (ListView) rootView.findViewById(R.id.lvNewsFeed);
         listPost = new ListStatus();
-        thisContext = this.getContext();
-        adapter = new ListStatusAdapter(this, this.getContext(), R.layout.row_news_feed, listPost, lvListComment);
+        lvListComment = new ArrayList<>();
+        adapter = new ListStatusAdapter(this, getContext(), R.layout.row_news_feed, listPost);
         lvListNewsFeed.setAdapter(adapter);
 
-        adapterComment = new ArrayList<>();
-        lvListComment = new ArrayList<>();
-        commentList = new ArrayList<>();
-
         btnPostStatus = (Button) rootView.findViewById(R.id.btnPostStatus);
-
-
         edtStatus = (EditText) rootView.findViewById(R.id.edtStatus);
-
 
         btnPostStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String status = edtStatus.getText().toString().trim();
-
                 if (status.equals("")) {
                     return;
                 }
@@ -101,13 +86,13 @@ public class NewsFeedTab extends Fragment {
             }
         });
 
-        //startActivityForResult(intent, 0);
         loadData();
+
         return rootView;
     }
 
-    public void startIntent(int position){
-        intent = new Intent(getActivity(), CommentActivity.class);
+    public void startIntent(int position) {
+        Intent intent = new Intent(getActivity(), CommentActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("fbName", listPost.get(position).getName());
         bundle.putString("fbImg", listPost.get(position).getLinkAvatar());
@@ -116,14 +101,17 @@ public class NewsFeedTab extends Fragment {
         startActivity(intent);
     }
 
+    public String getFbId() {
+        return fbId;
+    }
+
     private void loadData() {
         mDatabase.child("Status").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Status userNF = dataSnapshot.getValue(Status.class);
+                Status post = dataSnapshot.getValue(Status.class);
                 numberOfPost++;
-//                Log.e("ghjkl", Integer.toString(numberOfPost));
-                listPost.add(0, userNF);
+                listPost.add(0, post);
                 adapter.notifyDataSetChanged();
 
 
