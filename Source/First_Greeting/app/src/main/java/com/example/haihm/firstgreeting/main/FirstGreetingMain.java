@@ -99,6 +99,7 @@ public class FirstGreetingMain extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intent = new Intent(FirstGreetingMain.this, SettingActivity.class);
+            intent.putExtra("MyPackage",bund);
             startActivity(intent);
             overridePendingTransition(R.anim.anim_alpha_in, R.anim.anim_alpha_out);
 

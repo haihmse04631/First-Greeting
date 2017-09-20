@@ -25,6 +25,7 @@
 
     <RadioGroup
         android:layout_width="match_parent"
+        android:id="@+id/grbtn"
         android:layout_height="match_parent"
         android:layout_marginLeft="20dp">
 
