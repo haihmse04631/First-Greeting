@@ -16,6 +16,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import static android.R.attr.id;
+
 /**
  * Created by DuyNguyen on 9/16/2017.
  */
@@ -81,9 +83,34 @@ public class ListStatusAdapter extends BaseAdapter {
         final Status userStatus = userListNewsFeed.get(position);
         holder.tvUserName.setText(userStatus.getName());
         holder.tvContentPost.setText(userListNewsFeed.get(position).getContentPost());
+
+        mDatabase.child("Status").child(Integer.toString(position)).child("likedUsers").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean liked = false;
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    if (data.getValue().equals(id)) {
+                        liked = true;
+                        break;
+                    }
+                    if (liked) {
+                        holder.btnLike.setBackgroundResource(R.drawable.liked);
+                    } else {
+                        holder.btnLike.setBackgroundResource(R.drawable.like);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         Picasso.with(myContext).load(userListNewsFeed.get(position).getLinkAvatar()).into(holder.imgAvatarNewsFeed);
         holder.tvLiked.setText("Like: (" + userListNewsFeed.get(position).getLikedNumber() + ")");
-        holder.tvCommented.setText("Comment: " + userListNewsFeed.get(position).getCommentedNumber());
+        holder.tvCommented.setText("Comment: (" + userListNewsFeed.get(position).getCommentedNumber() + ")");
 
         holder.btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +139,7 @@ public class ListStatusAdapter extends BaseAdapter {
                             mDatabase.child("Status").child(Integer.toString(position)).child("likedNumber").setValue(userStatus.getLikedNumber());
                             mDatabase.child("Status").child(Integer.toString(position)).child("likedUsers").child(Integer.toString(userStatus.getLikedNumber())).setValue(id);
                             holder.tvLiked.setText("Like: (" + Integer.toString(userStatus.getLikedNumber()) + ")");
+                            holder.btnLike.setBackgroundResource(R.drawable.liked);
                         }
                     }
 

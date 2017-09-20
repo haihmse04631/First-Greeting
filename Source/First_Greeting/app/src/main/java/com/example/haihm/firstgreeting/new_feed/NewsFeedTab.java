@@ -130,7 +130,6 @@ public class NewsFeedTab extends Fragment {
             }
         });
 
-
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
