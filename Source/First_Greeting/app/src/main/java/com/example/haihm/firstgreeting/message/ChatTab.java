@@ -31,11 +31,11 @@ import java.util.HashMap;
 public class ChatTab extends Fragment {
     private ListView lvListChat;
     private ListUserAdapter adapter;
-    private UserList userList, tempList;
+    private static UserList userList, tempList;
     private String fbId;
     private SearchView svSearchUser;
     private String fbImage;
-    DatabaseReference mData;
+    private DatabaseReference mData;
     Bundle bundle;
 
     @Override
@@ -77,7 +77,7 @@ public class ChatTab extends Fragment {
         return rootView;
     }
 
-    private void searchUser(){
+    private void searchUser() {
         svSearchUser.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
@@ -87,19 +87,17 @@ public class ChatTab extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                if(s != null && !s.isEmpty()){
+                if (s != null && !s.isEmpty()) {
                     tempList = new UserList();
-                    for(int i=0; i<userList.size(); i++){
-                        if(userList.get(i).getName().toLowerCase().contains(s.toLowerCase()))
-                        {
-                            tempList.add(new User(userList.get(i).getName(),userList.get(i).getLinkAvatar(),userList.get(i).getId(), userList.get(i).getRole(), userList.get(i).getLastMessage()));
+                    for (int i = 0; i < userList.size(); i++) {
+                        if (userList.get(i).getName().toLowerCase().contains(s.toLowerCase())) {
+                            tempList.add(new User(userList.get(i).getName(), userList.get(i).getLinkAvatar(), userList.get(i).getId(), userList.get(i).getRole(), userList.get(i).getLastMessage()));
                         }
                     }
 
                     adapter = new ListUserAdapter(getActivity(), R.layout.row_list_chat, tempList);
                     lvListChat.setAdapter(adapter);
-                }
-                else{
+                } else {
                     adapter = new ListUserAdapter(getActivity(), R.layout.row_list_chat, userList);
                     lvListChat.setAdapter(adapter);
                 }
@@ -132,8 +130,8 @@ public class ChatTab extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         HashMap<String, SingleMessage> lastMessages = new HashMap<>();
                         long indexOfLastMess = dataSnapshot.child(fbId).child(friendId).getChildrenCount();
-                         SingleMessage lastMess1;
-                         SingleMessage lastMess2;
+                        SingleMessage lastMess1;
+                        SingleMessage lastMess2;
                         if (indexOfLastMess == 0) {
                             Date date = new Date();
                             date.setTime(0);
@@ -242,6 +240,21 @@ public class ChatTab extends Fragment {
         mData.child("Message").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String friendId = dataSnapshot.getKey();
+                if (friendId.equals(fbId)) {
+                    return;
+                }
+                for (DataSnapshot child : dataSnapshot.child(fbId).getChildren()) {
+                    SingleMessage aMessage = child.getValue(SingleMessage.class);
+                    aMessage.setType("receive");
+                    for (int i = 0; i < userList.size(); i++) {
+                        if (userList.get(i).getId().equals(friendId)) {
+                            userList.get(i).getLastMessage().put(friendId, aMessage);
+                            sortList();
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                }
             }
 
             @Override

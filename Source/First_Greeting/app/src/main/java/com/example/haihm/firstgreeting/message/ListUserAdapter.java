@@ -2,6 +2,7 @@ package com.example.haihm.firstgreeting.message;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,22 +25,14 @@ public class ListUserAdapter extends BaseAdapter {
     int myLayout;
     UserList userList;
     HashMap<String, Integer> count;
-
-    public ListUserAdapter(Context myContext, int myLayout, UserList userList, HashMap<String, Integer> count) {
-        this.myContext = myContext;
-        this.myLayout = myLayout;
-        this.userList = userList;
-        this.count = count;
-    }
+    HashMap<String, SingleMessage> temp;
 
     public ListUserAdapter(Context myContext, int myLayout, UserList userList) {
         this.myContext = myContext;
         this.myLayout = myLayout;
         this.userList = userList;
         this.count = new HashMap<>();
-        for (User user : userList) {
-            count.put(user.getId(), 0);
-        }
+        this.temp = new HashMap<>();
     }
 
     @Override
@@ -85,20 +78,40 @@ public class ListUserAdapter extends BaseAdapter {
         holder.tvName.setText(friendUser.getName());
         holder.tvLastMessage.setText(lasMess.getContent());
 
+        for (User user : userList) {
+            if (count.containsKey(user.getId())) {
+                count.put(user.getId(), Math.max(0, count.get(user.getId())));
+            } else {
+                count.put(user.getId(), 0);
+                temp.put(user.getId(), new SingleMessage());
+            }
+        }
+
         if (lasMess.getStatus().equals("true")) {
             holder.tvCountMess.setVisibility(View.INVISIBLE);
             holder.tvLastMessage.setTypeface(null, Typeface.NORMAL);
             count.put(friendId, 0);
-        } else if (lasMess.getType().equals("receive")) {
-            count.put(friendId, count.get(friendId) + 1);
-            holder.tvLastMessage.setTypeface(null, Typeface.BOLD_ITALIC);
-            holder.tvCountMess.setText(Integer.toString(count.get(friendId)));
-            holder.tvCountMess.setVisibility(View.VISIBLE);
+        } else {
+            if (lasMess.getType().equals("receive")) {
+                if (!temp.get(friendId).equals(lasMess)) {
+                    count.put(friendId, count.get(friendId) + 1);
+                    temp.put(friendId, lasMess);
+                }
+                holder.tvLastMessage.setTypeface(null, Typeface.BOLD_ITALIC);
+                holder.tvCountMess.setText(Integer.toString(count.get(friendId)));
+                holder.tvCountMess.setVisibility(View.VISIBLE);
+            }
         }
 
-        Picasso.with(myContext).load(userList.get(position).getLinkAvatar()).into(holder.imgAvatar);
+        Picasso.with(myContext).
+
+    load(userList.get(position).
+
+    getLinkAvatar()).
+
+    into(holder.imgAvatar);
 
 
         return rowView;
-    }
+}
 }

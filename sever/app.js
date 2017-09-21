@@ -9,13 +9,14 @@ const API_SECRET = 'c9c70eda35502ae4ea2597145991abbb00aba1e6';
 
 // get initial session id 
 var opentok = new OpenTok(API_KEY, API_SECRET);
-// var opentok = new OpenTok.OpenTokSDK(API_KEY, API_SECRET);
 
 var sessionId = [];
+var numberOfSession = 0;
 var m = 0,
     n = 0;
 var member = [];
 var cvt = [];
+var infoRoom = [];
 
 Array.prototype.contains = function(data) {
     var i = this.length;
@@ -26,6 +27,7 @@ Array.prototype.contains = function(data) {
     }
     return false;
 }
+
 
 Array.prototype.push = function(obj) {
     this[this.length++] = obj;
@@ -46,7 +48,6 @@ Array.prototype.remove = function(fbId) {
     if (position != -1) {
         this.splice(position, 1);
     }
-
 }
 
 function scramble(array) {
@@ -104,11 +105,11 @@ io.on('connection', function(socket) {
 
             cvt.push({ id: data.fbId, name: data.name, sesionId: '', token: '', socket: socket });
             console.log("Total ctv: " + cvt.length);
-            if (cvt.length % 2 == 0) {
-                if (cvt.length / 2 > sessionId.length) {
-                    // createNewSession();
-                }
-            }
+            // if (cvt.length % 2 == 0) {
+            //     if (cvt.length / 2 > sessionId.length) {
+            //         createNewSession();
+            //     }
+            // }
         } else {
             console.log("This user is existed");
             cvt.remove(data.fbId);
@@ -117,47 +118,17 @@ io.on('connection', function(socket) {
         }
 
         socket.on('cancel-attendant', function(fbId) {
-            // console.log(fbId);
             member.remove(fbId);
         });
 
-        // socket.on('get-info-rooms', function(data) {
-        //     // console.log(data);
-        //     var data = [];
-        //     for (var i = 0; i < sessionId.length; i++) {
-        //         var userId1 = "";
-        //         var userName1 = "";
-        //         for (var iMember = 0; iMember < member.length; iMember++) {
-        //             if (member[iMember].sessionId == sessionId[i]) {
-        //                 userId1 = member[iMember].id;
-        //                 userName1 = member[iMember].name;
-        //                 break;
-        //             }
-        //         }
-        //         var userId2 = "";
-        //         var userName2 = "";
-        //         var iCvt;
-        //         for (iCvt = 0; iCvt < cvt.length; iCvt++) {
-        //             if (cvt[iCvt].sessionId == sessionId[i]) {
-        //                 userId2 = cvt[iCvt].id;
-        //                 userName2 = cvt[iCvt].name;
-        //                 break;
-        //             }
-        //         }
-        //         var userId3 = "";
-        //         var userName3 = "";
-        //         for (iCvt = iCvt + 1; iCvt < cvt.length; iCvt++) {
-        //             if (cvt[iCvt].sessionId == sessionId[i]) {
-        //                 userId3 = cvt[iCvt].id;
-        //                 userName3 = cvt[iCvt].name;
-        //                 break;
-        //             }
-        //         }
-        //         var aRoom = { roomNumber: i, userId1, userId2, userId3, userName1, userName2, userName3 };
-        //         data.push(aRoom);
-        //         // console.log(data);
-        //     }
-        //     socket.emit('return-info', data);
+
+        socket.on('get-info-rooms', function(data) {
+            console.log(data);
+            console.log(infoRoom);
+
+            socket.emit('return-info', infoRoom);
+        });
+
     });
 
     socket.on('disconnect', function() {
@@ -173,28 +144,18 @@ io.on('connection', function(socket) {
 function sendToMember(index) {
     if (member[index] != null) {
         console.log("Session ID sending to member " + index + ":\n" + member[index].sessionId);
-        var name1 = member[index].name;
-        var name2 = "";
-        var name3 = "";
+        var id2 = "";
+        var id3 = "";
 
-        if (index * 2 < m) nametwo = cvt[index * 2].name;
-        if (index * 2 + 1 < m) namethree = cvt[index * 2 + 1].name;
-
-        // var name1 = "Pham Hong Son";
-        // var name2 = "Ngon";
-        // var name3 = "Ngot";
-
-        name1 = convertString(name1);
-        name2 = convertString(name2);
-        name3 = convertString(name3);
+        if (index * 2 < m) id2 = cvt[index * 2].id;
+        if (index * 2 + 1 < m) id3 = cvt[index * 2 + 1].id;
 
         member[index].socket.emit('return-session-id', {
             indexSession: index,
             sessionId: member[index].sessionId,
             token: member[index].token,
-            name1: name1,
-            name2: name2,
-            name3: name3
+            id2: id2,
+            id3: id3
         });
 
 
@@ -204,33 +165,23 @@ function sendToMember(index) {
 function sendToCtv(index) {
     if (cvt[index] != null) {
         console.log("Session ID sending to cvt " + index + ":\n" + cvt[index].sessionId);
-        var name1 = cvt[index].name;
-        var name2 = "";
-        var name3 = "";
+        var id2 = "";
+        var id3 = "";
 
         var mIndex = Math.floor(index / 2);
-        if (mIndex < n) name2 = member[mIndex].name;
+        if (mIndex < n) id2 = member[mIndex].id;
         if (index % 2 == 0) {
-            if (index + 1 < m) name3 = cvt[index + 1].name;
+            if (index + 1 < m) id3 = cvt[index + 1].id;
         } else {
-            name3 = cvt[index - 1].name
+            id3 = cvt[index - 1].id
         }
-
-        // var name1 = "Pham Hong Son";
-        // var name2 = "Ngon";
-        // var name3 = "Ngot";
-
-        name1 = convertString(name1);
-        name2 = convertString(name2);
-        name3 = convertString(name);
 
         cvt[index].socket.emit('return-session-id', {
             indexSession: mIndex,
             sessionId: cvt[index].sessionId,
             token: opentok.generateToken(cvt[index].sessionId),
-            name1: name1,
-            name2: name2,
-            name3: name3
+            id2: id2,
+            id3: id3
         });
 
     }
@@ -265,42 +216,45 @@ function start() {
     m = cvt.length;
     console.log("Total member: " + n);
     console.log("Total ctv:" + m);
-    var numberOfSession = Math.max(n, Math.trunc(m / 2))
+    numberOfSession = Math.max(n, Math.trunc((m + 1) / 2))
     console.log("max: " + numberOfSession);
+    infoRoom.splice(0, infoRoom.length);
+    console.log(cvt);
+    console.log('0:' + sessionId[0]);
+    console.log('1:' + sessionId[1]);
     for (var index = 0; index < numberOfSession; index++) {
+        var userId1 = "";
+        var userId2 = "";
+        var userId3 = "";
         if (index < n) {
             member[index].sessionId = sessionId[index];
             member[index].token = opentok.generateToken(member[index].sessionId);
             sendToMember(index);
+            userId1 = member[index].id;
         }
         if (index * 2 < m) {
+            console.log('index:' + (index * 2));
             cvt[index * 2].sessionId = sessionId[index];
             cvt[index * 2].token = opentok.generateToken(cvt[index * 2].sessionId);
             sendToCtv(index * 2);
+            userId2 = cvt[index * 2].id;
         }
         if (index * 2 + 1 < m) {
             cvt[index * 2 + 1].sessionId = sessionId[index];
             cvt[index * 2 + 1].token = opentok.generateToken(cvt[index * 2].sessionId);
             sendToCtv(index * 2 + 1);
+            userId3 = cvt[index * 2 + 1].id;
         }
-        member.splice(index, 1);
-        cvt.splice(index, 2);
+        infoRoom.push({
+            roomNumber: index,
+            userId1: userId1,
+            userId2: userId2,
+            userId3: userId3
+        });
+
     }
+    member.splice(0, member.length);
+    cvt.splice(0, cvt.length);
     sessionId.splice(0, numberOfSession);
     createNewSession();
-}
-
-function convertString(str) {
-    str = str.toLowerCase();
-    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
-    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
-    str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
-    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
-    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
-    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
-    str = str.replace(/đ/g, "d");
-    // str = str.replace(/!|@|\$|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\'| |\"|\&|\#|\[|\]|~/g, "-");
-    str = str.replace(/-+-/g, "-");
-    str = str.replace(/^\-+|\-+$/g, "");
-    return str;
 }
