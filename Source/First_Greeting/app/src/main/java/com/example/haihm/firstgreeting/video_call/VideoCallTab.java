@@ -56,11 +56,26 @@ public class VideoCallTab extends Fragment {
         }
 
         mData = FirebaseDatabase.getInstance().getReference();
+
+        btnAttend = (ImageButton) rootView.findViewById(R.id.btnAttend);
+        btnLeave = (ImageButton) rootView.findViewById(R.id.btnLeave);
+
+        if (attendedState == 0) {
+            btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.attend));
+
+        } else if (attendedState == 1) {
+            btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.attended));
+            btnLeave.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.stop_attend));
+            btnLeave.setVisibility(View.VISIBLE);
+        } else {
+            btnAttend.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_room));
+            btnLeave.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.leave));
+            btnLeave.setVisibility(View.VISIBLE);
+        }
+
         fbId = getArguments().getString("fbId");
         fbName = getArguments().getString("fbName");
         fbImg = getArguments().getString("fbImage");
-        btnAttend = (ImageButton) rootView.findViewById(R.id.btnAttend);
-        btnLeave = (ImageButton) rootView.findViewById(R.id.btnLeave);
 
         try {
             if (mSocket == null) {
@@ -124,6 +139,7 @@ public class VideoCallTab extends Fragment {
 
             }
         });
+
         btnLeave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -70,30 +70,29 @@ public class ListUserAdapter extends BaseAdapter {
         ViewHolder holder = new ViewHolder();
         LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = convertView;
-        if (rowView == null) {
-            rowView = inflater.inflate(myLayout, null);
-            holder.imgAvatar = (ImageView) rowView.findViewById(R.id.imageAvatar);
-            holder.tvName = (TextView) rowView.findViewById(R.id.tvName);
-            holder.tvLastMessage = (TextView) rowView.findViewById(R.id.tvLastMessage);
-            holder.tvCountMess = (TextView) rowView.findViewById(R.id.txtCountMess);
-            rowView.setTag(holder);
-        } else {
-            holder = (ViewHolder) rowView.getTag();
-        }
+        rowView = inflater.inflate(myLayout, null);
+        holder.imgAvatar = (ImageView) rowView.findViewById(R.id.imageAvatar);
+        holder.tvName = (TextView) rowView.findViewById(R.id.tvName);
+        holder.tvLastMessage = (TextView) rowView.findViewById(R.id.tvLastMessage);
+        holder.tvCountMess = (TextView) rowView.findViewById(R.id.txtCountMess);
+        rowView.setTag(holder);
+        holder = (ViewHolder) rowView.getTag();
 
-        String fbId = userList.get(position).getId();
-        SingleMessage lasMess = userList.get(position).getLastMessage().get(fbId);
-        holder.tvName.setText(userList.get(position).getName());
+        User friendUser = userList.get(position);
+        String friendId = friendUser.getId();
+        SingleMessage lasMess = friendUser.getLastMessage().get(friendId);
+
+        holder.tvName.setText(friendUser.getName());
         holder.tvLastMessage.setText(lasMess.getContent());
 
         if (lasMess.getStatus().equals("true")) {
             holder.tvCountMess.setVisibility(View.INVISIBLE);
             holder.tvLastMessage.setTypeface(null, Typeface.NORMAL);
-            count.put(fbId, 0);
+            count.put(friendId, 0);
         } else if (lasMess.getType().equals("receive")) {
-            count.put(fbId, count.get(fbId) + 1);
+            count.put(friendId, count.get(friendId) + 1);
             holder.tvLastMessage.setTypeface(null, Typeface.BOLD_ITALIC);
-            holder.tvCountMess.setText(Integer.toString(count.get(fbId)));
+            holder.tvCountMess.setText(Integer.toString(count.get(friendId)));
             holder.tvCountMess.setVisibility(View.VISIBLE);
         }
 
