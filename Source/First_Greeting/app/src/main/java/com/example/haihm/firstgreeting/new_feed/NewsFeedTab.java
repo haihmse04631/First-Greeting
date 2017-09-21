@@ -64,7 +64,7 @@ public class NewsFeedTab extends Fragment {
                 }
                 Status userStatus = new Status(getArguments().getString("fbName"),
                         status, getArguments().getString("fbImage"));
-                mDatabase.child("Status").child(Integer.toString(numberOfPost)).setValue(userStatus);
+                mDatabase.child("Status").child(Integer.toString(listPost.size())).setValue(userStatus);
                 edtStatus.setText("");
             }
         });
