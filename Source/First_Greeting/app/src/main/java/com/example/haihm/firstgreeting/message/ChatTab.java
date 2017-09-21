@@ -4,7 +4,6 @@ package com.example.haihm.firstgreeting.message;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +54,8 @@ public class ChatTab extends Fragment {
         adapter = new ListUserAdapter(this.getContext(), R.layout.row_list_chat, userList);
         lvListChat.setAdapter(adapter);
 
+        loadData();
+
         lvListChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -70,10 +71,6 @@ public class ChatTab extends Fragment {
                 startActivity(intent);
             }
         });
-
-        //Load data from Firebase
-
-        loadData();
 
         searchUser();
 
@@ -130,30 +127,32 @@ public class ChatTab extends Fragment {
                     return;
                 }
                 final User user = dataSnapshot.getValue(User.class);
-                final HashMap<String, SingleMessage> lastMessages = new HashMap<String, SingleMessage>();
-                final SingleMessage[] lastMess1 = {new SingleMessage()};
-                final SingleMessage[] lastMess2 = {new SingleMessage()};
                 mData.child("Message").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        HashMap<String, SingleMessage> lastMessages = new HashMap<>();
                         long indexOfLastMess = dataSnapshot.child(fbId).child(friendId).getChildrenCount();
+                         SingleMessage lastMess1;
+                         SingleMessage lastMess2;
                         if (indexOfLastMess == 0) {
                             Date date = new Date();
                             date.setTime(0);
-                            lastMess1[0] = new SingleMessage(date, " ", "");
+                            lastMess1 = new SingleMessage(date, " ", "");
                         } else {
-                            lastMess1[0] = dataSnapshot.child(fbId).child(friendId).child(Long.toString(indexOfLastMess - 1)).getValue(SingleMessage.class);
+                            lastMess1 = dataSnapshot.child(fbId).child(friendId).child(Long.toString(indexOfLastMess - 1)).getValue(SingleMessage.class);
                         }
 
                         indexOfLastMess = dataSnapshot.child(friendId).child(fbId).getChildrenCount();
                         if (indexOfLastMess == 0) {
-                            lastMess2[0] = new SingleMessage(lastMess1[0].getDate(), " ", "");
+                            lastMess2 = new SingleMessage(lastMess1.getDate(), " ", "");
                         } else {
-                            lastMess2[0] = dataSnapshot.child(friendId).child(fbId).child(Long.toString(indexOfLastMess - 1)).getValue(SingleMessage.class);
+                            lastMess2 = dataSnapshot.child(friendId).child(fbId).child(Long.toString(indexOfLastMess - 1)).getValue(SingleMessage.class);
                         }
-                        SingleMessage lastMess = lastMess1[0].getDate().compareTo(lastMess2[0].getDate()) >= 0 ? lastMess1[0] : lastMess2[0];
+
+                        SingleMessage lastMess = lastMess1.getDate().compareTo(lastMess2.getDate()) >= 0 ? lastMess1 : lastMess2;
                         lastMessages.put(friendId, lastMess);
                         user.setLastMessage(lastMessages);
+
                         userList.add(user);
                         sortList();
                         adapter.notifyDataSetChanged();

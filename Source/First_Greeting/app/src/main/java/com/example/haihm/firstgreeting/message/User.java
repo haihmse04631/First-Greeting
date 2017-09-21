@@ -21,7 +21,7 @@ public class User {
         this.linkAvatar = linkAvatar;
         this.id = id;
         this.role = role;
-        lastMessage = new HashMap<String, SingleMessage>(){
+        lastMessage = new HashMap<String, SingleMessage>() {
             @Override
             public String toString() {
                 String s = "";
