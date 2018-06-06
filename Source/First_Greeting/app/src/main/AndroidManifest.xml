@@ -34,7 +34,9 @@
             android:name=".message.MessageForm"
             android:label="Message"
             android:theme="@style/AppTheme"/>
-        <activity android:name=".video_call.VideoCallActivity" />
+        <activity android:name=".video_call.VideoCallActivity"
+            android:theme="@style/AppTheme"
+            />
         <activity android:name=".new_feed.CommentActivity" />
         <activity android:name=".main.SettingActivity"></activity>
     </application>

@@ -47,6 +47,21 @@ Array.prototype.remove = function(fbId) {
     }
     if (position != -1) {
         this.splice(position, 1);
+        console.log('Removed id : ' + fbId);
+    }
+}
+
+Array.prototype.removeSocket = function(socket) {
+    var position = -1;
+    for (var i = 0; i < this.length; i++) {
+        if (this[i].socket.id == socket.id) {
+            position = i;
+            break;
+        }
+    }
+    if (position != -1) {
+        this.splice(position, 1);
+        console.log('Removed socket : ' + socket.id);
     }
 }
 
@@ -132,7 +147,9 @@ io.on('connection', function(socket) {
     });
 
     socket.on('disconnect', function() {
-        console.log('User ' + socket + " disconnected");
+        console.log('User disconnected');
+        member.removeSocket(socket);
+        cvt.removeSocket(socket);
     });
 
     socket.on('start-call', function(data) {
@@ -219,9 +236,6 @@ function start() {
     numberOfSession = Math.max(n, Math.trunc((m + 1) / 2))
     console.log("max: " + numberOfSession);
     infoRoom.splice(0, infoRoom.length);
-    console.log(cvt);
-    console.log('0:' + sessionId[0]);
-    console.log('1:' + sessionId[1]);
     for (var index = 0; index < numberOfSession; index++) {
         var userId1 = "";
         var userId2 = "";

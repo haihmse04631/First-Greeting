@@ -22,8 +22,6 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-
-
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("MyPackage");
         final String id = bundle.getString("fbId");

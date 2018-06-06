@@ -51,11 +51,11 @@ public class CommentActivity extends AppCompatActivity {
         showData();
 
         listComment = new CommentList();
-        lvCommentList = findViewById(R.id.lvListComment);
+        lvCommentList = (ListView) findViewById(R.id.lvListComment);
         commentAdapter = new ListCommentAdapter(CommentActivity.this, R.layout.row_comment, listComment);
         lvCommentList.setAdapter(commentAdapter);
 
-        ImageButton btnSendComment = findViewById(R.id.btnSendComment);
+        ImageButton btnSendComment = (ImageButton) findViewById(R.id.btnSendComment);
 
         btnSendComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +83,7 @@ public class CommentActivity extends AppCompatActivity {
 
         postIndex = bundle.getInt("postIndex");
         postSize = bundle.getInt("postSize");
-        edtComment = findViewById(R.id.edtComment);
+        edtComment = (EditText) findViewById(R.id.edtComment);
 
         loadComment();
     }
